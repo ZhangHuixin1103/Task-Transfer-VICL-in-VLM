@@ -1,6 +1,11 @@
 import re
 
 # Define placeholders for dataset paths
+VICL = {
+    "annotation_path": "/mnt/data/huixin/Task-Transfer/data/dataset/converted_dataset.json",
+    "data_path": "/mnt/data/huixin/Task-Transfer/data/tasks/",  # Can be empty if paths are in annotations
+}
+
 CAMBRIAN_737K = {
     "annotation_path": "PATH_TO_CAMBRIAN_737K_ANNOTATION",
     "data_path": "",
@@ -27,6 +32,7 @@ VIDEOCHATGPT = {
 }
 
 data_dict = {
+    "VICL": VICL,
     "cambrian_737k": CAMBRIAN_737K,
     "cambrian_737k_pack": CAMBRIAN_737K_PACK,
     "mp_doc": MP_DOC,

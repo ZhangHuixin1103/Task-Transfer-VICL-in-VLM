@@ -1,9 +1,8 @@
 import json
 
 # Define input and output file paths for clarity
-INPUT_FILE = "data/dataset/dataset.json"
-OUTPUT_FILE = "data/dataset/converted_data.json"
-IMAGE_BASE_PATH = "/mnt/data/huixin/Task-Transfer/data/tasks/"
+INPUT_FILE = "data/dataset/train_dataset.json"
+OUTPUT_FILE = "data/dataset/converted_dataset.json"
 
 # The core instruction prompt for the user's message.
 # Using a constant for this makes the code cleaner and easier to modify.
@@ -35,14 +34,20 @@ def convert_data(raw_data: list) -> list:
               formatted for Qwen-VL training.
     """
     converted_dataset = []
-    # Using enumerate to automatically generate a unique ID for each sample
-    for i, item in enumerate(raw_data):
+    # Loop through each item in the raw dataset.
+    for item in raw_data:
+        # Collect all three image paths into a list for the 'image' key.
+        image_paths = [
+            item['taskA_input'],
+            item['taskA_output'],
+            item['taskB_input'],
+        ]
+
         # Construct the user's message by embedding image paths and the instruction prompt.
-        # The f-string syntax is clean and efficient for this purpose.
         user_message_value = (
-            f"Picture 1: <img>{IMAGE_BASE_PATH}{item['taskA_input']}</img>\n"
-            f"Picture 2: <img>{IMAGE_BASE_PATH}{item['taskA_output']}</img>\n"
-            f"Picture 3: <img>{IMAGE_BASE_PATH}{item['taskB_input']}</img>\n"
+            f"Picture 1: <image>\n"
+            f"Picture 2: <image>\n"
+            f"Picture 3: <image>\n"
             f"{INSTRUCTION_PROMPT}"
         )
 
@@ -51,14 +56,13 @@ def convert_data(raw_data: list) -> list:
 
         # Create the conversation turn, as required by the Qwen-VL format.
         conversation = [
-            {"from": "user", "value": user_message_value},
-            {"from": "assistant", "value": assistant_message_value},
+            {"from": "human", "value": user_message_value},
+            {"from": "gpt", "value": assistant_message_value},
         ]
 
         # Assemble the final dictionary for the current data sample.
-        # The 'id' is crucial for distinguishing each training example.
         formatted_sample = {
-            "id": f"identity_{i+1}",
+            "image": image_paths,
             "conversations": conversation
         }
         converted_dataset.append(formatted_sample)
