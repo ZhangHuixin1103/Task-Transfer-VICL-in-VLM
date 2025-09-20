@@ -6,13 +6,13 @@
 # ======================
 MASTER_ADDR="127.0.0.1"                     # [Required] Master node IP for multi-GPU training
 MASTER_PORT=$(shuf -i 20000-29999 -n 1)     # Random port to avoid conflicts
-export CUDA_VISIBLE_DEVICES=0,1,2,3         # Specify GPUs to use
+export CUDA_VISIBLE_DEVICES=1,2             # Specify GPUs to use
 NPROC_PER_NODE=$(echo "$CUDA_VISIBLE_DEVICES" | awk -F',' '{print NF}')  # Automatically detects available GPUs
 
 # ======================
 # Path Configuration
 # ======================
-MODEL_PATH="Qwen/Qwen2.5-VL-7B-Instruct"    # [ModelArguments] Pretrained model path
+MODEL_PATH="Qwen/Qwen2.5-VL-3B-Instruct"    # [ModelArguments] Pretrained model path
 OUTPUT_DIR="./output"                       # Directory for saving checkpoints
 CACHE_DIR="../../.cache"                    # [TrainingArguments] Cache directory for models
 export HF_HOME=$CACHE_DIR                   # Set HF cache directory
@@ -37,7 +37,7 @@ torchrun --nproc_per_node=$NPROC_PER_NODE \
          --output_dir $OUTPUT_DIR \
          --cache_dir $CACHE_DIR \
          --bf16 \
-         --per_device_train_batch_size 4 \
+         --per_device_train_batch_size 1 \
          --gradient_accumulation_steps 4 \
          --learning_rate 5e-7 \
          --warmup_ratio 0.03 \
@@ -49,7 +49,7 @@ torchrun --nproc_per_node=$NPROC_PER_NODE \
          --model_max_length 8192 \
          --data_flatten True \
          --data_packing True \
-         --max_pixels 1605632 \
+         --max_pixels 401408 \
          --min_pixels 12544 \
          --num_train_epochs 3 \
          --logging_steps 10 \
