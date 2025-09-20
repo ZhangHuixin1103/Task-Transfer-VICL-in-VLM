@@ -4,5 +4,6 @@ data/tasks
 data/dataset
 
 Emu
+Qwen2.5-VL/qwen-vl-finetune/output
 
 .DS_Store

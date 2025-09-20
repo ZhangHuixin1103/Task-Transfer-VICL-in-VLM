@@ -6,7 +6,7 @@
 # ======================
 MASTER_ADDR="127.0.0.1"                     # [Required] Master node IP for multi-GPU training
 MASTER_PORT=$(shuf -i 20000-29999 -n 1)     # Random port to avoid conflicts
-export CUDA_VISIBLE_DEVICES=1,2,3,4         # Specify GPUs to use
+export CUDA_VISIBLE_DEVICES=0,1,2,3         # Specify GPUs to use
 NPROC_PER_NODE=$(echo "$CUDA_VISIBLE_DEVICES" | awk -F',' '{print NF}')  # Automatically detects available GPUs
 
 # ======================

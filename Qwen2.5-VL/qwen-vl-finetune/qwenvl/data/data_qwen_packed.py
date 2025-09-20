@@ -1,29 +1,24 @@
-import os
 import copy
-import json
-import random
-import logging
-import re
-import time
-import math
 import itertools
-import ast
-from dataclasses import dataclass, field
-from typing import Dict, Optional, Sequence, List, Tuple
-from io import BytesIO
-import base64
+import json
+import os
+import random
+import sys
+import time
 from collections.abc import Sequence
+from dataclasses import dataclass, field
+from typing import Dict, List, Optional, Sequence, Tuple
 
 import numpy as np
 import torch
-from torch.utils.data import Dataset
-from PIL import Image
-from decord import VideoReader
-from torchcodec.decoders import VideoDecoder
 import transformers
+from decord import VideoReader
+from PIL import Image
+from torch.utils.data import Dataset
+from torchcodec.decoders import VideoDecoder
 
 from . import data_list
-from .rope2d import get_rope_index_25, get_rope_index_2
+from .rope2d import get_rope_index_2, get_rope_index_25
 
 IGNORE_INDEX = -100
 IMAGE_TOKEN_INDEX = 151655
@@ -42,6 +37,11 @@ def rank0_print(*args):
 def read_jsonl(path):
     with open(path, "r") as f:
         return [json.loads(line) for line in f]
+
+
+def round_by_factor(number: int, factor: int) -> int:
+    """Returns the closest integer to 'number' that is divisible by 'factor'."""
+    return round(number / factor) * factor
 
 
 def preprocess_qwen_2_visual(
@@ -237,6 +237,17 @@ class LazySupervisedDataset(Dataset):
     def process_image_unified(self, image_file):
         processor = copy.deepcopy(self.data_args.image_processor)
         image = Image.open(image_file).convert("RGB")
+
+        width, height = image.size
+        if width > 1280:
+            target_width = 1064
+            scale = target_width / width
+            new_height = int(height * scale)
+            factor = 28
+            new_width = round_by_factor(target_width, factor)
+            new_height = round_by_factor(new_height, factor)
+            image = image.resize((new_width, new_height), Image.BICUBIC)
+            print(f"Resized image {image_file} from ({width}, {height}) to ({new_width}, {new_height})")
 
         visual_processed = processor.preprocess(image, return_tensors="pt")
         image_tensor = visual_processed["pixel_values"]
