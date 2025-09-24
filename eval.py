@@ -1,10 +1,12 @@
 import argparse
+import base64
 import hashlib
 import json
 import logging
 import os
 import random
 import re
+import shutil
 import sys
 import time
 from io import BytesIO
@@ -465,6 +467,50 @@ def generate_mask(
     return _fallback_simple_mask(b_abs, TMP_DIR)
 
 
+def _extract_image_from_parts(parts):
+    """
+    Extracts an image from the parts returned by Gemini.
+    1. First, it looks for binary `inline_data`.
+    2. Then, it tries to parse a base64-encoded image from the `text` part.
+    Returns a PIL.Image object if found, otherwise returns None.
+    """
+    # Loop through each part of the response
+    for p in parts:
+        # Case 1: The part contains direct binary image data.
+        # Use getattr for safe access to avoid errors if the attribute doesn't exist.
+        if getattr(p, "inline_data", None) and getattr(p.inline_data, "data", None):
+            try:
+                # Try to open the binary data as an image
+                return Image.open(BytesIO(p.inline_data.data))
+            except Exception as e:
+                # If opening fails, log it and continue to the next part
+                logging.warning(f"Could not open inline_data as image: {e}")
+                pass
+
+        # Case 2: The part contains text, which might have a base64 image embedded.
+        if getattr(p, "text", None):
+            # Use regex to find the base64 image pattern
+            m = re.search(
+                r"data:image/(?:png|jpeg|jpg);base64,([A-Za-z0-9+/=\s\r\n]+)",
+                p.text
+            )
+            if m:
+                # If a match is found, extract the base64 string (group 1)
+                b64_str = m.group(1)
+                try:
+                    # Decode the base64 string into raw bytes
+                    raw_bytes = base64.b64decode(b64_str)
+                    # Try to open the bytes as an image
+                    return Image.open(BytesIO(raw_bytes))
+                except Exception as e:
+                    # If decoding or opening fails, log it and continue
+                    logging.warning(f"Could not decode or open base64 image: {e}")
+                    pass
+    
+    # If no image is found in any part, return None
+    return None
+
+
 # Function to generate image with Gemini
 def generate_image(taskA_input, taskA_output, taskB_input, text_prompt, mask_path=None, gt_ext='.jpg'):
     """Generate task B output using Gemini."""
@@ -505,11 +551,21 @@ def generate_image(taskA_input, taskA_output, taskB_input, text_prompt, mask_pat
             )
         )
 
-        for part in response.candidates[0].content.parts:
-            if part.text:
-                logging.info(f"Gemini returned text:\n---\n{_shorten(part.text)}\n---")
-            if part.inline_data:
-                return Image.open(BytesIO(part.inline_data.data))
+        parts = response.candidates[0].content.parts
+
+        for p in parts:
+            if getattr(p, "text", None):
+                logging.info(f"Gemini returned text:\n---\n{_shorten(p.text)}\n---")
+                break
+
+        image = _extract_image_from_parts(parts)
+        if image:
+            # If an image was found, return it
+            return image
+        else:
+            # If no image was found, log a specific warning and return None
+            logging.warning("Gemini response had no image (neither inline_data nor base64 in text).")
+            return None
 
     except Exception as e:
         logging.warning(f"Gemini generation failed: {e}")
@@ -719,18 +775,20 @@ def run_evaluation(args):
                                                    taskB_input, text_prompt,
                                                    mask_path, gt_ext)
                         if gen_image:
+                            logging.info(f"Attempt {i+1}: Successfully received an image from Gemini.")
                             temp_path = os.path.join(combo_tmp_dir,
                                                      f"gen_{i}{gt_ext}")
                             gen_image.save(temp_path)
                             curr_psnr, _ = eval_quality(taskB_gt_path,
                                                         temp_path)
+                            logging.info(f"Attempt {i+1}: Saved to {temp_path}, PSNR: {curr_psnr:.2f}")
                             if curr_psnr > best_psnr:
-                                if best_gen_path:
-                                    os.remove(best_gen_path)
                                 best_psnr = curr_psnr
                                 best_gen_path = temp_path
-                            else:
-                                os.remove(temp_path)
+                                logging.info(f"Attempt {i+1}: New best image found!")
+                        else:
+                            logging.warning(f"Attempt {i+1}: Gemini API call succeeded but returned NO image.")
+
                     except Exception as e:
                         logging.warning(f"Generation attempt {i} failed: {e}")
 
@@ -739,7 +797,7 @@ def run_evaluation(args):
                     b_name = os.path.basename(taskB_input)
                     final_path = os.path.join(pair_res_dir,
                                               f"{a_name}_{b_name}_{combo_id}{gt_ext}")
-                    os.rename(best_gen_path, final_path)
+                    shutil.move(best_gen_path, final_path)
 
                     # Step 5: Evaluate best
                     psnr, ssim, viescore = evaluate_generated(taskB_gt_path, final_path,
@@ -754,6 +812,11 @@ def run_evaluation(args):
                     }
                     log_file.write(json.dumps(log_entry) + '\n')
                     pair_best_scores.append(log_entry)
+                    log_file.flush()
+                    os.fsync(log_file.fileno())
+                    logging.info(f"Combo {combo_id}: PSNR={psnr:.2f}, SSIM={ssim:.4f}, VIEScore={viescore:.2f}")
+
+                    shutil.rmtree(combo_tmp_dir, ignore_errors=True)
 
             # Average for pair
             if pair_best_scores:
