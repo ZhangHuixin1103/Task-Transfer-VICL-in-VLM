@@ -619,7 +619,7 @@ def evaluate_generated(gt_path, gen_path, taskA_input, taskA_output, taskB_input
     for path in image_list:
         mime_type = "image/png" if path.lower().endswith(".png") else "image/jpeg"
         with open(path, "rb") as f:
-            parts.append(types.Part.from_bytes(f.read(), mime_type=mime_type))
+            parts.append(types.Part.from_bytes(data=f.read(), mime_type=mime_type))
 
     # Call Gemini API
     # mllm_model = Gemini()
@@ -742,10 +742,42 @@ def run_evaluation(args):
                 gt_ext = os.path.splitext(taskB_gt_path)[1]
 
                 combo_id = hashed_id(taskA_input, taskB_input)
-                if combo_id in existing_combo_ids:
-                    logging.info(f"Skip existing combination {combo_id}")
-                    continue
 
+                a_name = os.path.basename(taskA_input)
+                b_name = os.path.basename(taskB_input)
+                final_path = os.path.join(pair_res_dir, f"{a_name}_{b_name}_{combo_id}{gt_ext}")
+
+                # Check if the final image already exists
+                if os.path.exists(final_path):
+                    # If the image exists, check if its metrics are already logged
+                    if combo_id in existing_combo_ids:
+                        logging.info(f"COMPLETE: Skipping combo {combo_id}, image and metrics already exist.")
+                        continue
+                    else:
+                        # If image exists but metrics are missing, calculate and log them now
+                        logging.info(f"RESUMING: Found image for {combo_id}, calculating and logging metrics...")
+                        try:
+                            psnr, ssim, viescore = evaluate_generated(taskB_gt_path, final_path,
+                                                                      taskA_input, taskA_output,
+                                                                      taskB_input, taskA, taskB)
+                            log_entry = {
+                                "combo_id": combo_id,
+                                "final_image": final_path,
+                                "psnr": psnr,
+                                "ssim": ssim,
+                                "viescore": viescore
+                            }
+                            log_file.write(json.dumps(log_entry) + '\n')
+                            pair_best_scores.append(log_entry)
+                            log_file.flush()
+                            os.fsync(log_file.fileno())
+                            logging.info(f"SUCCESS: Logged metrics for existing image {combo_id}.")
+                        except Exception as e:
+                            logging.error(f"FAILURE: Could not evaluate existing image {final_path}. Error: {e}")
+                        continue
+
+                # If we reach here, it means neither image nor log exists, so we proceed
+                logging.info(f"STARTING: Processing new combo {combo_id}.")
                 combo_tmp_dir = os.path.join(TMP_DIR, pair_key, combo_id)
                 os.makedirs(combo_tmp_dir, exist_ok=True)
 
@@ -793,10 +825,6 @@ def run_evaluation(args):
                         logging.warning(f"Generation attempt {i} failed: {e}")
 
                 if best_gen_path:
-                    a_name = os.path.basename(taskA_input)
-                    b_name = os.path.basename(taskB_input)
-                    final_path = os.path.join(pair_res_dir,
-                                              f"{a_name}_{b_name}_{combo_id}{gt_ext}")
                     shutil.move(best_gen_path, final_path)
 
                     # Step 5: Evaluate best
