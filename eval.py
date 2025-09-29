@@ -30,7 +30,7 @@ from VIEScore.paper_implementation.imagen_museum.utils import \
     write_entry_to_json_file
 
 # Add VIEScore path
-viescore_path = '/mnt/data/huixin/Task-Transfer/VIEScore'
+viescore_path = '/data1/tzz/huixin/Task-Transfer/VIEScore'
 if viescore_path not in sys.path:
     sys.path.append(viescore_path)
 
@@ -50,9 +50,11 @@ BASE_MODEL_PATH = "Qwen/Qwen2.5-VL-3B-Instruct"
 QWEN_MODEL = "qwen-2.5-vl-3b-instruct"
 CHECKPOINT_PATH = "Qwen2.5-VL/qwen-vl-finetune/output/checkpoint-latest"
 
-GEMINI_API_KEY = "sk-Uqq0JFYc56oSgTFmrnGRzZgbtV4NBoNJKm18hvnpQKoFHjJF"
+# GEMINI_API_KEY = "sk-Uqq0JFYc56oSgTFmrnGRzZgbtV4NBoNJKm18hvnpQKoFHjJF"
+GEMINI_API_KEY = "sk-2LE9SvYG170QGDDX1ajIUlsuVxt1bqY9nY92BZAKvSZlPWFL"
 GEMINI_MODEL = "gemini-2.0-flash-preview-image-generation"
 BASE_URL = "https://globalai.vip"
+# BASE_URL = "http://82.29.71.210:5300"
 API_KEY_HEADER = "api-key"
 
 # How many chars to show when printing long model responses
@@ -184,8 +186,20 @@ def generate_eval_dataset():
 # Function to generate text prompt
 def generate_text_prompt(taskA_input, taskA_output, taskB_input, model, processor, use_qwen=True, fixed_prompt=None):
     """Generate text prompt using finetuned Qwen or fixed prompt."""
-    if not use_qwen:
-        return fixed_prompt or "You are an expert in analyzing image processing tasks. [FILL TASK A DEGRADATION] and [FILL TASK B DEGRADATION]."
+    if not use_qwen and fixed_prompt is None:
+        return fixed_prompt or "You are an expert in analyzing image processing tasks. Fix the third image and generate an output image."
+
+    elif not use_qwen and fixed_prompt is not None:
+        # Get task names from file paths
+        taskA = taskA_input.split('/')[0]
+        taskB = taskB_input.split('/')[0]
+
+        # Replace placeholders with actual task names
+        prompt = fixed_prompt.replace('[TASK_A_DEGRADATION]', taskA).replace('[TASK_B_DEGRADATION]', taskB)
+
+        # Logging the final prompt
+        logging.info(f"Using fixed prompt:\n{prompt}")
+        return prompt
 
     # Build messages
     messages = [
@@ -878,10 +892,11 @@ if __name__ == "__main__":
     parser.add_argument("--use_qwen_for_prompt", action="store_true",
                         default=False, help="Use Qwen for generating text prompt")
     parser.add_argument("--fixed_prompt", type=str, default=None,
+                        # This is a visual in-context learning task. The first two images are an input and output of Task A: [TASK_A_DEGRADATION]. The third image is the input for Task B: [TASK_B_DEGRADATION]. The goal is to perform Task B on the third image and generate output image, learning from Task A.
                         help="Fixed text prompt if not using Qwen")
     parser.add_argument("--use_mask", action="store_true",
                         default=False, help="Use mask for generation")
-    parser.add_argument("--num_tries", type=int, default=10,
+    parser.add_argument("--num_tries", type=int, default=5,
                         help="Number of generation attempts per combination")
     args = parser.parse_args()
 
