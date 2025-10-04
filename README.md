@@ -18,15 +18,15 @@ Our results show that T2T-VICL achieves stable performance across diverse low-le
 
 | Task | colorization | deblurring | dehazing | demoireing | denoising | deraining | harmonization | inpainting | light enhancement | reflection removal | shadow removal | style transfer |
 |:----:|:------------:|:----------:|:--------:|:----------:|:---------:|:---------:|:-------------:|:----------:|:-----------------:|:------------------:|:--------------:|:--------------:|
-| **colorization**       | - |   |   |   |   |   | ✔ |   |   |   |   | ✔ |
+| **colorization**       | - |   |   |   |   |   | ✔ |   | ✔ |   |   | ✔ |
 | **deblurring**         |   | - | ✔ | ✔ |   | ✔ |   |   |   |   |   |   |
-| **dehazing**           |   |   | - |   | ✔ | ✔ |   |   |   |   |   |   |
+| **dehazing**           |   |   | - |   | ✔ | ✔ |   |   |   | ✔ |   |   |
 | **demoireing**         |   |   | ✔ | - |   |   |   |   |   |   |   |   |
 | **denoising**          |   | ✔ |   |   | - |   |   |   | ✔ |   |   |   |
-| **deraining**          |   |   |   | ✔ | ✔ | - |   |   |   |   |   | ✔ |
-| **harmonization**      |   |   |   |   |   |   | - |   | ✔ |   |   | ✔ |
+| **deraining**          |   |   | ✔ | ✔ | ✔ | - |   |   |   |   | ✔ | ✔ |
+| **harmonization**      | ✔ |   |   |   |   |   | - |   | ✔ | ✔ |   | ✔ |
 | **inpainting**         | ✔ |   |   |   |   |   | ✔ | - | ✔ |   |   | ✔ |
-| **light enhancement**  | ✔ |   |   |   |   | ✔ |   |   | - |   | ✔ |   |
-| **reflection removal** |   |   | ✔ |   |   |   |   |   |   | - |   |   |
+| **light enhancement**  | ✔ |   |   |   |   | ✔ | ✔ |   | - |   | ✔ | ✔ |
+| **reflection removal** |   |   | ✔ |   |   |   |   |   |   | - | ✔ |   |
 | **shadow removal**     |   |   |   |   |   | ✔ |   |   |   | ✔ | - |   |
-| **style transfer**     |   |   |   |   |   |   |   |   | ✔ |   |   | - |
+| **style transfer**     | ✔ |   |   |   |   |   | ✔ |   | ✔ |   |   | - |
