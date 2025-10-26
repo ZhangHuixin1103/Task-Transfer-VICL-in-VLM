@@ -11,6 +11,8 @@ from transformers import (AutoProcessor, AutoTokenizer,
                           Qwen2_5_VLForConditionalGeneration)
 from transformers.utils.quantization_config import BitsAndBytesConfig
 
+os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "expandable_segments:True"
+
 # 1. Configuration
 
 # Data and output path configuration
