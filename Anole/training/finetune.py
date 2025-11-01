@@ -1,30 +1,26 @@
-import torch
-import jsonlines
-from torch.utils.data import ConcatDataset
-from transformers import (
-    TrainingArguments, 
-    ChameleonProcessor, 
-    ChameleonForConditionalGeneration
-)
-from torch.nn.utils.rnn import pad_sequence
-from perceptual import PerceptualLoss
-from trainer import AnoleTrainer
-from custom_datasets import InterleavedDataset, collate_fn
 import argparse
 
+import jsonlines
+import torch
+from custom_datasets import InterleavedDataset, collate_fn
+from perceptual import PerceptualLoss
+from torch.nn.utils.rnn import pad_sequence
+from torch.utils.data import ConcatDataset
+from trainer import AnoleTrainer
+from transformers import (ChameleonForConditionalGeneration,
+                          ChameleonProcessor, TrainingArguments)
 
 parser = argparse.ArgumentParser(description="Training Chameleon")
 parser.add_argument('--initial_model', '-i', required=True, help='Path to initial model')
 parser.add_argument('--trained_model', '-o', required=True, help='Path to trained model')
 args = parser.parse_args()
 
-
 ANOLE_INITIAL_MODEL = args.initial_model
 ANOLE_TRAINED_MODEL = args.trained_model
 processor = ChameleonProcessor.from_pretrained(ANOLE_INITIAL_MODEL)
 
 # Initialize the dataset
-img_critique_data=InterleavedDataset("./dataset_example.jsonl")
+img_critique_data=InterleavedDataset("../../data/dataset/tokenized_dataset.jsonl")
 dataset=img_critique_data
 print(f"Total dataset length: {len(dataset)}")
 
