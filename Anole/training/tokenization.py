@@ -3,6 +3,7 @@ import os
 
 import torch
 from PIL import Image
+from tqdm import tqdm
 from transformers import ChameleonForConditionalGeneration, ChameleonProcessor
 
 DATA_TASKS_DIR = "../../data/tasks"
@@ -61,7 +62,8 @@ def load_and_tokenize_prompts(file_path, processor, model):
         raw_data = json.load(f)
 
     # Iterate over the list of dictionaries
-    for data in raw_data:
+    print(f"Tokenizing {len(raw_data)} items...")
+    for data in tqdm(raw_data):
         if "prompt" not in data:
             # 1. Extract task names to replace placeholders
             task_a_name = data["taskA_input"].split('/')[0]
@@ -87,7 +89,7 @@ def load_and_tokenize_prompts(file_path, processor, model):
             response_images = [images[3]]  # Keep as list
 
             # 4. Process prompt with its 3 images
-            inputs_prompt = processor(prompt_text, images=prompt_images, padding=False,
+            inputs_prompt = processor(text=prompt_text, images=prompt_images, padding=False,
                                       return_tensors="pt", return_for_text_completion=True).to("cuda", dtype=torch.bfloat16)
             inputs_prompt_ids = inputs_prompt['input_ids']
 
@@ -99,7 +101,7 @@ def load_and_tokenize_prompts(file_path, processor, model):
                 inputs_prompt_ids = inputs_prompt_ids.masked_scatter(special_image_mask_prompt, image_tokens_prompt)
 
             # 5. Process response with its 1 image
-            inputs_response = processor(response_text, images=response_images, padding=False,
+            inputs_response = processor(text=response_text, images=response_images, padding=False,
                                         return_tensors="pt", return_for_text_completion=True).to("cuda", dtype=torch.bfloat16)
             inputs_response_ids = inputs_response['input_ids']
 

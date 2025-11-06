@@ -5,7 +5,6 @@ python inference.py \
     --mode image_critique \
     --output_file critique_output.jsonl
 
-
 # For object thoughts mode  
 python inference.py \
     --model_path ../twgi-subgoal-anole-7b \
