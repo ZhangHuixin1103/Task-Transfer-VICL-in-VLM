@@ -258,7 +258,7 @@ def main():
     args = parser.parse_args()
 
     # Step 1: Load existing data to determine the state.
-    output_json_path = OUTPUT_DIR / "train_dataset_test.json"
+    output_json_path = OUTPUT_DIR / "train_dataset.json"
     processed_data = load_processed_data(output_json_path)
 
     all_tasks = [d for d in DATA_ROOT.iterdir() if d.is_dir()]

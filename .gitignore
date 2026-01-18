@@ -5,8 +5,8 @@ data/tasks
 data/tmp
 data/output
 
-Emu
 Qwen2.5-VL/qwen-vl-finetune/output
+Qwen3-VL/qwen-vl-finetune/output
 VIEScore/data
 
 .DS_Store

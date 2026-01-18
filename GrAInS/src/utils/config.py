@@ -5,6 +5,7 @@ MODEL_NAME_MAP = {
     "qwen-2.5-vl-3b-instruct": "Qwen/Qwen2.5-VL-3B-Instruct",
     "qwen-2.5-vl-7b-instruct": "Qwen/Qwen2.5-VL-7B-Instruct",
     "qwen-2.5-7b-instruct": "Qwen/Qwen2.5-7B-Instruct",
+    "qwen-3-vl-4b-instruct": "Qwen/Qwen3-VL-4B-Instruct",
     "llava-1.6-7b": "llava-hf/llava-v1.6-vicuna-7b-hf",
     "gemma-3-4b": "google/gemma-3-4b-it",
     "gemma-3-12b": "google/gemma-3-12b-it",

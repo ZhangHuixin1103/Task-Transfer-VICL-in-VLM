@@ -20,7 +20,7 @@ from peft import PeftModel
 from PIL import Image, ImageFilter
 from qwen_vl_utils import process_vision_info
 from skimage.metrics import peak_signal_noise_ratio, structural_similarity
-from transformers import AutoProcessor, Qwen2_5_VLForConditionalGeneration
+from transformers import AutoProcessor, Qwen3VLForConditionalGeneration
 
 from GrAInS.src.attribution.gradient.vlm_grad import \
     get_token_attributions_contrastive
@@ -41,17 +41,17 @@ logging.basicConfig(level=logging.INFO, format="%(levelname)s - %(message)s")
 DATA_TASKS_DIR = "data/tasks"
 TRAIN_DATASET_JSON = "data/dataset/train_dataset.json"
 EVAL_DATASET_JSON = "data/dataset/eval_dataset.json"
-OUTPUT_DIR = "data/output/output_qwen1"
-TMP_DIR = "data/tmp/tmp_qwen1"
+OUTPUT_DIR = "data/output/output_qwen"
+TMP_DIR = "data/tmp/tmp_qwen"
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 os.makedirs(TMP_DIR, exist_ok=True)
 
-BASE_MODEL_PATH = "Qwen/Qwen2.5-VL-3B-Instruct"
-QWEN_MODEL = "qwen-2.5-vl-3b-instruct"
-CHECKPOINT_PATH = "Qwen2.5-VL/qwen-vl-finetune/output/checkpoint-latest"
+BASE_MODEL_PATH = "Qwen/Qwen3-VL-4B-Instruct"
+QWEN_MODEL = "qwen-3-vl-4b-instruct"
+CHECKPOINT_PATH = "Qwen3-VL/qwen-vl-finetune/output/checkpoint-4875"
 
-GEMINI_API_KEY = "sk-Uqq0JFYc56oSgTFmrnGRzZgbtV4NBoNJKm18hvnpQKoFHjJF"
-# GEMINI_API_KEY = "sk-2LE9SvYG170QGDDX1ajIUlsuVxt1bqY9nY92BZAKvSZlPWFL"
+# GEMINI_API_KEY = "sk-Uqq0JFYc56oSgTFmrnGRzZgbtV4NBoNJKm18hvnpQKoFHjJF"
+GEMINI_API_KEY = "sk-2LE9SvYG170QGDDX1ajIUlsuVxt1bqY9nY92BZAKvSZlPWFL"
 GEMINI_MODEL = "gemini-2.5-flash-image-preview:generateContent"
 BASE_URL = "https://globalai.vip"
 # BASE_URL = "http://82.29.71.210:5300"
@@ -730,7 +730,7 @@ def run_evaluation(args):
 
     if args.use_qwen_for_prompt:
         if os.path.exists(os.path.join(CHECKPOINT_PATH, "adapter_config.json")):
-            base_model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
+            base_model = Qwen3VLForConditionalGeneration.from_pretrained(
                 BASE_MODEL_PATH, torch_dtype="auto", device_map="auto"
             )
             prompt_qwen_model = PeftModel.from_pretrained(base_model, CHECKPOINT_PATH)
@@ -739,7 +739,7 @@ def run_evaluation(args):
             except Exception as e:
                 logging.warning(f"Failed to merge LoRA: {e}")
         else:
-            prompt_qwen_model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
+            prompt_qwen_model = Qwen3VLForConditionalGeneration.from_pretrained(
                 CHECKPOINT_PATH, torch_dtype="auto", device_map="auto"
             )
 
@@ -764,8 +764,6 @@ def run_evaluation(args):
                     existing_combo_ids.add(entry['combo_id'])
 
         with open(log_path, 'a') as log_file:
-            pair_best_scores = []
-
             for entry in entries:
                 taskA, taskB = pair_key.split('__', 1)
                 taskA_input = entry['taskA_input']
@@ -802,7 +800,6 @@ def run_evaluation(args):
                                 "viescore": viescore
                             }
                             log_file.write(json.dumps(log_entry) + '\n')
-                            pair_best_scores.append(log_entry)
                             log_file.flush()
                             os.fsync(log_file.fileno())
                             logging.info(f"SUCCESS: Logged metrics for existing image {combo_id}.")
@@ -873,7 +870,6 @@ def run_evaluation(args):
                         "viescore": viescore
                     }
                     log_file.write(json.dumps(log_entry) + '\n')
-                    pair_best_scores.append(log_entry)
                     log_file.flush()
                     os.fsync(log_file.fileno())
                     logging.info(f"Combo {combo_id}: PSNR={psnr:.2f}, SSIM={ssim:.4f}, VIEScore={viescore:.2f}")
@@ -881,20 +877,31 @@ def run_evaluation(args):
                     shutil.rmtree(combo_tmp_dir, ignore_errors=True)
 
             # Average for pair
-            if pair_best_scores:
-                avg_psnr = np.mean([s['psnr'] for s in pair_best_scores])
-                avg_ssim = np.mean([s['ssim'] for s in pair_best_scores])
-                avg_viescore = np.mean([s['viescore']
-                                       for s in pair_best_scores])
+            all_scores = []
+            if os.path.exists(log_path):
+                with open(log_path, 'r') as f:
+                    for line in f:
+                        try:
+                            entry = json.loads(line)
+                            if all(k in entry for k in ("psnr", "ssim", "viescore")):
+                                all_scores.append(entry)
+                        except Exception:
+                            continue
+            if all_scores:
+                avg_psnr = np.mean([s['psnr'] for s in all_scores])
+                avg_ssim = np.mean([s['ssim'] for s in all_scores])
+                avg_viescore = np.mean([s['viescore'] for s in all_scores])
                 pair_metrics_path = os.path.join(pair_res_dir,
                                                  "evaluation_results.json")
                 with open(pair_metrics_path, 'w') as f:
                     json.dump({
+                        "num_samples": len(all_scores),
                         "avg_psnr": avg_psnr,
                         "avg_ssim": avg_ssim,
                         "avg_viescore": avg_viescore
                     }, f, indent=4)
                 final_results[pair_key] = {
+                    "num_samples": len(all_scores),
                     "avg_psnr": avg_psnr,
                     "avg_ssim": avg_ssim,
                     "avg_viescore": avg_viescore
