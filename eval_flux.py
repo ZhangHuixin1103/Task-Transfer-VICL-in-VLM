@@ -21,6 +21,8 @@ if viescore_path not in sys.path:
 from VIEScore.paper_implementation.imagen_museum.utils import \
     write_entry_to_json_file
 
+from eval import hashed_id, generate_text_prompt, evaluate_generated
+
 DATA_TASKS_DIR = "data/tasks"
 EVAL_DATASET_JSON = "data/dataset/eval_dataset.json"
 OUTPUT_DIR = "data/output/baseline/flux/output_qwen"
@@ -48,13 +50,14 @@ def load_flux_pipeline():
     pipe.enable_model_cpu_offload()
     return pipe
 
+
 def generate_image_flux(pipe, taskA_in, taskA_out, taskB_in, text_prompt):
     ref_images = [
         load_image(os.path.join(DATA_TASKS_DIR, taskA_in)),
         load_image(os.path.join(DATA_TASKS_DIR, taskA_out)),
         load_image(os.path.join(DATA_TASKS_DIR, taskB_in))
     ]
-    
+
     try:
         output = pipe(
             prompt=text_prompt,
@@ -72,7 +75,7 @@ def generate_image_flux(pipe, taskA_in, taskA_out, taskB_in, text_prompt):
 def run_evaluation(args):
     with open(EVAL_DATASET_JSON, 'r') as f:
         eval_data = json.load(f)
-    
+
     grouped = {}
     for entry in eval_data:
         taskA = entry['taskA_input'].split('/')[0]
@@ -115,8 +118,10 @@ def run_evaluation(args):
         if os.path.exists(log_path):
             with open(log_path, 'r') as f:
                 for line in f:
-                    try: existing_combo_ids.add(json.loads(line)['combo_id'])
-                    except: continue
+                    try:
+                        existing_combo_ids.add(json.loads(line)['combo_id'])
+                    except:
+                        continue
 
         with open(log_path, 'a') as log_file:
             for entry in entries[:args.max_samples]:
@@ -124,15 +129,34 @@ def run_evaluation(args):
                 taskA_out = entry['taskA_output']
                 taskB_in = entry['taskB_input']
                 taskB_out = entry['taskB_output']
-                
-                from eval import hashed_id
+
                 combo_id = hashed_id(taskA_in, taskB_in)
+                final_path = os.path.join(pair_res_dir, f"{combo_id}.png")
 
-                if combo_id in existing_combo_ids:
-                    logging.info(f"SKIP: {combo_id} already exists.")
-                    continue
+                if os.path.exists(final_path):
+                    if combo_id in existing_combo_ids:
+                        logging.info(f"COMPLETE: Skipping combo {combo_id}, image and metrics already exist.")
+                        continue
+                    else:
+                        logging.info(f"RESUMING: Found image for {combo_id}, calculating and logging metrics...")
+                        try:
+                            psnr, ssim, viescore = evaluate_generated(
+                                os.path.join(DATA_TASKS_DIR, taskB_out), final_path,
+                                taskA_in, taskA_out, taskB_in,
+                                pair_key.split('__')[0], pair_key.split('__')[1]
+                            )
+                            log_entry = {"combo_id": combo_id, "final_image": final_path,
+                                         "psnr": psnr, "ssim": ssim, "viescore": viescore}
+                            log_file.write(json.dumps(log_entry) + '\n')
+                            log_file.flush()
+                            os.fsync(log_file.fileno())
+                            logging.info(f"SUCCESS: Logged metrics for existing image {combo_id}.")
+                        except Exception as e:
+                            logging.error(f"FAILURE: Could not evaluate existing image {final_path}. Error: {e}")
+                        continue
 
-                from eval import generate_text_prompt
+                logging.info(f"STARTING: Processing new combo {combo_id}.")
+
                 text_prompt = generate_text_prompt(
                     taskA_in, taskA_out, taskB_in,
                     model=prompt_qwen_model,
@@ -142,55 +166,46 @@ def run_evaluation(args):
                 )
 
                 gen_image = generate_image_flux(pipe, taskA_in, taskA_out, taskB_in, text_prompt)
-
                 if gen_image:
-                    final_path = os.path.join(pair_res_dir, f"{combo_id}.png")
+                    logging.info(f"Successfully received an image from Flux.")
                     gen_image.save(final_path)
-                    
-                    from eval import evaluate_generated
                     psnr, ssim, viescore = evaluate_generated(
-                        os.path.join(DATA_TASKS_DIR, taskB_out), 
-                        final_path, taskA_in, taskA_out, taskB_in, 
+                        os.path.join(DATA_TASKS_DIR, taskB_out), final_path,
+                        taskA_in, taskA_out, taskB_in,
                         pair_key.split('__')[0], pair_key.split('__')[1]
                     )
-                    
-                    log_entry = {
-                        "combo_id": combo_id,
-                        "final_image": final_path,
-                        "psnr": psnr,
-                        "ssim": ssim,
-                        "viescore": viescore
-                    }
+                    log_entry = {"combo_id": combo_id, "final_image": final_path,
+                                 "psnr": psnr, "ssim": ssim, "viescore": viescore}
                     log_file.write(json.dumps(log_entry) + '\n')
                     log_file.flush()
                     os.fsync(log_file.fileno())
-                    logging.info(f"ID {combo_id} Done. VIEScore: {viescore}")
+                    logging.info(f"Combo {combo_id}: PSNR={psnr:.2f}, SSIM={ssim:.4f}, VIEScore={viescore:.2f}")
 
-        all_scores = []
-        if os.path.exists(log_path):
-            with open(log_path, 'r') as f:
-                for line in f:
-                    try:
-                        res_entry = json.loads(line)
-                        if all(k in res_entry for k in ("psnr", "ssim", "viescore")):
-                            all_scores.append(res_entry)
-                    except: continue
+            all_scores = []
+            if os.path.exists(log_path):
+                with open(log_path, 'r') as f:
+                    for line in f:
+                        try:
+                            res_entry = json.loads(line)
+                            if all(k in res_entry for k in ("psnr", "ssim", "viescore")):
+                                all_scores.append(res_entry)
+                        except:
+                            continue
 
-        if all_scores:
-            metrics = {
-                "num_samples": len(all_scores),
-                "avg_psnr": np.mean([s['psnr'] for s in all_scores]),
-                "avg_ssim": np.mean([s['ssim'] for s in all_scores]),
-                "avg_viescore": np.mean([s['viescore'] for s in all_scores])
-            }
-            with open(os.path.join(pair_res_dir, "evaluation_results.json"), 'w') as f:
-                json.dump(metrics, f, indent=4)
-            final_results[pair_key] = metrics
-
+            if all_scores:
+                metrics = {
+                    "num_samples": len(all_scores),
+                    "avg_psnr": np.mean([s['psnr'] for s in all_scores]),
+                    "avg_ssim": np.mean([s['ssim'] for s in all_scores]),
+                    "avg_viescore": np.mean([s['viescore'] for s in all_scores])
+                }
+                with open(os.path.join(pair_res_dir, "evaluation_results.json"), 'w') as f:
+                    json.dump(metrics, f, indent=4)
+                final_results[pair_key] = metrics
 
     with open(os.path.join(OUTPUT_DIR, "evaluation_results.json"), 'w') as f:
         json.dump(final_results, f, indent=4)
-    
+
     logging.info("Evaluation completed. Results saved.")
 
 
@@ -200,6 +215,6 @@ if __name__ == "__main__":
                         help="Use Qwen for generating text prompt")
     parser.add_argument("--fixed_prompt", type=str, default=None,
                         help="Fixed text prompt if not using Qwen")
-    parser.add_argument("--max_samples", type=int, default=50)
+    parser.add_argument("--max_samples", type=int, default=100)
     args = parser.parse_args()
     run_evaluation(args)

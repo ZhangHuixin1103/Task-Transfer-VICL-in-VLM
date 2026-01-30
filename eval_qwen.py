@@ -71,10 +71,10 @@ def generate_image_qwen(pipeline, img_paths, text_prompt):
 
 def run_evaluation(args):
     eval_data, grouped = generate_eval_dataset()
-    
+
     print(f"Loading Pipeline: {args.model_id}")
     pipeline = QwenImageEditPlusPipeline.from_pretrained(
-        args.model_id, 
+        args.model_id,
         torch_dtype=torch.bfloat16
     )
     pipeline.to('cuda')
@@ -84,7 +84,7 @@ def run_evaluation(args):
     if args.use_qwen_for_prompt:
         from peft import PeftModel
         from transformers import AutoProcessor, Qwen3VLForConditionalGeneration
-        
+
         if os.path.exists(os.path.join(CHECKPOINT_PATH, "adapter_config.json")):
             base_model = Qwen3VLForConditionalGeneration.from_pretrained(
                 BASE_MODEL_PATH, torch_dtype="auto", device_map="auto"
@@ -124,7 +124,7 @@ def run_evaluation(args):
             for entry in entries[:args.max_samples]:
                 taskA, taskB = pair_key.split('__', 1)
                 combo_id = hashed_id(entry['taskA_input'], entry['taskB_input'])
-                
+
                 gt_path = os.path.join(DATA_TASKS_DIR, entry['taskB_output'])
                 gt_ext = os.path.splitext(gt_path)[1]
                 save_name = f"{os.path.basename(entry['taskA_input'])}_{os.path.basename(entry['taskB_input'])}_{combo_id}{gt_ext}"
@@ -135,10 +135,10 @@ def run_evaluation(args):
                         logging.info(f"COMPLETE: Skipping combo {combo_id}, image and metrics already exist.")
                         continue
                     else:
-                        logging.info(f"RESUMING: Calculating metrics for {combo_id}...")
+                        logging.info(f"RESUMING: Found image for {combo_id}, calculating and logging metrics...")
                         try:
                             psnr, ssim, viescore = evaluate_generated(
-                                gt_path, final_path, 
+                                gt_path, final_path,
                                 entry['taskA_input'], entry['taskA_output'], entry['taskB_input'],
                                 taskA, taskB
                             )
@@ -152,11 +152,13 @@ def run_evaluation(args):
                             log_file.write(json.dumps(log_entry) + '\n')
                             log_file.flush()
                             os.fsync(log_file.fileno())
+                            logging.info(f"SUCCESS: Logged metrics for existing image {combo_id}.")
                         except Exception as e:
-                            logging.error(f"Failed to calculate metrics for existing image {combo_id}: {e}")
+                            logging.error(f"FAILURE: Could not evaluate existing image {final_path}. Error: {e}")
                         continue
 
-                logging.info(f"Generating for combo: {combo_id}")
+                logging.info(f"STARTING: Processing new combo {combo_id}.")
+
                 text_prompt = generate_text_prompt(
                     entry['taskA_input'], entry['taskA_output'], entry['taskB_input'],
                     model=prompt_model, processor=prompt_processor,
@@ -165,55 +167,60 @@ def run_evaluation(args):
 
                 try:
                     img_list = [entry['taskA_input'], entry['taskA_output'], entry['taskB_input']]
-                    generated_img = generate_image_qwen(pipeline, img_list, text_prompt)
-                    generated_img.save(final_path)
+                    gen_image = generate_image_qwen(pipeline, img_list, text_prompt)
+                    if gen_image:
+                        logging.info(f"Successfully received an image from Qwen-Image.")
+                        gen_image.save(final_path)
 
-                    psnr, ssim, viescore = evaluate_generated(
-                        gt_path, final_path, 
-                        entry['taskA_input'], entry['taskA_output'], entry['taskB_input'],
-                        taskA, taskB
-                    )
+                        psnr, ssim, viescore = evaluate_generated(
+                            gt_path, final_path,
+                            entry['taskA_input'], entry['taskA_output'], entry['taskB_input'],
+                            taskA, taskB
+                        )
 
-                    log_entry = {
-                        "combo_id": combo_id,
-                        "final_image": final_path,
-                        "psnr": psnr,
-                        "ssim": ssim,
-                        "viescore": viescore
-                    }
-                    log_file.write(json.dumps(log_entry) + '\n')
-                    log_file.flush()
+                        log_entry = {
+                            "combo_id": combo_id,
+                            "final_image": final_path,
+                            "psnr": psnr,
+                            "ssim": ssim,
+                            "viescore": viescore
+                        }
+                        log_file.write(json.dumps(log_entry) + '\n')
+                        log_file.flush()
+                        os.fsync(log_file.fileno())
+                        logging.info(f"Combo {combo_id}: PSNR={psnr:.2f}, SSIM={ssim:.4f}, VIEScore={viescore:.2f}")
                 except Exception as e:
                     logging.error(f"Failed to process {combo_id}: {e}")
 
-        all_scores = []
-        with open(log_path, 'r') as f:
-            for line in f:
-                entry = json.loads(line)
-                all_scores.append(entry)
-        
-        if all_scores:
-            avg_metrics = {
-                "num_samples": len(all_scores),
-                "avg_psnr": np.mean([s['psnr'] for s in all_scores]),
-                "avg_ssim": np.mean([s['ssim'] for s in all_scores]),
-                "avg_viescore": np.mean([s['viescore'] for s in all_scores])
-            }
-            with open(os.path.join(pair_res_dir, "evaluation_results.json"), 'w') as f:
-                json.dump(avg_metrics, f, indent=4)
-            final_results[pair_key] = avg_metrics
+            all_scores = []
+            with open(log_path, 'r') as f:
+                for line in f:
+                    entry = json.loads(line)
+                    all_scores.append(entry)
+
+            if all_scores:
+                avg_metrics = {
+                    "num_samples": len(all_scores),
+                    "avg_psnr": np.mean([s['psnr'] for s in all_scores]),
+                    "avg_ssim": np.mean([s['ssim'] for s in all_scores]),
+                    "avg_viescore": np.mean([s['viescore'] for s in all_scores])
+                }
+                with open(os.path.join(pair_res_dir, "evaluation_results.json"), 'w') as f:
+                    json.dump(avg_metrics, f, indent=4)
+                final_results[pair_key] = avg_metrics
 
     with open(os.path.join(OUTPUT_DIR, "evaluation_results.json"), 'w') as f:
         json.dump(final_results, f, indent=4)
 
     logging.info("Qwen Evaluation Complete.")
 
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Qwen-Image-Edit-2511 Evaluation")
     parser.add_argument("--model_id", type=str, default="Qwen/Qwen-Image-Edit-2511")
     parser.add_argument("--use_qwen_for_prompt", action="store_true", default=False)
     parser.add_argument("--fixed_prompt", type=str, default=None)
-    parser.add_argument("--max_samples", type=int, default=50)
+    parser.add_argument("--max_samples", type=int, default=100)
     args = parser.parse_args()
 
     run_evaluation(args)
