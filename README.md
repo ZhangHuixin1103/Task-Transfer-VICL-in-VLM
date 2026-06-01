@@ -1,12 +1,34 @@
 # T2T-VICL: Cross-Task Visual In-Context Learning via Implicit Text-Driven VLMs
 
-[Paper](https://arxiv.org/abs/2511.16107) | [Code](https://github.com/ZhangHuixin1103/Task-Transfer.git) | Data: coming soon | [Raw Results](https://drive.google.com/drive/u/2/folders/1HePThPdjlGakg46b0fL_MFQvUQp2njMD)
+<div align="center">
+<img width="720" alt="T2T-VICL framework" src="assets/framework.png" />
+</div>
+
+<p style="line-height: 300%;" align="center">
+  <a href="https://arxiv.org/abs/2511.16107">
+    <img src="https://img.shields.io/badge/arXiv-Paper-b31b1b?logo=arxiv&logoColor=white" alt="Paper">
+  </a>
+  &nbsp;
+  <a href="https://github.com/ZhangHuixin1103/Task-Transfer">
+    <img src="https://img.shields.io/badge/GitHub-Code-181717?logo=github&logoColor=white" alt="Code">
+  </a>
+  &nbsp;
+  <a href="https://drive.google.com/drive/folders/1Au53egqWttWAMMHzUXhG71NER3c9lscv">
+    <img src="https://img.shields.io/badge/Google%20Drive-Data-4285F4?logo=googledrive&logoColor=white" alt="Data">
+  </a>
+  &nbsp;
+  <a href="https://huggingface.co/datasets/ZhangHuixin/VICL">
+    <img src="https://img.shields.io/badge/🤗%20HuggingFace-Data-yellow" alt="Data">
+  </a>
+</p>
 
 This repository contains the official implementation of **T2T-VICL**, a collaborative framework for studying **cross-task visual in-context learning (VICL)**. In standard VICL, the demonstration pair and the query usually belong to the same visual task. T2T-VICL studies a harder setting: the visual prompt comes from **Task A**, while the query image requires **Task B**.
 
 The core idea is to translate mismatched visual demonstrations into **implicit textual guidance**. A large teacher VLM first describes the relationship between two low-level vision tasks without explicitly naming the tasks. A smaller Qwen-VL student is then fine-tuned to generate such content-dependent prompts from three images: Task A input, Task A output, and Task B input. The generated prompt guides a frozen image-editing VLM, and multiple candidates are evaluated with PSNR, SSIM, and VIEScore.
 
-<img width="400" height="470" alt="T2T-VICL overview" src="https://github.com/user-attachments/assets/0de690b6-b38d-4492-9344-7c30028a5910" />
+<div align="center">
+<img height="480" alt="T2T-VICL overview" src="assets/VICL.png" />
+</div>
 
 ## Method Overview
 
@@ -63,11 +85,25 @@ The project was developed with Python, PyTorch, Transformers, Diffusers, Qwen-VL
 ```bash
 conda create -n vicl python=3.10
 conda activate vicl
-pip install torch torchvision --index-url https://download.pytorch.org/whl/cu124
-pip install transformers accelerate peft diffusers qwen-vl-utils scikit-image pillow tqdm google-genai
+
+# Install PyTorch according to your CUDA driver first
+# Example:
+pip install torch==2.6.0 torchvision==0.21.0 torchaudio==2.6.0 --index-url https://download.pytorch.org/whl/cu118  # CUDA 11.8
+pip install torch==2.6.0 torchvision==0.21.0 torchaudio==2.6.0 --index-url https://download.pytorch.org/whl/cu124  # CUDA 12.4
+pip install torch==2.6.0 torchvision==0.21.0 torchaudio==2.6.0 --index-url https://download.pytorch.org/whl/cu126  # CUDA 12.6
+
+# Find proper Flash Attention 2 version from this link: https://github.com/Dao-AILab/flash-attention/releases
+# Example:
+pip install flash-attn==2.7.4.post1 --no-build-isolation
+pip install -U flash-attn --no-build-isolation
+
+# Install project dependencies
+pip install -r requirements.txt
 ```
 
 For Qwen3-VL fine-tuning, also install the packages required by `Qwen3-VL/qwen-vl-finetune/README.md`, including DeepSpeed and FlashAttention if your hardware supports them.
+
+**Note**: For baseline models' evaluation process (including FireRed, Flux 2, OmniGen 2, Qwen-Image), the required packages might slightly differ. Check their official installation guidelines if you have any questions.
 
 ## Data Preparation
 
@@ -95,19 +131,21 @@ data/dataset/
 `-- eval_dataset_2.json         # Same-task VICL ablation pairs
 ```
 
-To regenerate the Qwen-VL SFT file from `train_dataset.json`:
-
-```bash
-python data_process.py
-```
-
 To generate teacher descriptions for a new ordered task pair:
 
 ```bash
 python data.py deblurring dehazing
 ```
 
-`data.py` loads Qwen2.5-VL-32B-Instruct by default and writes to `data/dataset/train_dataset.json`. Adjust model paths, sample counts, and dataset paths in the script before running large-scale generation.
+The `data.py` loads Qwen2.5-VL-32B-Instruct by default and writes to `data/dataset/train_dataset.json`. Adjust model paths, sample counts, and dataset paths in the script before running large-scale generation.
+
+To regenerate the Qwen-VL SFT file from `train_dataset.json`:
+
+```bash
+python data_process.py
+```
+
+**Note**: To download original data (`tasks` and `dataset`), you need to contact authors to get the Google Drive folder shared link, or sign User Agreement to gain access to Hugging Face dataset.
 
 ## Fine-Tuning
 
@@ -121,7 +159,7 @@ Make sure `annotation_path` points to `data/dataset/converted_dataset.json` and 
 
 ```bash
 cd Qwen3-VL/qwen-vl-finetune
-NPROC_PER_NODE=8 bash scripts/sft_qwen3_4b.sh
+bash finetune.sh  # Or you can choose any shell script file from Qwen3-VL/qwen-vl-finetune/scripts
 ```
 
 The evaluation scripts expect the fine-tuned checkpoint at:
@@ -134,26 +172,30 @@ If you save the checkpoint elsewhere, update `CHECKPOINT_PATH` in the correspond
 
 ## Evaluation
 
-Run cross-task evaluation with the learned Qwen prompt:
+Main experiments on Gemini:
+- Run cross-task evaluation with the learned Qwen prompt.
+
+   ```bash
+   python eval.py --use_qwen_for_prompt
+   ```
+
+- Run the fixed-prompt baseline.
+
+   ```bash
+   python eval.py --fixed_prompt "This is a visual in-context learning task. The first two images are an input and output of Task A. The third image is the input for Task B. The goal is to perform Task B on the third image and generate output image, learning from Task A."
+   ```
+
+Additional models:
 
 ```bash
-python eval.py --use_qwen_for_prompt
-```
+# Closed-source
+python eval_seedream.py --use_qwen_for_prompt  # --fixed_prompt "xxx"
 
-Run the fixed-prompt baseline:
-
-```bash
-python eval.py --fixed_prompt "This is a visual in-context learning task. The first two images are an input and output of Task A. The third image is the input for Task B. The goal is to perform Task B on the third image and generate output image, learning from Task A."
-```
-
-Additional backends:
-
-```bash
-python eval_seedream.py --use_qwen_for_prompt
-python eval_qwen.py --use_qwen_for_prompt
-python eval_flux.py --use_qwen_for_prompt
-python eval_omnigen.py --use_qwen_for_prompt
-python eval_firered.py --use_qwen_for_prompt
+# Open-source
+python eval_qwen.py --use_qwen_for_prompt      # --fixed_prompt "xxx"
+python eval_flux.py --use_qwen_for_prompt      # --fixed_prompt "xxx"
+python eval_omnigen.py --use_qwen_for_prompt   # --fixed_prompt "xxx"
+python eval_firered.py --use_qwen_for_prompt   # --fixed_prompt "xxx"
 ```
 
 Same-task ablations:
@@ -162,6 +204,8 @@ Same-task ablations:
 python eval_1.py
 python eval_2.py --use_qwen_for_prompt
 ```
+
+All commands above can be found in `eval.sh`.
 
 Outputs are written under `data/output/`. Each task-pair directory contains generated images, `evaluation_log.jsonl`, and averaged `evaluation_results.json`.
 
@@ -187,4 +231,4 @@ Some scripts contain placeholder keys or machine-specific paths from the origina
 
 ## Acknowledgements
 
-This repository builds on Qwen-VL, VIEScore, GrAInS, and several recent image-editing VLMs. Please also follow the licenses and usage terms of the underlying datasets, pretrained models, and API providers.
+This repository builds on [Qwen-VL](https://github.com/QwenLM/Qwen3-VL), [VIEScore](https://github.com/TIGER-AI-Lab/VIEScore), [GrAInS](https://github.com/duykhuongnguyen/GrAInS), and several recent image-editing VLMs. Please also follow the licenses and usage terms of the underlying datasets, pretrained models, and API providers.

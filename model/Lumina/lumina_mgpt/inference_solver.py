@@ -450,24 +450,35 @@ class FlexARInferenceSolver:
             
         st = time.time()
         if self.quant:
+            # generation_result = self.model.generate(
+            #     prompt, generation_config, logits_processor=logits_processor, streamer=streamer, **generate_kwargs,
+            # )[0][prompt_len:].tolist()
             generation_result = self.model.generate(
-                prompt, generation_config, logits_processor=logits_processor, streamer=streamer, **generate_kwargs,
-            )[0][prompt_len:].tolist()
+                prompt, generation_config, logits_processor=logits_processor, streamer=streamer,
+                output_hidden_states=True, return_dict_in_generate=True, **generate_kwargs
+            )
             self.model.reset_call_times()
         else:
             with torch.cuda.amp.autocast(dtype=self.dtype):
+                # generation_result = self.model.generate(
+                #     prompt, generation_config, logits_processor=logits_processor, streamer=streamer
+                # )[0][prompt_len:].tolist()
                 generation_result = self.model.generate(
-                    prompt, generation_config, logits_processor=logits_processor, streamer=streamer
-                )[0][prompt_len:].tolist()
-        if len(generation_result) > 0 and generation_result[-1] == 151666:
-            generation_result = generation_result
+                    prompt, generation_config, logits_processor=logits_processor, streamer=streamer,
+                    output_hidden_states=True, return_dict_in_generate=True
+                )
+        # if len(generation_result) > 0 and generation_result[-1] == 151666:
+        #     generation_result = generation_result
             
+        sequences = generation_result.sequences
+        gen_tokens = sequences[0][prompt_len:].tolist()
+
         print("Length of ids:", len(generation_result))
         print(f"SAMPLE TIME:{time.time()-st}")
         
         if ref_tokens is not None:
-            generation_result = ref_tokens + generation_result
-        return self.decode_ids(generation_result)
+            gen_tokens = ref_tokens + gen_tokens
+        return self.decode_ids(gen_tokens), generation_result
     
     def show_images(self, batch):
         """ Display a batch of images inline. """

@@ -1,0 +1,5837 @@
+[
+    {
+        "task": "colorization",
+        "input": "colorization/input/image4804.jpg",
+        "output": "colorization/output/image4804.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image2446.jpg",
+        "output": "colorization/output/image2446.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image4472.jpg",
+        "output": "colorization/output/image4472.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image1696.jpg",
+        "output": "colorization/output/image1696.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image0296.jpg",
+        "output": "colorization/output/image0296.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image2755.jpg",
+        "output": "colorization/output/image2755.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image3556.jpg",
+        "output": "colorization/output/image3556.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image2631.jpg",
+        "output": "colorization/output/image2631.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image3725.jpg",
+        "output": "colorization/output/image3725.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image1837.jpg",
+        "output": "colorization/output/image1837.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image2440.jpg",
+        "output": "colorization/output/image2440.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image3150.jpg",
+        "output": "colorization/output/image3150.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image3840.jpg",
+        "output": "colorization/output/image3840.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image2091.jpg",
+        "output": "colorization/output/image2091.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image3375.jpg",
+        "output": "colorization/output/image3375.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image3302.jpg",
+        "output": "colorization/output/image3302.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image1722.jpg",
+        "output": "colorization/output/image1722.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image2237.jpg",
+        "output": "colorization/output/image2237.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image4868.jpg",
+        "output": "colorization/output/image4868.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image1642.jpg",
+        "output": "colorization/output/image1642.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image2387.jpg",
+        "output": "colorization/output/image2387.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image1554.jpg",
+        "output": "colorization/output/image1554.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image0154.jpg",
+        "output": "colorization/output/image0154.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image0721.jpg",
+        "output": "colorization/output/image0721.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image1842.jpg",
+        "output": "colorization/output/image1842.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image3654.jpg",
+        "output": "colorization/output/image3654.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image2779.jpg",
+        "output": "colorization/output/image2779.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image1558.jpg",
+        "output": "colorization/output/image1558.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image0260.jpg",
+        "output": "colorization/output/image0260.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image3963.jpg",
+        "output": "colorization/output/image3963.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image1626.jpg",
+        "output": "colorization/output/image1626.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image1092.jpg",
+        "output": "colorization/output/image1092.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image2289.jpg",
+        "output": "colorization/output/image2289.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image1540.jpg",
+        "output": "colorization/output/image1540.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image0642.jpg",
+        "output": "colorization/output/image0642.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image4237.jpg",
+        "output": "colorization/output/image4237.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image3966.jpg",
+        "output": "colorization/output/image3966.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image0871.jpg",
+        "output": "colorization/output/image0871.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image3218.jpg",
+        "output": "colorization/output/image3218.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image4242.jpg",
+        "output": "colorization/output/image4242.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image2761.jpg",
+        "output": "colorization/output/image2761.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image0812.jpg",
+        "output": "colorization/output/image0812.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image3157.jpg",
+        "output": "colorization/output/image3157.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image1049.jpg",
+        "output": "colorization/output/image1049.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image0597.jpg",
+        "output": "colorization/output/image0597.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image0408.jpg",
+        "output": "colorization/output/image0408.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image4049.jpg",
+        "output": "colorization/output/image4049.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image4559.jpg",
+        "output": "colorization/output/image4559.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image2486.jpg",
+        "output": "colorization/output/image2486.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image4111.jpg",
+        "output": "colorization/output/image4111.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image2131.jpg",
+        "output": "colorization/output/image2131.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image3213.jpg",
+        "output": "colorization/output/image3213.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image2654.jpg",
+        "output": "colorization/output/image2654.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image2641.jpg",
+        "output": "colorization/output/image2641.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image3188.jpg",
+        "output": "colorization/output/image3188.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image3342.jpg",
+        "output": "colorization/output/image3342.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image4663.jpg",
+        "output": "colorization/output/image4663.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image4548.jpg",
+        "output": "colorization/output/image4548.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image4574.jpg",
+        "output": "colorization/output/image4574.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image4066.jpg",
+        "output": "colorization/output/image4066.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image4137.jpg",
+        "output": "colorization/output/image4137.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image0881.jpg",
+        "output": "colorization/output/image0881.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image2218.jpg",
+        "output": "colorization/output/image2218.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image1009.jpg",
+        "output": "colorization/output/image1009.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image0159.jpg",
+        "output": "colorization/output/image0159.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image4515.jpg",
+        "output": "colorization/output/image4515.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image1069.jpg",
+        "output": "colorization/output/image1069.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image3476.jpg",
+        "output": "colorization/output/image3476.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image0219.jpg",
+        "output": "colorization/output/image0219.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image1857.jpg",
+        "output": "colorization/output/image1857.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image1015.jpg",
+        "output": "colorization/output/image1015.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image1506.jpg",
+        "output": "colorization/output/image1506.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image2897.jpg",
+        "output": "colorization/output/image2897.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image2405.jpg",
+        "output": "colorization/output/image2405.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image1378.jpg",
+        "output": "colorization/output/image1378.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image1083.jpg",
+        "output": "colorization/output/image1083.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image0548.jpg",
+        "output": "colorization/output/image0548.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image4883.jpg",
+        "output": "colorization/output/image4883.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image0239.jpg",
+        "output": "colorization/output/image0239.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image2462.jpg",
+        "output": "colorization/output/image2462.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image2162.jpg",
+        "output": "colorization/output/image2162.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image0637.jpg",
+        "output": "colorization/output/image0637.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image4617.jpg",
+        "output": "colorization/output/image4617.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image0432.jpg",
+        "output": "colorization/output/image0432.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image2172.jpg",
+        "output": "colorization/output/image2172.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image0687.jpg",
+        "output": "colorization/output/image0687.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image2513.jpg",
+        "output": "colorization/output/image2513.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image1531.jpg",
+        "output": "colorization/output/image1531.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image3601.jpg",
+        "output": "colorization/output/image3601.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image4624.jpg",
+        "output": "colorization/output/image4624.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image3011.jpg",
+        "output": "colorization/output/image3011.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image0483.jpg",
+        "output": "colorization/output/image0483.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image4420.jpg",
+        "output": "colorization/output/image4420.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image0574.jpg",
+        "output": "colorization/output/image0574.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image1442.jpg",
+        "output": "colorization/output/image1442.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image0386.jpg",
+        "output": "colorization/output/image0386.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image3186.jpg",
+        "output": "colorization/output/image3186.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image2616.jpg",
+        "output": "colorization/output/image2616.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image4058.jpg",
+        "output": "colorization/output/image4058.jpg"
+    },
+    {
+        "task": "colorization",
+        "input": "colorization/input/image4345.jpg",
+        "output": "colorization/output/image4345.jpg"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/001377.png",
+        "output": "deblurring/output/001377.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/000187.png",
+        "output": "deblurring/output/000187.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/000271.png",
+        "output": "deblurring/output/000271.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/002870.png",
+        "output": "deblurring/output/002870.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/001030.png",
+        "output": "deblurring/output/001030.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/001356.png",
+        "output": "deblurring/output/001356.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/001021.png",
+        "output": "deblurring/output/001021.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/000689.png",
+        "output": "deblurring/output/000689.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/000713.png",
+        "output": "deblurring/output/000713.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/000725.png",
+        "output": "deblurring/output/000725.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/001005.png",
+        "output": "deblurring/output/001005.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/001315.png",
+        "output": "deblurring/output/001315.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/002106.png",
+        "output": "deblurring/output/002106.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/000658.png",
+        "output": "deblurring/output/000658.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/002891.png",
+        "output": "deblurring/output/002891.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/002858.png",
+        "output": "deblurring/output/002858.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/002113.png",
+        "output": "deblurring/output/002113.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/002812.png",
+        "output": "deblurring/output/002812.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/001345.png",
+        "output": "deblurring/output/001345.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/000951.png",
+        "output": "deblurring/output/000951.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/000038.png",
+        "output": "deblurring/output/000038.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/001354.png",
+        "output": "deblurring/output/001354.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/000137.png",
+        "output": "deblurring/output/000137.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/000213.png",
+        "output": "deblurring/output/000213.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/002890.png",
+        "output": "deblurring/output/002890.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/001047.png",
+        "output": "deblurring/output/001047.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/000001.png",
+        "output": "deblurring/output/000001.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/000978.png",
+        "output": "deblurring/output/000978.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/000057.png",
+        "output": "deblurring/output/000057.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/000123.png",
+        "output": "deblurring/output/000123.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/002162.png",
+        "output": "deblurring/output/002162.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/000765.png",
+        "output": "deblurring/output/000765.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/000076.png",
+        "output": "deblurring/output/000076.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/000769.png",
+        "output": "deblurring/output/000769.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/002826.png",
+        "output": "deblurring/output/002826.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/000641.png",
+        "output": "deblurring/output/000641.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/002178.png",
+        "output": "deblurring/output/002178.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/000972.png",
+        "output": "deblurring/output/000972.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/001397.png",
+        "output": "deblurring/output/001397.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/001370.png",
+        "output": "deblurring/output/001370.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/001008.png",
+        "output": "deblurring/output/001008.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/000020.png",
+        "output": "deblurring/output/000020.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/000277.png",
+        "output": "deblurring/output/000277.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/000115.png",
+        "output": "deblurring/output/000115.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/000979.png",
+        "output": "deblurring/output/000979.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/002174.png",
+        "output": "deblurring/output/002174.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/000127.png",
+        "output": "deblurring/output/000127.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/002892.png",
+        "output": "deblurring/output/002892.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/002508.png",
+        "output": "deblurring/output/002508.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/001018.png",
+        "output": "deblurring/output/001018.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/001366.png",
+        "output": "deblurring/output/001366.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/000684.png",
+        "output": "deblurring/output/000684.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/000082.png",
+        "output": "deblurring/output/000082.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/000624.png",
+        "output": "deblurring/output/000624.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/000249.png",
+        "output": "deblurring/output/000249.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/000692.png",
+        "output": "deblurring/output/000692.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/000031.png",
+        "output": "deblurring/output/000031.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/001359.png",
+        "output": "deblurring/output/001359.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/000608.png",
+        "output": "deblurring/output/000608.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/002513.png",
+        "output": "deblurring/output/002513.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/001355.png",
+        "output": "deblurring/output/001355.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/001379.png",
+        "output": "deblurring/output/001379.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/000219.png",
+        "output": "deblurring/output/000219.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/002898.png",
+        "output": "deblurring/output/002898.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/000967.png",
+        "output": "deblurring/output/000967.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/000970.png",
+        "output": "deblurring/output/000970.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/002164.png",
+        "output": "deblurring/output/002164.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/000051.png",
+        "output": "deblurring/output/000051.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/000194.png",
+        "output": "deblurring/output/000194.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/000146.png",
+        "output": "deblurring/output/000146.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/000189.png",
+        "output": "deblurring/output/000189.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/000023.png",
+        "output": "deblurring/output/000023.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/000612.png",
+        "output": "deblurring/output/000612.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/001001.png",
+        "output": "deblurring/output/001001.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/000722.png",
+        "output": "deblurring/output/000722.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/001304.png",
+        "output": "deblurring/output/001304.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/000096.png",
+        "output": "deblurring/output/000096.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/000229.png",
+        "output": "deblurring/output/000229.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/000965.png",
+        "output": "deblurring/output/000965.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/002811.png",
+        "output": "deblurring/output/002811.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/002192.png",
+        "output": "deblurring/output/002192.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/000241.png",
+        "output": "deblurring/output/000241.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/002853.png",
+        "output": "deblurring/output/002853.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/001334.png",
+        "output": "deblurring/output/001334.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/002864.png",
+        "output": "deblurring/output/002864.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/000994.png",
+        "output": "deblurring/output/000994.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/001371.png",
+        "output": "deblurring/output/001371.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/000632.png",
+        "output": "deblurring/output/000632.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/002482.png",
+        "output": "deblurring/output/002482.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/001384.png",
+        "output": "deblurring/output/001384.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/001049.png",
+        "output": "deblurring/output/001049.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/002173.png",
+        "output": "deblurring/output/002173.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/002172.png",
+        "output": "deblurring/output/002172.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/001038.png",
+        "output": "deblurring/output/001038.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/002808.png",
+        "output": "deblurring/output/002808.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/000021.png",
+        "output": "deblurring/output/000021.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/000693.png",
+        "output": "deblurring/output/000693.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/001044.png",
+        "output": "deblurring/output/001044.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/002161.png",
+        "output": "deblurring/output/002161.png"
+    },
+    {
+        "task": "deblurring",
+        "input": "deblurring/input/000039.png",
+        "output": "deblurring/output/000039.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/581.png",
+        "output": "dehazing/output/581.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/273.png",
+        "output": "dehazing/output/273.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/1280.png",
+        "output": "dehazing/output/1280.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/117.png",
+        "output": "dehazing/output/117.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/1204.png",
+        "output": "dehazing/output/1204.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/1445.png",
+        "output": "dehazing/output/1445.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/579.png",
+        "output": "dehazing/output/579.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/1144.png",
+        "output": "dehazing/output/1144.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/279.png",
+        "output": "dehazing/output/279.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/91.png",
+        "output": "dehazing/output/91.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/232.png",
+        "output": "dehazing/output/232.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/93.png",
+        "output": "dehazing/output/93.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/292.png",
+        "output": "dehazing/output/292.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/873.png",
+        "output": "dehazing/output/873.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/567.png",
+        "output": "dehazing/output/567.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/374.png",
+        "output": "dehazing/output/374.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/1221.png",
+        "output": "dehazing/output/1221.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/1171.png",
+        "output": "dehazing/output/1171.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/953.png",
+        "output": "dehazing/output/953.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/1008.png",
+        "output": "dehazing/output/1008.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/633.png",
+        "output": "dehazing/output/633.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/1170.png",
+        "output": "dehazing/output/1170.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/17.png",
+        "output": "dehazing/output/17.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/301.png",
+        "output": "dehazing/output/301.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/818.png",
+        "output": "dehazing/output/818.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/938.png",
+        "output": "dehazing/output/938.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/952.png",
+        "output": "dehazing/output/952.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/841.png",
+        "output": "dehazing/output/841.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/724.png",
+        "output": "dehazing/output/724.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/771.png",
+        "output": "dehazing/output/771.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/407.png",
+        "output": "dehazing/output/407.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/676.png",
+        "output": "dehazing/output/676.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/630.png",
+        "output": "dehazing/output/630.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/242.png",
+        "output": "dehazing/output/242.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/185.png",
+        "output": "dehazing/output/185.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/227.png",
+        "output": "dehazing/output/227.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/1304.png",
+        "output": "dehazing/output/1304.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/447.png",
+        "output": "dehazing/output/447.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/606.png",
+        "output": "dehazing/output/606.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/126.png",
+        "output": "dehazing/output/126.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/962.png",
+        "output": "dehazing/output/962.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/502.png",
+        "output": "dehazing/output/502.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/1367.png",
+        "output": "dehazing/output/1367.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/1423.png",
+        "output": "dehazing/output/1423.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/1100.png",
+        "output": "dehazing/output/1100.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/605.png",
+        "output": "dehazing/output/605.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/322.png",
+        "output": "dehazing/output/322.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/891.png",
+        "output": "dehazing/output/891.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/1266.png",
+        "output": "dehazing/output/1266.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/1275.png",
+        "output": "dehazing/output/1275.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/315.png",
+        "output": "dehazing/output/315.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/1422.png",
+        "output": "dehazing/output/1422.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/1408.png",
+        "output": "dehazing/output/1408.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/826.png",
+        "output": "dehazing/output/826.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/576.png",
+        "output": "dehazing/output/576.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/884.png",
+        "output": "dehazing/output/884.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/901.png",
+        "output": "dehazing/output/901.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/48.png",
+        "output": "dehazing/output/48.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/974.png",
+        "output": "dehazing/output/974.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/556.png",
+        "output": "dehazing/output/556.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/1369.png",
+        "output": "dehazing/output/1369.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/33.png",
+        "output": "dehazing/output/33.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/993.png",
+        "output": "dehazing/output/993.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/1273.png",
+        "output": "dehazing/output/1273.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/649.png",
+        "output": "dehazing/output/649.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/207.png",
+        "output": "dehazing/output/207.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/1014.png",
+        "output": "dehazing/output/1014.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/428.png",
+        "output": "dehazing/output/428.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/340.png",
+        "output": "dehazing/output/340.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/1435.png",
+        "output": "dehazing/output/1435.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/224.png",
+        "output": "dehazing/output/224.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/339.png",
+        "output": "dehazing/output/339.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/909.png",
+        "output": "dehazing/output/909.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/941.png",
+        "output": "dehazing/output/941.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/1185.png",
+        "output": "dehazing/output/1185.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/710.png",
+        "output": "dehazing/output/710.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/966.png",
+        "output": "dehazing/output/966.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/1124.png",
+        "output": "dehazing/output/1124.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/506.png",
+        "output": "dehazing/output/506.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/329.png",
+        "output": "dehazing/output/329.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/132.png",
+        "output": "dehazing/output/132.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/732.png",
+        "output": "dehazing/output/732.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/36.png",
+        "output": "dehazing/output/36.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/686.png",
+        "output": "dehazing/output/686.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/1398.png",
+        "output": "dehazing/output/1398.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/757.png",
+        "output": "dehazing/output/757.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/795.png",
+        "output": "dehazing/output/795.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/328.png",
+        "output": "dehazing/output/328.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/917.png",
+        "output": "dehazing/output/917.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/1316.png",
+        "output": "dehazing/output/1316.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/1327.png",
+        "output": "dehazing/output/1327.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/865.png",
+        "output": "dehazing/output/865.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/823.png",
+        "output": "dehazing/output/823.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/505.png",
+        "output": "dehazing/output/505.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/1109.png",
+        "output": "dehazing/output/1109.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/427.png",
+        "output": "dehazing/output/427.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/310.png",
+        "output": "dehazing/output/310.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/379.png",
+        "output": "dehazing/output/379.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/805.png",
+        "output": "dehazing/output/805.png"
+    },
+    {
+        "task": "dehazing",
+        "input": "dehazing/input/363.png",
+        "output": "dehazing/output/363.png"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/01277.jpg",
+        "output": "demoireing/output/01277.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/01719.jpg",
+        "output": "demoireing/output/01719.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/01675.jpg",
+        "output": "demoireing/output/01675.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/00853.jpg",
+        "output": "demoireing/output/00853.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/00764.jpg",
+        "output": "demoireing/output/00764.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/01860.jpg",
+        "output": "demoireing/output/01860.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/01108.jpg",
+        "output": "demoireing/output/01108.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/00069.jpg",
+        "output": "demoireing/output/00069.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/01231.jpg",
+        "output": "demoireing/output/01231.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/00278.jpg",
+        "output": "demoireing/output/00278.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/00112.jpg",
+        "output": "demoireing/output/00112.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/02328.jpg",
+        "output": "demoireing/output/02328.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/02293.jpg",
+        "output": "demoireing/output/02293.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/01530.jpg",
+        "output": "demoireing/output/01530.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/00812.jpg",
+        "output": "demoireing/output/00812.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/01689.jpg",
+        "output": "demoireing/output/01689.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/02176.jpg",
+        "output": "demoireing/output/02176.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/01700.jpg",
+        "output": "demoireing/output/01700.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/01772.jpg",
+        "output": "demoireing/output/01772.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/00462.jpg",
+        "output": "demoireing/output/00462.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/00628.jpg",
+        "output": "demoireing/output/00628.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/01047.jpg",
+        "output": "demoireing/output/01047.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/00546.jpg",
+        "output": "demoireing/output/00546.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/02398.jpg",
+        "output": "demoireing/output/02398.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/00722.jpg",
+        "output": "demoireing/output/00722.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/02062.jpg",
+        "output": "demoireing/output/02062.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/02183.jpg",
+        "output": "demoireing/output/02183.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/01537.jpg",
+        "output": "demoireing/output/01537.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/00026.jpg",
+        "output": "demoireing/output/00026.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/02224.jpg",
+        "output": "demoireing/output/02224.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/01876.jpg",
+        "output": "demoireing/output/01876.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/02274.jpg",
+        "output": "demoireing/output/02274.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/02132.jpg",
+        "output": "demoireing/output/02132.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/01625.jpg",
+        "output": "demoireing/output/01625.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/00724.jpg",
+        "output": "demoireing/output/00724.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/01350.jpg",
+        "output": "demoireing/output/01350.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/01818.jpg",
+        "output": "demoireing/output/01818.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/00699.jpg",
+        "output": "demoireing/output/00699.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/02204.jpg",
+        "output": "demoireing/output/02204.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/00148.jpg",
+        "output": "demoireing/output/00148.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/00591.jpg",
+        "output": "demoireing/output/00591.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/00419.jpg",
+        "output": "demoireing/output/00419.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/02072.jpg",
+        "output": "demoireing/output/02072.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/00974.jpg",
+        "output": "demoireing/output/00974.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/01236.jpg",
+        "output": "demoireing/output/01236.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/01506.jpg",
+        "output": "demoireing/output/01506.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/00257.jpg",
+        "output": "demoireing/output/00257.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/01802.jpg",
+        "output": "demoireing/output/01802.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/01442.jpg",
+        "output": "demoireing/output/01442.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/01829.jpg",
+        "output": "demoireing/output/01829.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/01387.jpg",
+        "output": "demoireing/output/01387.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/00260.jpg",
+        "output": "demoireing/output/00260.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/00901.jpg",
+        "output": "demoireing/output/00901.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/01320.jpg",
+        "output": "demoireing/output/01320.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/02159.jpg",
+        "output": "demoireing/output/02159.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/00502.jpg",
+        "output": "demoireing/output/00502.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/01611.jpg",
+        "output": "demoireing/output/01611.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/01641.jpg",
+        "output": "demoireing/output/01641.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/02444.jpg",
+        "output": "demoireing/output/02444.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/00383.jpg",
+        "output": "demoireing/output/00383.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/00936.jpg",
+        "output": "demoireing/output/00936.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/02455.jpg",
+        "output": "demoireing/output/02455.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/01760.jpg",
+        "output": "demoireing/output/01760.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/01785.jpg",
+        "output": "demoireing/output/01785.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/02371.jpg",
+        "output": "demoireing/output/02371.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/02053.jpg",
+        "output": "demoireing/output/02053.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/00441.jpg",
+        "output": "demoireing/output/00441.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/01967.jpg",
+        "output": "demoireing/output/01967.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/02170.jpg",
+        "output": "demoireing/output/02170.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/00389.jpg",
+        "output": "demoireing/output/00389.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/01730.jpg",
+        "output": "demoireing/output/01730.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/00986.jpg",
+        "output": "demoireing/output/00986.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/01914.jpg",
+        "output": "demoireing/output/01914.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/01323.jpg",
+        "output": "demoireing/output/01323.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/01020.jpg",
+        "output": "demoireing/output/01020.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/00855.jpg",
+        "output": "demoireing/output/00855.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/01469.jpg",
+        "output": "demoireing/output/01469.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/00839.jpg",
+        "output": "demoireing/output/00839.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/02319.jpg",
+        "output": "demoireing/output/02319.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/01282.jpg",
+        "output": "demoireing/output/01282.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/02016.jpg",
+        "output": "demoireing/output/02016.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/00325.jpg",
+        "output": "demoireing/output/00325.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/02215.jpg",
+        "output": "demoireing/output/02215.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/01536.jpg",
+        "output": "demoireing/output/01536.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/01578.jpg",
+        "output": "demoireing/output/01578.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/01300.jpg",
+        "output": "demoireing/output/01300.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/00795.jpg",
+        "output": "demoireing/output/00795.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/00607.jpg",
+        "output": "demoireing/output/00607.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/00595.jpg",
+        "output": "demoireing/output/00595.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/00313.jpg",
+        "output": "demoireing/output/00313.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/02093.jpg",
+        "output": "demoireing/output/02093.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/00117.jpg",
+        "output": "demoireing/output/00117.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/01235.jpg",
+        "output": "demoireing/output/01235.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/00298.jpg",
+        "output": "demoireing/output/00298.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/00204.jpg",
+        "output": "demoireing/output/00204.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/00283.jpg",
+        "output": "demoireing/output/00283.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/01258.jpg",
+        "output": "demoireing/output/01258.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/01554.jpg",
+        "output": "demoireing/output/01554.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/02317.jpg",
+        "output": "demoireing/output/02317.jpg"
+    },
+    {
+        "task": "demoireing",
+        "input": "demoireing/input/01589.jpg",
+        "output": "demoireing/output/01589.jpg"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0004_011.png",
+        "output": "denoising/output/0004_011.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0134_010.png",
+        "output": "denoising/output/0134_010.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0057_010.png",
+        "output": "denoising/output/0057_010.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0072_010.png",
+        "output": "denoising/output/0072_010.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0075_010.png",
+        "output": "denoising/output/0075_010.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0172_010.png",
+        "output": "denoising/output/0172_010.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0166_011.png",
+        "output": "denoising/output/0166_011.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0129_011.png",
+        "output": "denoising/output/0129_011.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0013_011.png",
+        "output": "denoising/output/0013_011.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0159_010.png",
+        "output": "denoising/output/0159_010.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0135_010.png",
+        "output": "denoising/output/0135_010.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0154_010.png",
+        "output": "denoising/output/0154_010.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0025_010.png",
+        "output": "denoising/output/0025_010.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0010_010.png",
+        "output": "denoising/output/0010_010.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0123_010.png",
+        "output": "denoising/output/0123_010.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0156_011.png",
+        "output": "denoising/output/0156_011.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0194_010.png",
+        "output": "denoising/output/0194_010.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0016_010.png",
+        "output": "denoising/output/0016_010.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0115_011.png",
+        "output": "denoising/output/0115_011.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0116_010.png",
+        "output": "denoising/output/0116_010.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0118_010.png",
+        "output": "denoising/output/0118_010.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0151_010.png",
+        "output": "denoising/output/0151_010.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0145_011.png",
+        "output": "denoising/output/0145_011.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0164_011.png",
+        "output": "denoising/output/0164_011.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0161_010.png",
+        "output": "denoising/output/0161_010.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0181_011.png",
+        "output": "denoising/output/0181_011.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0060_010.png",
+        "output": "denoising/output/0060_010.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0033_010.png",
+        "output": "denoising/output/0033_010.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0102_010.png",
+        "output": "denoising/output/0102_010.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0107_011.png",
+        "output": "denoising/output/0107_011.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0072_011.png",
+        "output": "denoising/output/0072_011.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0175_011.png",
+        "output": "denoising/output/0175_011.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0196_011.png",
+        "output": "denoising/output/0196_011.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0090_011.png",
+        "output": "denoising/output/0090_011.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0127_011.png",
+        "output": "denoising/output/0127_011.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0135_011.png",
+        "output": "denoising/output/0135_011.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0160_011.png",
+        "output": "denoising/output/0160_011.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0023_010.png",
+        "output": "denoising/output/0023_010.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0045_011.png",
+        "output": "denoising/output/0045_011.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0138_010.png",
+        "output": "denoising/output/0138_010.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0126_010.png",
+        "output": "denoising/output/0126_010.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0062_010.png",
+        "output": "denoising/output/0062_010.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0078_011.png",
+        "output": "denoising/output/0078_011.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0068_011.png",
+        "output": "denoising/output/0068_011.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0078_010.png",
+        "output": "denoising/output/0078_010.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0102_011.png",
+        "output": "denoising/output/0102_011.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0069_011.png",
+        "output": "denoising/output/0069_011.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0054_010.png",
+        "output": "denoising/output/0054_010.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0106_011.png",
+        "output": "denoising/output/0106_011.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0186_010.png",
+        "output": "denoising/output/0186_010.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0006_010.png",
+        "output": "denoising/output/0006_010.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0108_010.png",
+        "output": "denoising/output/0108_010.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0150_010.png",
+        "output": "denoising/output/0150_010.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0129_010.png",
+        "output": "denoising/output/0129_010.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0178_010.png",
+        "output": "denoising/output/0178_010.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0003_011.png",
+        "output": "denoising/output/0003_011.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0017_010.png",
+        "output": "denoising/output/0017_010.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0198_011.png",
+        "output": "denoising/output/0198_011.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0029_010.png",
+        "output": "denoising/output/0029_010.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0091_011.png",
+        "output": "denoising/output/0091_011.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0192_010.png",
+        "output": "denoising/output/0192_010.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0034_010.png",
+        "output": "denoising/output/0034_010.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0011_011.png",
+        "output": "denoising/output/0011_011.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0111_011.png",
+        "output": "denoising/output/0111_011.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0191_011.png",
+        "output": "denoising/output/0191_011.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0096_011.png",
+        "output": "denoising/output/0096_011.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0001_011.png",
+        "output": "denoising/output/0001_011.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0139_010.png",
+        "output": "denoising/output/0139_010.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0090_010.png",
+        "output": "denoising/output/0090_010.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0063_010.png",
+        "output": "denoising/output/0063_010.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0057_011.png",
+        "output": "denoising/output/0057_011.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0181_010.png",
+        "output": "denoising/output/0181_010.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0161_011.png",
+        "output": "denoising/output/0161_011.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0062_011.png",
+        "output": "denoising/output/0062_011.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0155_011.png",
+        "output": "denoising/output/0155_011.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0080_010.png",
+        "output": "denoising/output/0080_010.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0178_011.png",
+        "output": "denoising/output/0178_011.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0010_011.png",
+        "output": "denoising/output/0010_011.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0114_010.png",
+        "output": "denoising/output/0114_010.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0038_010.png",
+        "output": "denoising/output/0038_010.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0039_011.png",
+        "output": "denoising/output/0039_011.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0186_011.png",
+        "output": "denoising/output/0186_011.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0113_011.png",
+        "output": "denoising/output/0113_011.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0114_011.png",
+        "output": "denoising/output/0114_011.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0007_010.png",
+        "output": "denoising/output/0007_010.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0036_010.png",
+        "output": "denoising/output/0036_010.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0017_011.png",
+        "output": "denoising/output/0017_011.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0156_010.png",
+        "output": "denoising/output/0156_010.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0036_011.png",
+        "output": "denoising/output/0036_011.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0130_010.png",
+        "output": "denoising/output/0130_010.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0007_011.png",
+        "output": "denoising/output/0007_011.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0020_011.png",
+        "output": "denoising/output/0020_011.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0040_011.png",
+        "output": "denoising/output/0040_011.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0136_010.png",
+        "output": "denoising/output/0136_010.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0033_011.png",
+        "output": "denoising/output/0033_011.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0043_010.png",
+        "output": "denoising/output/0043_010.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0077_011.png",
+        "output": "denoising/output/0077_011.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0125_010.png",
+        "output": "denoising/output/0125_010.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0116_011.png",
+        "output": "denoising/output/0116_011.png"
+    },
+    {
+        "task": "denoising",
+        "input": "denoising/input/0134_011.png",
+        "output": "denoising/output/0134_011.png"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/3871.jpg",
+        "output": "deraining/output/3871.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/11852.jpg",
+        "output": "deraining/output/11852.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/11732.jpg",
+        "output": "deraining/output/11732.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/10390.jpg",
+        "output": "deraining/output/10390.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/13414.jpg",
+        "output": "deraining/output/13414.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/2457.jpg",
+        "output": "deraining/output/2457.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/11816.jpg",
+        "output": "deraining/output/11816.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/12952.jpg",
+        "output": "deraining/output/12952.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/4443.jpg",
+        "output": "deraining/output/4443.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/10662.jpg",
+        "output": "deraining/output/10662.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/4459.jpg",
+        "output": "deraining/output/4459.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/2955.jpg",
+        "output": "deraining/output/2955.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/12762.jpg",
+        "output": "deraining/output/12762.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/9286.jpg",
+        "output": "deraining/output/9286.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/6317.jpg",
+        "output": "deraining/output/6317.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/12193.jpg",
+        "output": "deraining/output/12193.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/5290.jpg",
+        "output": "deraining/output/5290.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/12816.jpg",
+        "output": "deraining/output/12816.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/13373.jpg",
+        "output": "deraining/output/13373.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/362.jpg",
+        "output": "deraining/output/362.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/241.jpg",
+        "output": "deraining/output/241.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/2773.jpg",
+        "output": "deraining/output/2773.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/10570.jpg",
+        "output": "deraining/output/10570.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/7446.jpg",
+        "output": "deraining/output/7446.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/12824.jpg",
+        "output": "deraining/output/12824.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/2762.jpg",
+        "output": "deraining/output/2762.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/2155.jpg",
+        "output": "deraining/output/2155.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/7386.jpg",
+        "output": "deraining/output/7386.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/9850.jpg",
+        "output": "deraining/output/9850.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/7061.jpg",
+        "output": "deraining/output/7061.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/1728.jpg",
+        "output": "deraining/output/1728.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/7411.jpg",
+        "output": "deraining/output/7411.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/8062.jpg",
+        "output": "deraining/output/8062.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/9093.jpg",
+        "output": "deraining/output/9093.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/449.jpg",
+        "output": "deraining/output/449.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/11188.jpg",
+        "output": "deraining/output/11188.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/10279.jpg",
+        "output": "deraining/output/10279.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/2119.jpg",
+        "output": "deraining/output/2119.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/2080.jpg",
+        "output": "deraining/output/2080.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/2629.jpg",
+        "output": "deraining/output/2629.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/8858.jpg",
+        "output": "deraining/output/8858.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/12445.jpg",
+        "output": "deraining/output/12445.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/1491.jpg",
+        "output": "deraining/output/1491.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/3726.jpg",
+        "output": "deraining/output/3726.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/297.jpg",
+        "output": "deraining/output/297.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/4697.jpg",
+        "output": "deraining/output/4697.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/12650.jpg",
+        "output": "deraining/output/12650.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/9236.jpg",
+        "output": "deraining/output/9236.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/6155.jpg",
+        "output": "deraining/output/6155.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/2150.jpg",
+        "output": "deraining/output/2150.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/1786.jpg",
+        "output": "deraining/output/1786.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/7642.jpg",
+        "output": "deraining/output/7642.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/8364.jpg",
+        "output": "deraining/output/8364.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/12992.jpg",
+        "output": "deraining/output/12992.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/11223.jpg",
+        "output": "deraining/output/11223.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/8217.jpg",
+        "output": "deraining/output/8217.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/9166.jpg",
+        "output": "deraining/output/9166.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/2889.jpg",
+        "output": "deraining/output/2889.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/12273.jpg",
+        "output": "deraining/output/12273.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/11623.jpg",
+        "output": "deraining/output/11623.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/8334.jpg",
+        "output": "deraining/output/8334.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/13388.jpg",
+        "output": "deraining/output/13388.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/6871.jpg",
+        "output": "deraining/output/6871.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/6646.jpg",
+        "output": "deraining/output/6646.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/679.jpg",
+        "output": "deraining/output/679.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/3965.jpg",
+        "output": "deraining/output/3965.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/12598.jpg",
+        "output": "deraining/output/12598.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/11294.jpg",
+        "output": "deraining/output/11294.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/10034.jpg",
+        "output": "deraining/output/10034.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/1258.jpg",
+        "output": "deraining/output/1258.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/10324.jpg",
+        "output": "deraining/output/10324.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/8535.jpg",
+        "output": "deraining/output/8535.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/644.jpg",
+        "output": "deraining/output/644.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/8808.jpg",
+        "output": "deraining/output/8808.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/11680.jpg",
+        "output": "deraining/output/11680.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/5575.jpg",
+        "output": "deraining/output/5575.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/9523.jpg",
+        "output": "deraining/output/9523.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/4461.jpg",
+        "output": "deraining/output/4461.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/11457.jpg",
+        "output": "deraining/output/11457.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/2958.jpg",
+        "output": "deraining/output/2958.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/4400.jpg",
+        "output": "deraining/output/4400.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/6048.jpg",
+        "output": "deraining/output/6048.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/4634.jpg",
+        "output": "deraining/output/4634.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/5830.jpg",
+        "output": "deraining/output/5830.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/783.jpg",
+        "output": "deraining/output/783.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/9704.jpg",
+        "output": "deraining/output/9704.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/3050.jpg",
+        "output": "deraining/output/3050.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/5664.jpg",
+        "output": "deraining/output/5664.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/6567.jpg",
+        "output": "deraining/output/6567.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/3681.jpg",
+        "output": "deraining/output/3681.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/1080.jpg",
+        "output": "deraining/output/1080.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/8195.jpg",
+        "output": "deraining/output/8195.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/2079.jpg",
+        "output": "deraining/output/2079.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/496.jpg",
+        "output": "deraining/output/496.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/10186.jpg",
+        "output": "deraining/output/10186.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/11681.jpg",
+        "output": "deraining/output/11681.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/11616.jpg",
+        "output": "deraining/output/11616.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/6466.jpg",
+        "output": "deraining/output/6466.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/12603.jpg",
+        "output": "deraining/output/12603.jpg"
+    },
+    {
+        "task": "deraining",
+        "input": "deraining/input/7452.jpg",
+        "output": "deraining/output/7452.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f1322.jpg",
+        "output": "harmonization/output/f1322.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f1266.jpg",
+        "output": "harmonization/output/f1266.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f4828.jpg",
+        "output": "harmonization/output/f4828.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f1240.jpg",
+        "output": "harmonization/output/f1240.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f1123.jpg",
+        "output": "harmonization/output/f1123.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f2765.jpg",
+        "output": "harmonization/output/f2765.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f3633.jpg",
+        "output": "harmonization/output/f3633.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f629.jpg",
+        "output": "harmonization/output/f629.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f945.jpg",
+        "output": "harmonization/output/f945.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f59.jpg",
+        "output": "harmonization/output/f59.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f280.jpg",
+        "output": "harmonization/output/f280.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f1062.jpg",
+        "output": "harmonization/output/f1062.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f104.jpg",
+        "output": "harmonization/output/f104.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f2831.jpg",
+        "output": "harmonization/output/f2831.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f4248.jpg",
+        "output": "harmonization/output/f4248.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f696.jpg",
+        "output": "harmonization/output/f696.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f2083.jpg",
+        "output": "harmonization/output/f2083.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f1769.jpg",
+        "output": "harmonization/output/f1769.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f670.jpg",
+        "output": "harmonization/output/f670.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f1252.jpg",
+        "output": "harmonization/output/f1252.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f4722.jpg",
+        "output": "harmonization/output/f4722.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f2140.jpg",
+        "output": "harmonization/output/f2140.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f602.jpg",
+        "output": "harmonization/output/f602.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f4592.jpg",
+        "output": "harmonization/output/f4592.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f5120.jpg",
+        "output": "harmonization/output/f5120.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f3300.jpg",
+        "output": "harmonization/output/f3300.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f2683.jpg",
+        "output": "harmonization/output/f2683.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f2780.jpg",
+        "output": "harmonization/output/f2780.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f2120.jpg",
+        "output": "harmonization/output/f2120.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f4618.jpg",
+        "output": "harmonization/output/f4618.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f3431.jpg",
+        "output": "harmonization/output/f3431.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f493.jpg",
+        "output": "harmonization/output/f493.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f2871.jpg",
+        "output": "harmonization/output/f2871.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f5045.jpg",
+        "output": "harmonization/output/f5045.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f2395.jpg",
+        "output": "harmonization/output/f2395.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f1050.jpg",
+        "output": "harmonization/output/f1050.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f4815.jpg",
+        "output": "harmonization/output/f4815.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f2437.jpg",
+        "output": "harmonization/output/f2437.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f2642.jpg",
+        "output": "harmonization/output/f2642.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f2526.jpg",
+        "output": "harmonization/output/f2526.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f4727.jpg",
+        "output": "harmonization/output/f4727.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f4097.jpg",
+        "output": "harmonization/output/f4097.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f4187.jpg",
+        "output": "harmonization/output/f4187.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f2091.jpg",
+        "output": "harmonization/output/f2091.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f5038.jpg",
+        "output": "harmonization/output/f5038.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f2616.jpg",
+        "output": "harmonization/output/f2616.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f2014.jpg",
+        "output": "harmonization/output/f2014.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f3708.jpg",
+        "output": "harmonization/output/f3708.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f2935.jpg",
+        "output": "harmonization/output/f2935.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f5096.jpg",
+        "output": "harmonization/output/f5096.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f5064.jpg",
+        "output": "harmonization/output/f5064.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f2217.jpg",
+        "output": "harmonization/output/f2217.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f2221.jpg",
+        "output": "harmonization/output/f2221.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f831.jpg",
+        "output": "harmonization/output/f831.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f5118.jpg",
+        "output": "harmonization/output/f5118.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f2641.jpg",
+        "output": "harmonization/output/f2641.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f229.jpg",
+        "output": "harmonization/output/f229.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f4067.jpg",
+        "output": "harmonization/output/f4067.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f3869.jpg",
+        "output": "harmonization/output/f3869.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f3905.jpg",
+        "output": "harmonization/output/f3905.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f5059.jpg",
+        "output": "harmonization/output/f5059.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f120.jpg",
+        "output": "harmonization/output/f120.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f4412.jpg",
+        "output": "harmonization/output/f4412.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f2302.jpg",
+        "output": "harmonization/output/f2302.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f3934.jpg",
+        "output": "harmonization/output/f3934.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f2879.jpg",
+        "output": "harmonization/output/f2879.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f4685.jpg",
+        "output": "harmonization/output/f4685.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f113.jpg",
+        "output": "harmonization/output/f113.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f3608.jpg",
+        "output": "harmonization/output/f3608.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f3052.jpg",
+        "output": "harmonization/output/f3052.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f3177.jpg",
+        "output": "harmonization/output/f3177.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f826.jpg",
+        "output": "harmonization/output/f826.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f1187.jpg",
+        "output": "harmonization/output/f1187.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f1612.jpg",
+        "output": "harmonization/output/f1612.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f1599.jpg",
+        "output": "harmonization/output/f1599.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f2931.jpg",
+        "output": "harmonization/output/f2931.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f529.jpg",
+        "output": "harmonization/output/f529.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f1448.jpg",
+        "output": "harmonization/output/f1448.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f1124.jpg",
+        "output": "harmonization/output/f1124.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f888.jpg",
+        "output": "harmonization/output/f888.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f1480.jpg",
+        "output": "harmonization/output/f1480.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f992.jpg",
+        "output": "harmonization/output/f992.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f4535.jpg",
+        "output": "harmonization/output/f4535.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f1341.jpg",
+        "output": "harmonization/output/f1341.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f1342.jpg",
+        "output": "harmonization/output/f1342.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f3461.jpg",
+        "output": "harmonization/output/f3461.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f132.jpg",
+        "output": "harmonization/output/f132.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f1696.jpg",
+        "output": "harmonization/output/f1696.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f1656.jpg",
+        "output": "harmonization/output/f1656.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f4216.jpg",
+        "output": "harmonization/output/f4216.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f827.jpg",
+        "output": "harmonization/output/f827.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f5123.jpg",
+        "output": "harmonization/output/f5123.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f2979.jpg",
+        "output": "harmonization/output/f2979.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f3289.jpg",
+        "output": "harmonization/output/f3289.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f1325.jpg",
+        "output": "harmonization/output/f1325.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f4277.jpg",
+        "output": "harmonization/output/f4277.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f1348.jpg",
+        "output": "harmonization/output/f1348.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f277.jpg",
+        "output": "harmonization/output/f277.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f2860.jpg",
+        "output": "harmonization/output/f2860.jpg"
+    },
+    {
+        "task": "harmonization",
+        "input": "harmonization/input/f1413.jpg",
+        "output": "harmonization/output/f1413.jpg"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/312.png",
+        "output": "inpainting/output/312.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/581.png",
+        "output": "inpainting/output/581.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/465.png",
+        "output": "inpainting/output/465.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/195.png",
+        "output": "inpainting/output/195.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/283.png",
+        "output": "inpainting/output/283.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/341.png",
+        "output": "inpainting/output/341.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/587.png",
+        "output": "inpainting/output/587.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/133.png",
+        "output": "inpainting/output/133.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/274.png",
+        "output": "inpainting/output/274.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/160.png",
+        "output": "inpainting/output/160.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/445.png",
+        "output": "inpainting/output/445.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/706.png",
+        "output": "inpainting/output/706.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/757.png",
+        "output": "inpainting/output/757.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/300.png",
+        "output": "inpainting/output/300.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/484.png",
+        "output": "inpainting/output/484.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/410.png",
+        "output": "inpainting/output/410.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/319.png",
+        "output": "inpainting/output/319.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/663.png",
+        "output": "inpainting/output/663.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/54.png",
+        "output": "inpainting/output/54.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/380.png",
+        "output": "inpainting/output/380.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/537.png",
+        "output": "inpainting/output/537.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/703.png",
+        "output": "inpainting/output/703.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/684.png",
+        "output": "inpainting/output/684.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/454.png",
+        "output": "inpainting/output/454.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/155.png",
+        "output": "inpainting/output/155.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/30.png",
+        "output": "inpainting/output/30.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/399.png",
+        "output": "inpainting/output/399.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/317.png",
+        "output": "inpainting/output/317.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/625.png",
+        "output": "inpainting/output/625.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/490.png",
+        "output": "inpainting/output/490.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/453.png",
+        "output": "inpainting/output/453.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/86.png",
+        "output": "inpainting/output/86.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/302.png",
+        "output": "inpainting/output/302.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/387.png",
+        "output": "inpainting/output/387.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/416.png",
+        "output": "inpainting/output/416.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/752.png",
+        "output": "inpainting/output/752.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/732.png",
+        "output": "inpainting/output/732.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/552.png",
+        "output": "inpainting/output/552.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/685.png",
+        "output": "inpainting/output/685.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/361.png",
+        "output": "inpainting/output/361.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/617.png",
+        "output": "inpainting/output/617.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/214.png",
+        "output": "inpainting/output/214.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/401.png",
+        "output": "inpainting/output/401.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/266.png",
+        "output": "inpainting/output/266.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/364.png",
+        "output": "inpainting/output/364.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/698.png",
+        "output": "inpainting/output/698.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/611.png",
+        "output": "inpainting/output/611.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/471.png",
+        "output": "inpainting/output/471.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/128.png",
+        "output": "inpainting/output/128.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/779.png",
+        "output": "inpainting/output/779.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/586.png",
+        "output": "inpainting/output/586.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/208.png",
+        "output": "inpainting/output/208.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/385.png",
+        "output": "inpainting/output/385.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/423.png",
+        "output": "inpainting/output/423.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/603.png",
+        "output": "inpainting/output/603.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/653.png",
+        "output": "inpainting/output/653.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/652.png",
+        "output": "inpainting/output/652.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/371.png",
+        "output": "inpainting/output/371.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/43.png",
+        "output": "inpainting/output/43.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/2.png",
+        "output": "inpainting/output/2.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/19.png",
+        "output": "inpainting/output/19.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/52.png",
+        "output": "inpainting/output/52.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/365.png",
+        "output": "inpainting/output/365.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/521.png",
+        "output": "inpainting/output/521.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/235.png",
+        "output": "inpainting/output/235.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/168.png",
+        "output": "inpainting/output/168.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/31.png",
+        "output": "inpainting/output/31.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/113.png",
+        "output": "inpainting/output/113.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/67.png",
+        "output": "inpainting/output/67.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/799.png",
+        "output": "inpainting/output/799.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/740.png",
+        "output": "inpainting/output/740.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/230.png",
+        "output": "inpainting/output/230.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/286.png",
+        "output": "inpainting/output/286.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/477.png",
+        "output": "inpainting/output/477.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/210.png",
+        "output": "inpainting/output/210.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/509.png",
+        "output": "inpainting/output/509.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/141.png",
+        "output": "inpainting/output/141.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/554.png",
+        "output": "inpainting/output/554.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/204.png",
+        "output": "inpainting/output/204.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/313.png",
+        "output": "inpainting/output/313.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/551.png",
+        "output": "inpainting/output/551.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/577.png",
+        "output": "inpainting/output/577.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/776.png",
+        "output": "inpainting/output/776.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/121.png",
+        "output": "inpainting/output/121.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/223.png",
+        "output": "inpainting/output/223.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/190.png",
+        "output": "inpainting/output/190.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/237.png",
+        "output": "inpainting/output/237.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/233.png",
+        "output": "inpainting/output/233.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/449.png",
+        "output": "inpainting/output/449.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/557.png",
+        "output": "inpainting/output/557.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/119.png",
+        "output": "inpainting/output/119.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/188.png",
+        "output": "inpainting/output/188.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/189.png",
+        "output": "inpainting/output/189.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/272.png",
+        "output": "inpainting/output/272.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/448.png",
+        "output": "inpainting/output/448.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/263.png",
+        "output": "inpainting/output/263.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/151.png",
+        "output": "inpainting/output/151.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/634.png",
+        "output": "inpainting/output/634.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/646.png",
+        "output": "inpainting/output/646.png"
+    },
+    {
+        "task": "inpainting",
+        "input": "inpainting/input/605.png",
+        "output": "inpainting/output/605.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/484.png",
+        "output": "light_enhancement/output/484.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/572.png",
+        "output": "light_enhancement/output/572.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/488.png",
+        "output": "light_enhancement/output/488.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/534.png",
+        "output": "light_enhancement/output/534.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/167.png",
+        "output": "light_enhancement/output/167.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/68.png",
+        "output": "light_enhancement/output/68.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/653.png",
+        "output": "light_enhancement/output/653.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/50.png",
+        "output": "light_enhancement/output/50.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/46.png",
+        "output": "light_enhancement/output/46.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/645.png",
+        "output": "light_enhancement/output/645.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/789.png",
+        "output": "light_enhancement/output/789.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/786.png",
+        "output": "light_enhancement/output/786.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/183.png",
+        "output": "light_enhancement/output/183.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/526.png",
+        "output": "light_enhancement/output/526.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/523.png",
+        "output": "light_enhancement/output/523.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/486.png",
+        "output": "light_enhancement/output/486.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/52.png",
+        "output": "light_enhancement/output/52.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/637.png",
+        "output": "light_enhancement/output/637.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/744.png",
+        "output": "light_enhancement/output/744.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/612.png",
+        "output": "light_enhancement/output/612.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/773.png",
+        "output": "light_enhancement/output/773.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/211.png",
+        "output": "light_enhancement/output/211.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/717.png",
+        "output": "light_enhancement/output/717.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/617.png",
+        "output": "light_enhancement/output/617.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/62.png",
+        "output": "light_enhancement/output/62.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/784.png",
+        "output": "light_enhancement/output/784.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/641.png",
+        "output": "light_enhancement/output/641.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/232.png",
+        "output": "light_enhancement/output/232.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/473.png",
+        "output": "light_enhancement/output/473.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/575.png",
+        "output": "light_enhancement/output/575.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/219.png",
+        "output": "light_enhancement/output/219.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/342.png",
+        "output": "light_enhancement/output/342.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/788.png",
+        "output": "light_enhancement/output/788.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/104.png",
+        "output": "light_enhancement/output/104.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/141.png",
+        "output": "light_enhancement/output/141.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/169.png",
+        "output": "light_enhancement/output/169.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/56.png",
+        "output": "light_enhancement/output/56.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/719.png",
+        "output": "light_enhancement/output/719.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/769.png",
+        "output": "light_enhancement/output/769.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/622.png",
+        "output": "light_enhancement/output/622.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/469.png",
+        "output": "light_enhancement/output/469.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/720.png",
+        "output": "light_enhancement/output/720.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/610.png",
+        "output": "light_enhancement/output/610.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/76.png",
+        "output": "light_enhancement/output/76.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/185.png",
+        "output": "light_enhancement/output/185.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/265.png",
+        "output": "light_enhancement/output/265.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/620.png",
+        "output": "light_enhancement/output/620.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/659.png",
+        "output": "light_enhancement/output/659.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/175.png",
+        "output": "light_enhancement/output/175.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/759.png",
+        "output": "light_enhancement/output/759.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/594.png",
+        "output": "light_enhancement/output/594.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/721.png",
+        "output": "light_enhancement/output/721.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/504.png",
+        "output": "light_enhancement/output/504.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/735.png",
+        "output": "light_enhancement/output/735.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/258.png",
+        "output": "light_enhancement/output/258.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/628.png",
+        "output": "light_enhancement/output/628.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/545.png",
+        "output": "light_enhancement/output/545.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/686.png",
+        "output": "light_enhancement/output/686.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/777.png",
+        "output": "light_enhancement/output/777.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/681.png",
+        "output": "light_enhancement/output/681.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/491.png",
+        "output": "light_enhancement/output/491.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/36.png",
+        "output": "light_enhancement/output/36.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/216.png",
+        "output": "light_enhancement/output/216.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/2.png",
+        "output": "light_enhancement/output/2.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/482.png",
+        "output": "light_enhancement/output/482.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/713.png",
+        "output": "light_enhancement/output/713.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/227.png",
+        "output": "light_enhancement/output/227.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/616.png",
+        "output": "light_enhancement/output/616.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/69.png",
+        "output": "light_enhancement/output/69.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/733.png",
+        "output": "light_enhancement/output/733.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/162.png",
+        "output": "light_enhancement/output/162.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/184.png",
+        "output": "light_enhancement/output/184.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/28.png",
+        "output": "light_enhancement/output/28.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/54.png",
+        "output": "light_enhancement/output/54.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/48.png",
+        "output": "light_enhancement/output/48.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/194.png",
+        "output": "light_enhancement/output/194.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/464.png",
+        "output": "light_enhancement/output/464.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/475.png",
+        "output": "light_enhancement/output/475.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/532.png",
+        "output": "light_enhancement/output/532.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/729.png",
+        "output": "light_enhancement/output/729.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/142.png",
+        "output": "light_enhancement/output/142.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/737.png",
+        "output": "light_enhancement/output/737.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/140.png",
+        "output": "light_enhancement/output/140.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/607.png",
+        "output": "light_enhancement/output/607.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/93.png",
+        "output": "light_enhancement/output/93.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/722.png",
+        "output": "light_enhancement/output/722.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/143.png",
+        "output": "light_enhancement/output/143.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/542.png",
+        "output": "light_enhancement/output/542.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/567.png",
+        "output": "light_enhancement/output/567.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/550.png",
+        "output": "light_enhancement/output/550.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/772.png",
+        "output": "light_enhancement/output/772.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/480.png",
+        "output": "light_enhancement/output/480.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/639.png",
+        "output": "light_enhancement/output/639.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/583.png",
+        "output": "light_enhancement/output/583.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/579.png",
+        "output": "light_enhancement/output/579.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/145.png",
+        "output": "light_enhancement/output/145.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/470.png",
+        "output": "light_enhancement/output/470.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/507.png",
+        "output": "light_enhancement/output/507.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/131.png",
+        "output": "light_enhancement/output/131.png"
+    },
+    {
+        "task": "light_enhancement",
+        "input": "light_enhancement/input/596.png",
+        "output": "light_enhancement/output/596.png"
+    },
+    {
+        "task": "reflection_removal",
+        "input": "reflection_removal/input/0057.jpg",
+        "output": "reflection_removal/output/0057.jpg"
+    },
+    {
+        "task": "reflection_removal",
+        "input": "reflection_removal/input/0012.jpg",
+        "output": "reflection_removal/output/0012.jpg"
+    },
+    {
+        "task": "reflection_removal",
+        "input": "reflection_removal/input/0054.jpg",
+        "output": "reflection_removal/output/0054.jpg"
+    },
+    {
+        "task": "reflection_removal",
+        "input": "reflection_removal/input/0052.jpg",
+        "output": "reflection_removal/output/0052.jpg"
+    },
+    {
+        "task": "reflection_removal",
+        "input": "reflection_removal/input/0075.jpg",
+        "output": "reflection_removal/output/0075.jpg"
+    },
+    {
+        "task": "reflection_removal",
+        "input": "reflection_removal/input/0087.jpg",
+        "output": "reflection_removal/output/0087.jpg"
+    },
+    {
+        "task": "reflection_removal",
+        "input": "reflection_removal/input/0007.jpg",
+        "output": "reflection_removal/output/0007.jpg"
+    },
+    {
+        "task": "reflection_removal",
+        "input": "reflection_removal/input/0081.jpg",
+        "output": "reflection_removal/output/0081.jpg"
+    },
+    {
+        "task": "reflection_removal",
+        "input": "reflection_removal/input/0048.jpg",
+        "output": "reflection_removal/output/0048.jpg"
+    },
+    {
+        "task": "reflection_removal",
+        "input": "reflection_removal/input/0061.jpg",
+        "output": "reflection_removal/output/0061.jpg"
+    },
+    {
+        "task": "reflection_removal",
+        "input": "reflection_removal/input/0032.jpg",
+        "output": "reflection_removal/output/0032.jpg"
+    },
+    {
+        "task": "reflection_removal",
+        "input": "reflection_removal/input/0089.jpg",
+        "output": "reflection_removal/output/0089.jpg"
+    },
+    {
+        "task": "reflection_removal",
+        "input": "reflection_removal/input/0079.jpg",
+        "output": "reflection_removal/output/0079.jpg"
+    },
+    {
+        "task": "reflection_removal",
+        "input": "reflection_removal/input/0068.jpg",
+        "output": "reflection_removal/output/0068.jpg"
+    },
+    {
+        "task": "reflection_removal",
+        "input": "reflection_removal/input/0090.jpg",
+        "output": "reflection_removal/output/0090.jpg"
+    },
+    {
+        "task": "reflection_removal",
+        "input": "reflection_removal/input/0100.jpg",
+        "output": "reflection_removal/output/0100.jpg"
+    },
+    {
+        "task": "reflection_removal",
+        "input": "reflection_removal/input/0095.jpg",
+        "output": "reflection_removal/output/0095.jpg"
+    },
+    {
+        "task": "reflection_removal",
+        "input": "reflection_removal/input/0051.jpg",
+        "output": "reflection_removal/output/0051.jpg"
+    },
+    {
+        "task": "reflection_removal",
+        "input": "reflection_removal/input/0046.jpg",
+        "output": "reflection_removal/output/0046.jpg"
+    },
+    {
+        "task": "reflection_removal",
+        "input": "reflection_removal/input/0055.jpg",
+        "output": "reflection_removal/output/0055.jpg"
+    },
+    {
+        "task": "reflection_removal",
+        "input": "reflection_removal/input/0077.jpg",
+        "output": "reflection_removal/output/0077.jpg"
+    },
+    {
+        "task": "reflection_removal",
+        "input": "reflection_removal/input/0009.jpg",
+        "output": "reflection_removal/output/0009.jpg"
+    },
+    {
+        "task": "reflection_removal",
+        "input": "reflection_removal/input/0053.jpg",
+        "output": "reflection_removal/output/0053.jpg"
+    },
+    {
+        "task": "reflection_removal",
+        "input": "reflection_removal/input/0019.jpg",
+        "output": "reflection_removal/output/0019.jpg"
+    },
+    {
+        "task": "reflection_removal",
+        "input": "reflection_removal/input/0016.jpg",
+        "output": "reflection_removal/output/0016.jpg"
+    },
+    {
+        "task": "reflection_removal",
+        "input": "reflection_removal/input/0006.jpg",
+        "output": "reflection_removal/output/0006.jpg"
+    },
+    {
+        "task": "reflection_removal",
+        "input": "reflection_removal/input/0021.jpg",
+        "output": "reflection_removal/output/0021.jpg"
+    },
+    {
+        "task": "reflection_removal",
+        "input": "reflection_removal/input/0015.jpg",
+        "output": "reflection_removal/output/0015.jpg"
+    },
+    {
+        "task": "reflection_removal",
+        "input": "reflection_removal/input/0082.jpg",
+        "output": "reflection_removal/output/0082.jpg"
+    },
+    {
+        "task": "reflection_removal",
+        "input": "reflection_removal/input/0029.jpg",
+        "output": "reflection_removal/output/0029.jpg"
+    },
+    {
+        "task": "reflection_removal",
+        "input": "reflection_removal/input/0011.jpg",
+        "output": "reflection_removal/output/0011.jpg"
+    },
+    {
+        "task": "reflection_removal",
+        "input": "reflection_removal/input/0035.jpg",
+        "output": "reflection_removal/output/0035.jpg"
+    },
+    {
+        "task": "reflection_removal",
+        "input": "reflection_removal/input/0013.jpg",
+        "output": "reflection_removal/output/0013.jpg"
+    },
+    {
+        "task": "reflection_removal",
+        "input": "reflection_removal/input/0027.jpg",
+        "output": "reflection_removal/output/0027.jpg"
+    },
+    {
+        "task": "reflection_removal",
+        "input": "reflection_removal/input/0037.jpg",
+        "output": "reflection_removal/output/0037.jpg"
+    },
+    {
+        "task": "reflection_removal",
+        "input": "reflection_removal/input/0050.jpg",
+        "output": "reflection_removal/output/0050.jpg"
+    },
+    {
+        "task": "reflection_removal",
+        "input": "reflection_removal/input/0024.jpg",
+        "output": "reflection_removal/output/0024.jpg"
+    },
+    {
+        "task": "reflection_removal",
+        "input": "reflection_removal/input/0084.jpg",
+        "output": "reflection_removal/output/0084.jpg"
+    },
+    {
+        "task": "reflection_removal",
+        "input": "reflection_removal/input/0070.jpg",
+        "output": "reflection_removal/output/0070.jpg"
+    },
+    {
+        "task": "reflection_removal",
+        "input": "reflection_removal/input/0060.jpg",
+        "output": "reflection_removal/output/0060.jpg"
+    },
+    {
+        "task": "reflection_removal",
+        "input": "reflection_removal/input/0072.jpg",
+        "output": "reflection_removal/output/0072.jpg"
+    },
+    {
+        "task": "reflection_removal",
+        "input": "reflection_removal/input/0023.jpg",
+        "output": "reflection_removal/output/0023.jpg"
+    },
+    {
+        "task": "reflection_removal",
+        "input": "reflection_removal/input/0018.jpg",
+        "output": "reflection_removal/output/0018.jpg"
+    },
+    {
+        "task": "reflection_removal",
+        "input": "reflection_removal/input/0042.jpg",
+        "output": "reflection_removal/output/0042.jpg"
+    },
+    {
+        "task": "reflection_removal",
+        "input": "reflection_removal/input/0022.jpg",
+        "output": "reflection_removal/output/0022.jpg"
+    },
+    {
+        "task": "reflection_removal",
+        "input": "reflection_removal/input/0063.jpg",
+        "output": "reflection_removal/output/0063.jpg"
+    },
+    {
+        "task": "reflection_removal",
+        "input": "reflection_removal/input/0092.jpg",
+        "output": "reflection_removal/output/0092.jpg"
+    },
+    {
+        "task": "reflection_removal",
+        "input": "reflection_removal/input/0101.jpg",
+        "output": "reflection_removal/output/0101.jpg"
+    },
+    {
+        "task": "reflection_removal",
+        "input": "reflection_removal/input/0083.jpg",
+        "output": "reflection_removal/output/0083.jpg"
+    },
+    {
+        "task": "reflection_removal",
+        "input": "reflection_removal/input/0071.jpg",
+        "output": "reflection_removal/output/0071.jpg"
+    },
+    {
+        "task": "reflection_removal",
+        "input": "reflection_removal/input/0008.jpg",
+        "output": "reflection_removal/output/0008.jpg"
+    },
+    {
+        "task": "reflection_removal",
+        "input": "reflection_removal/input/0088.jpg",
+        "output": "reflection_removal/output/0088.jpg"
+    },
+    {
+        "task": "reflection_removal",
+        "input": "reflection_removal/input/0076.jpg",
+        "output": "reflection_removal/output/0076.jpg"
+    },
+    {
+        "task": "reflection_removal",
+        "input": "reflection_removal/input/0094.jpg",
+        "output": "reflection_removal/output/0094.jpg"
+    },
+    {
+        "task": "reflection_removal",
+        "input": "reflection_removal/input/0078.jpg",
+        "output": "reflection_removal/output/0078.jpg"
+    },
+    {
+        "task": "reflection_removal",
+        "input": "reflection_removal/input/0047.jpg",
+        "output": "reflection_removal/output/0047.jpg"
+    },
+    {
+        "task": "reflection_removal",
+        "input": "reflection_removal/input/0031.jpg",
+        "output": "reflection_removal/output/0031.jpg"
+    },
+    {
+        "task": "reflection_removal",
+        "input": "reflection_removal/input/0026.jpg",
+        "output": "reflection_removal/output/0026.jpg"
+    },
+    {
+        "task": "reflection_removal",
+        "input": "reflection_removal/input/0041.jpg",
+        "output": "reflection_removal/output/0041.jpg"
+    },
+    {
+        "task": "reflection_removal",
+        "input": "reflection_removal/input/0067.jpg",
+        "output": "reflection_removal/output/0067.jpg"
+    },
+    {
+        "task": "reflection_removal",
+        "input": "reflection_removal/input/0049.jpg",
+        "output": "reflection_removal/output/0049.jpg"
+    },
+    {
+        "task": "reflection_removal",
+        "input": "reflection_removal/input/0069.jpg",
+        "output": "reflection_removal/output/0069.jpg"
+    },
+    {
+        "task": "reflection_removal",
+        "input": "reflection_removal/input/0036.jpg",
+        "output": "reflection_removal/output/0036.jpg"
+    },
+    {
+        "task": "reflection_removal",
+        "input": "reflection_removal/input/0040.jpg",
+        "output": "reflection_removal/output/0040.jpg"
+    },
+    {
+        "task": "reflection_removal",
+        "input": "reflection_removal/input/0066.jpg",
+        "output": "reflection_removal/output/0066.jpg"
+    },
+    {
+        "task": "reflection_removal",
+        "input": "reflection_removal/input/0096.jpg",
+        "output": "reflection_removal/output/0096.jpg"
+    },
+    {
+        "task": "reflection_removal",
+        "input": "reflection_removal/input/0065.jpg",
+        "output": "reflection_removal/output/0065.jpg"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/14-9.png",
+        "output": "shadow_removal/output/14-9.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/88-4.png",
+        "output": "shadow_removal/output/88-4.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/65-13.png",
+        "output": "shadow_removal/output/65-13.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/85-7.png",
+        "output": "shadow_removal/output/85-7.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/21-6.png",
+        "output": "shadow_removal/output/21-6.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/33-6.png",
+        "output": "shadow_removal/output/33-6.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/30-13.png",
+        "output": "shadow_removal/output/30-13.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/56-11.png",
+        "output": "shadow_removal/output/56-11.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/41-13.png",
+        "output": "shadow_removal/output/41-13.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/85-26.png",
+        "output": "shadow_removal/output/85-26.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/66-16.png",
+        "output": "shadow_removal/output/66-16.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/36-11.png",
+        "output": "shadow_removal/output/36-11.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/55-12.png",
+        "output": "shadow_removal/output/55-12.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/45-19.png",
+        "output": "shadow_removal/output/45-19.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/13-17.png",
+        "output": "shadow_removal/output/13-17.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/15-25.png",
+        "output": "shadow_removal/output/15-25.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/62-11.png",
+        "output": "shadow_removal/output/62-11.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/22-8.png",
+        "output": "shadow_removal/output/22-8.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/40-11.png",
+        "output": "shadow_removal/output/40-11.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/28-2.png",
+        "output": "shadow_removal/output/28-2.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/54-3.png",
+        "output": "shadow_removal/output/54-3.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/33-10.png",
+        "output": "shadow_removal/output/33-10.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/26-14.png",
+        "output": "shadow_removal/output/26-14.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/73-9.png",
+        "output": "shadow_removal/output/73-9.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/10-2.png",
+        "output": "shadow_removal/output/10-2.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/62-9.png",
+        "output": "shadow_removal/output/62-9.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/69-13.png",
+        "output": "shadow_removal/output/69-13.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/29-11.png",
+        "output": "shadow_removal/output/29-11.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/4-8.png",
+        "output": "shadow_removal/output/4-8.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/36-9.png",
+        "output": "shadow_removal/output/36-9.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/57-5.png",
+        "output": "shadow_removal/output/57-5.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/44-4.png",
+        "output": "shadow_removal/output/44-4.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/12-5.png",
+        "output": "shadow_removal/output/12-5.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/71-6.png",
+        "output": "shadow_removal/output/71-6.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/69-7.png",
+        "output": "shadow_removal/output/69-7.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/42-16.png",
+        "output": "shadow_removal/output/42-16.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/78-14.png",
+        "output": "shadow_removal/output/78-14.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/48-12.png",
+        "output": "shadow_removal/output/48-12.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/88-1.png",
+        "output": "shadow_removal/output/88-1.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/26-15.png",
+        "output": "shadow_removal/output/26-15.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/47-1.png",
+        "output": "shadow_removal/output/47-1.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/3-7.png",
+        "output": "shadow_removal/output/3-7.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/43-2.png",
+        "output": "shadow_removal/output/43-2.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/34-11.png",
+        "output": "shadow_removal/output/34-11.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/50-9.png",
+        "output": "shadow_removal/output/50-9.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/42-14.png",
+        "output": "shadow_removal/output/42-14.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/89-6.png",
+        "output": "shadow_removal/output/89-6.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/18-14.png",
+        "output": "shadow_removal/output/18-14.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/42-8.png",
+        "output": "shadow_removal/output/42-8.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/43-15.png",
+        "output": "shadow_removal/output/43-15.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/31-10.png",
+        "output": "shadow_removal/output/31-10.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/82-9.png",
+        "output": "shadow_removal/output/82-9.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/11-6.png",
+        "output": "shadow_removal/output/11-6.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/87-12.png",
+        "output": "shadow_removal/output/87-12.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/37-21.png",
+        "output": "shadow_removal/output/37-21.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/54-16.png",
+        "output": "shadow_removal/output/54-16.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/64-15.png",
+        "output": "shadow_removal/output/64-15.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/86-9.png",
+        "output": "shadow_removal/output/86-9.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/61-6.png",
+        "output": "shadow_removal/output/61-6.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/7-9.png",
+        "output": "shadow_removal/output/7-9.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/12-17.png",
+        "output": "shadow_removal/output/12-17.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/47-8.png",
+        "output": "shadow_removal/output/47-8.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/70-4.png",
+        "output": "shadow_removal/output/70-4.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/42-26.png",
+        "output": "shadow_removal/output/42-26.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/43-19.png",
+        "output": "shadow_removal/output/43-19.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/7-4.png",
+        "output": "shadow_removal/output/7-4.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/14-4.png",
+        "output": "shadow_removal/output/14-4.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/28-12.png",
+        "output": "shadow_removal/output/28-12.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/30-3.png",
+        "output": "shadow_removal/output/30-3.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/12-19.png",
+        "output": "shadow_removal/output/12-19.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/84-17.png",
+        "output": "shadow_removal/output/84-17.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/24-8.png",
+        "output": "shadow_removal/output/24-8.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/4-3.png",
+        "output": "shadow_removal/output/4-3.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/10-18.png",
+        "output": "shadow_removal/output/10-18.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/10-17.png",
+        "output": "shadow_removal/output/10-17.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/86-22.png",
+        "output": "shadow_removal/output/86-22.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/72-10.png",
+        "output": "shadow_removal/output/72-10.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/46-13.png",
+        "output": "shadow_removal/output/46-13.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/68-11.png",
+        "output": "shadow_removal/output/68-11.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/22-6.png",
+        "output": "shadow_removal/output/22-6.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/31-14.png",
+        "output": "shadow_removal/output/31-14.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/71-10.png",
+        "output": "shadow_removal/output/71-10.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/54-1.png",
+        "output": "shadow_removal/output/54-1.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/86-13.png",
+        "output": "shadow_removal/output/86-13.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/24-12.png",
+        "output": "shadow_removal/output/24-12.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/17-15.png",
+        "output": "shadow_removal/output/17-15.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/33-17.png",
+        "output": "shadow_removal/output/33-17.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/62-6.png",
+        "output": "shadow_removal/output/62-6.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/43-21.png",
+        "output": "shadow_removal/output/43-21.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/15-17.png",
+        "output": "shadow_removal/output/15-17.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/55-2.png",
+        "output": "shadow_removal/output/55-2.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/56-15.png",
+        "output": "shadow_removal/output/56-15.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/35-17.png",
+        "output": "shadow_removal/output/35-17.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/33-4.png",
+        "output": "shadow_removal/output/33-4.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/85-14.png",
+        "output": "shadow_removal/output/85-14.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/78-9.png",
+        "output": "shadow_removal/output/78-9.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/82-18.png",
+        "output": "shadow_removal/output/82-18.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/14-6.png",
+        "output": "shadow_removal/output/14-6.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/10-10.png",
+        "output": "shadow_removal/output/10-10.png"
+    },
+    {
+        "task": "shadow_removal",
+        "input": "shadow_removal/input/76-11.png",
+        "output": "shadow_removal/output/76-11.png"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/0669.jpg",
+        "output": "style_transfer/output/0669.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/3480.jpg",
+        "output": "style_transfer/output/3480.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/6335.jpg",
+        "output": "style_transfer/output/6335.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/2597.jpg",
+        "output": "style_transfer/output/2597.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/1670.jpg",
+        "output": "style_transfer/output/1670.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/7305.jpg",
+        "output": "style_transfer/output/7305.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/0268.jpg",
+        "output": "style_transfer/output/0268.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/5969.jpg",
+        "output": "style_transfer/output/5969.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/0710.jpg",
+        "output": "style_transfer/output/0710.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/3163.jpg",
+        "output": "style_transfer/output/3163.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/4840.jpg",
+        "output": "style_transfer/output/4840.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/5531.jpg",
+        "output": "style_transfer/output/5531.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/2450.jpg",
+        "output": "style_transfer/output/2450.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/2652.jpg",
+        "output": "style_transfer/output/2652.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/3736.jpg",
+        "output": "style_transfer/output/3736.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/7158.jpg",
+        "output": "style_transfer/output/7158.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/4490.jpg",
+        "output": "style_transfer/output/4490.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/2421.jpg",
+        "output": "style_transfer/output/2421.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/7580.jpg",
+        "output": "style_transfer/output/7580.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/1919.jpg",
+        "output": "style_transfer/output/1919.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/6454.jpg",
+        "output": "style_transfer/output/6454.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/3780.jpg",
+        "output": "style_transfer/output/3780.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/0955.jpg",
+        "output": "style_transfer/output/0955.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/4845.jpg",
+        "output": "style_transfer/output/4845.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/3051.jpg",
+        "output": "style_transfer/output/3051.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/5135.jpg",
+        "output": "style_transfer/output/5135.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/3884.jpg",
+        "output": "style_transfer/output/3884.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/4069.jpg",
+        "output": "style_transfer/output/4069.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/8125.jpg",
+        "output": "style_transfer/output/8125.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/3494.jpg",
+        "output": "style_transfer/output/3494.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/0197.jpg",
+        "output": "style_transfer/output/0197.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/4591.jpg",
+        "output": "style_transfer/output/4591.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/2667.jpg",
+        "output": "style_transfer/output/2667.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/1493.jpg",
+        "output": "style_transfer/output/1493.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/5729.jpg",
+        "output": "style_transfer/output/5729.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/1120.jpg",
+        "output": "style_transfer/output/1120.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/5689.jpg",
+        "output": "style_transfer/output/5689.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/0597.jpg",
+        "output": "style_transfer/output/0597.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/4508.jpg",
+        "output": "style_transfer/output/4508.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/7156.jpg",
+        "output": "style_transfer/output/7156.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/6095.jpg",
+        "output": "style_transfer/output/6095.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/3271.jpg",
+        "output": "style_transfer/output/3271.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/3723.jpg",
+        "output": "style_transfer/output/3723.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/0719.jpg",
+        "output": "style_transfer/output/0719.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/2896.jpg",
+        "output": "style_transfer/output/2896.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/7745.jpg",
+        "output": "style_transfer/output/7745.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/0780.jpg",
+        "output": "style_transfer/output/0780.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/2240.jpg",
+        "output": "style_transfer/output/2240.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/7065.jpg",
+        "output": "style_transfer/output/7065.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/4417.jpg",
+        "output": "style_transfer/output/4417.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/0178.jpg",
+        "output": "style_transfer/output/0178.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/5203.jpg",
+        "output": "style_transfer/output/5203.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/2262.jpg",
+        "output": "style_transfer/output/2262.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/8540.jpg",
+        "output": "style_transfer/output/8540.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/6239.jpg",
+        "output": "style_transfer/output/6239.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/0861.jpg",
+        "output": "style_transfer/output/0861.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/4975.jpg",
+        "output": "style_transfer/output/4975.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/5396.jpg",
+        "output": "style_transfer/output/5396.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/6569.jpg",
+        "output": "style_transfer/output/6569.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/5335.jpg",
+        "output": "style_transfer/output/5335.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/3160.jpg",
+        "output": "style_transfer/output/3160.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/3486.jpg",
+        "output": "style_transfer/output/3486.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/4535.jpg",
+        "output": "style_transfer/output/4535.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/0685.jpg",
+        "output": "style_transfer/output/0685.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/5122.jpg",
+        "output": "style_transfer/output/5122.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/7412.jpg",
+        "output": "style_transfer/output/7412.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/6743.jpg",
+        "output": "style_transfer/output/6743.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/0840.jpg",
+        "output": "style_transfer/output/0840.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/1762.jpg",
+        "output": "style_transfer/output/1762.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/3495.jpg",
+        "output": "style_transfer/output/3495.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/4444.jpg",
+        "output": "style_transfer/output/4444.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/5219.jpg",
+        "output": "style_transfer/output/5219.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/0990.jpg",
+        "output": "style_transfer/output/0990.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/4409.jpg",
+        "output": "style_transfer/output/4409.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/1371.jpg",
+        "output": "style_transfer/output/1371.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/7574.jpg",
+        "output": "style_transfer/output/7574.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/0781.jpg",
+        "output": "style_transfer/output/0781.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/1749.jpg",
+        "output": "style_transfer/output/1749.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/5592.jpg",
+        "output": "style_transfer/output/5592.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/6560.jpg",
+        "output": "style_transfer/output/6560.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/0591.jpg",
+        "output": "style_transfer/output/0591.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/3524.jpg",
+        "output": "style_transfer/output/3524.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/2837.jpg",
+        "output": "style_transfer/output/2837.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/7511.jpg",
+        "output": "style_transfer/output/7511.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/5950.jpg",
+        "output": "style_transfer/output/5950.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/1862.jpg",
+        "output": "style_transfer/output/1862.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/1049.jpg",
+        "output": "style_transfer/output/1049.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/7421.jpg",
+        "output": "style_transfer/output/7421.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/2020.jpg",
+        "output": "style_transfer/output/2020.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/2304.jpg",
+        "output": "style_transfer/output/2304.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/0653.jpg",
+        "output": "style_transfer/output/0653.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/5366.jpg",
+        "output": "style_transfer/output/5366.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/7607.jpg",
+        "output": "style_transfer/output/7607.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/7977.jpg",
+        "output": "style_transfer/output/7977.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/0249.jpg",
+        "output": "style_transfer/output/0249.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/0297.jpg",
+        "output": "style_transfer/output/0297.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/4841.jpg",
+        "output": "style_transfer/output/4841.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/1910.jpg",
+        "output": "style_transfer/output/1910.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/0010.jpg",
+        "output": "style_transfer/output/0010.jpg"
+    },
+    {
+        "task": "style_transfer",
+        "input": "style_transfer/input/5986.jpg",
+        "output": "style_transfer/output/5986.jpg"
+    }
+]
