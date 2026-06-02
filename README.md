@@ -1,28 +1,15 @@
-# T2T-VICL: Cross-Task Visual In-Context Learning via Implicit Text-Driven VLMs
+<h1 style = "text-align:center;">T2T-VICL: Cross-Task Visual In-Context Learning via Implicit Text-Driven VLMs</h1>
 
 <div align="center">
-<img width="720" alt="T2T-VICL framework" src="assets/framework.png" />
+<img width="640" alt="T2T-VICL framework" src="assets/framework.png" />
 </div>
 
-<p style="line-height: 400%;" align="center">
-  <a href="https://arxiv.org/abs/2511.16107">
-    <img src="https://img.shields.io/badge/arXiv-Paper-b31b1b?logo=arxiv&logoColor=white" alt="Paper">
-  </a>
-
-  <a href="https://github.com/ZhangHuixin1103/Task-Transfer">
-    <img src="https://img.shields.io/badge/GitHub-Code-181717?logo=github&logoColor=white" alt="Code">
-  </a>
-
-  <a href="https://drive.google.com/drive/folders/1INgcoOhSBgWYdB-Ec_qiBGnyPCTLDiGk">
-    <img src="https://img.shields.io/badge/Google%20Drive-Data-4285F4?logo=googledrive&logoColor=white" alt="Data">
-  </a>
-
-  <a href="https://huggingface.co/datasets/ZhangHuixin/VICL">
-    <img src="https://img.shields.io/badge/🤗%20HuggingFace-Data-yellow" alt="Data">
-  </a>
+<p style="margin-top: 20px; margin-bottom: 20px" align="center">
+  <a href="https://arxiv.org/abs/2511.16107"><img src="https://img.shields.io/badge/arXiv-Paper-b31b1b?logo=arxiv&logoColor=white" alt="Paper"></a>
+  <a href="https://github.com/ZhangHuixin1103/Task-Transfer"><img src="https://img.shields.io/badge/GitHub-Code-181717?logo=github&logoColor=white" alt="Code"></a>
+  <a href="https://drive.google.com/drive/folders/1INgcoOhSBgWYdB-Ec_qiBGnyPCTLDiGk"><img src="https://img.shields.io/badge/Google%20Drive-Data-4285F4?logo=googledrive&logoColor=white" alt="Google Drive Data"></a>
+  <a href="https://huggingface.co/datasets/ZhangHuixin/VICL"><img src="https://img.shields.io/badge/Hugging%20Face-Data-FFD21E?logo=huggingface&logoColor=white" alt="Hugging Face Data"></a>
 </p>
-
----
 
 This repository contains the official implementation of **T2T-VICL**, a collaborative framework for studying **cross-task visual in-context learning (VICL)**. In standard VICL, the demonstration pair and the query usually belong to the same visual task. T2T-VICL studies a harder setting: the visual prompt comes from **Task A**, while the query image requires **Task B**.
 
@@ -82,7 +69,7 @@ Task-Transfer/
 
 ## Installation
 
-The project was developed with Python, PyTorch, Transformers, Diffusers, Qwen-VL utilities, VIEScore, and optional API clients for Gemini and Seedream. The included `requirements.txt` is a conda-style environment export from the authors' machine, so the most reliable setup is:
+The project was developed with Python, PyTorch, Transformers, Diffusers, Qwen-VL utilities, VIEScore, and optional API clients for Gemini and Seedream. The included `requirements.txt` is an environment snapshot from the authors' machine, and you may use it as a reference for reproducing.
 
 ```bash
 conda create -n vicl python=3.10
@@ -94,12 +81,14 @@ pip install torch==2.6.0 torchvision==0.21.0 torchaudio==2.6.0 --index-url https
 pip install torch==2.6.0 torchvision==0.21.0 torchaudio==2.6.0 --index-url https://download.pytorch.org/whl/cu124  # CUDA 12.4
 pip install torch==2.6.0 torchvision==0.21.0 torchaudio==2.6.0 --index-url https://download.pytorch.org/whl/cu126  # CUDA 12.6
 
-# Find proper Flash Attention 2 version from this link: https://github.com/Dao-AILab/flash-attention/releases
+# Find a Flash Attention 2 version matching your CUDA/PyTorch version:
+# https://github.com/Dao-AILab/flash-attention/releases
 # Example:
 pip install flash-attn==2.7.4.post1 --no-build-isolation
 pip install -U flash-attn --no-build-isolation
 
 # Install project dependencies
+# pip install transformers accelerate peft diffusers qwen-vl-utils scikit-image pillow tqdm google-genai fal-client requests
 pip install -r requirements.txt
 ```
 
@@ -130,7 +119,7 @@ data/dataset/
 |-- converted_dataset.json      # Qwen-VL SFT format
 |-- eval_dataset.json           # Cross-task evaluation pairs
 |-- eval_dataset_1.json         # Single-task evaluation data
-`-- eval_dataset_2.json         # Same-task VICL ablation pairs
+`-- eval_dataset_2.json         # Same-task ablation pairs
 ```
 
 To generate teacher descriptions for a new ordered task pair:
@@ -163,6 +152,8 @@ Make sure `annotation_path` points to `data/dataset/converted_dataset.json` and 
 cd Qwen3-VL/qwen-vl-finetune
 bash finetune.sh  # Or you can choose any shell script file from Qwen3-VL/qwen-vl-finetune/scripts
 ```
+
+**Note**: The default training script uses the dataset name `VICL`, which is already registered in `qwenvl/data/__init__.py`. Update the hard-coded absolute paths in that file before launching training.
 
 The evaluation scripts expect the fine-tuned checkpoint at:
 
@@ -217,7 +208,8 @@ Some scripts contain placeholder keys or machine-specific paths from the origina
 
 - `GEMINI_API_KEY` and `BASE_URL` in `eval.py`, `eval_1.py`, `eval_2.py`, `eval_lumina.py`, and related Gemini scripts.
 - `FAL_KEY` in `eval_seedream.py` for Seedream evaluation.
-- `viescore_path` in evaluation scripts if your checkout path differs.
+- `viescore_path` in evaluation scripts if your checkout path differs from the authors' machine.
+- `annotation_path` and `data_path` for the `VICL` entry in `Qwen3-VL/qwen-vl-finetune/qwenvl/data/__init__.py`.
 - `CHECKPOINT_PATH` if the Qwen prompt generator checkpoint is saved elsewhere.
 
 ## Citation
