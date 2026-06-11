@@ -72,8 +72,9 @@ METRIC_SOURCES = {
     "fid": {
         "paper": "GANs Trained by a Two Time-Scale Update Rule Converge to a Local Nash Equilibrium, NeurIPS 2017",
         "official_code": "https://github.com/bioinf-jku/TTUR/blob/master/fid.py",
-        "official_interface": "fid.py /path/to/generated_images /path/to/ground_truth_images",
-        "scope": "distribution metric over generated vs. ground-truth images; used for all selected target tasks",
+        "pytorch_implementation": "https://github.com/mseitzer/pytorch-fid",
+        "official_interface": "python -m pytorch_fid /path/to/generated_images /path/to/ground_truth_images",
+        "scope": "distribution metric over generated vs. ground-truth images; used for all selected target tasks; defaults to the TTUR-recommended PyTorch implementation",
     },
     "art_fid": {
         "paper": "ArtFID: Quantitative Evaluation of Neural Style Transfer, GCPR 2022",
@@ -356,8 +357,39 @@ def parse_first_float(text: str) -> Optional[float]:
     return float(match.group(0)) if match else None
 
 
-def run_official_fid(python_bin: str, fid_py: Path, generated_dir: Path, gt_dir: Path) -> Tuple[Optional[float], str]:
+def run_ttur_fid(python_bin: str, fid_py: Path, generated_dir: Path, gt_dir: Path) -> Tuple[Optional[float], str]:
     cmd = [python_bin, str(fid_py), str(generated_dir), str(gt_dir)]
+    proc = subprocess.run(cmd, text=True, capture_output=True, check=False)
+    text = "\n".join(part for part in [proc.stdout, proc.stderr] if part)
+    if proc.returncode != 0:
+        return None, text.strip()
+    return parse_first_float(text), text.strip()
+
+
+def run_pytorch_fid(
+    python_bin: str,
+    generated_dir: Path,
+    gt_dir: Path,
+    device: str,
+    batch_size: int,
+    dims: int,
+    num_workers: Optional[int],
+) -> Tuple[Optional[float], str]:
+    cmd = [
+        python_bin,
+        "-m",
+        "pytorch_fid",
+        str(generated_dir),
+        str(gt_dir),
+        "--device",
+        device,
+        "--batch-size",
+        str(batch_size),
+        "--dims",
+        str(dims),
+    ]
+    if num_workers is not None:
+        cmd.extend(["--num-workers", str(num_workers)])
     proc = subprocess.run(cmd, text=True, capture_output=True, check=False)
     text = "\n".join(part for part in [proc.stdout, proc.stderr] if part)
     if proc.returncode != 0:
@@ -400,11 +432,17 @@ def run_official_artfid(
         return {"art_fid": None}, text.strip()
 
     metrics = {}
-    for name in ("ArtFID", "FID", "LPIPS", "content"):
+    output_names = {
+        "ArtFID": "art_fid",
+        "FID": "artfid_style_fid",
+        "LPIPS": "artfid_lpips",
+        "content": "artfid_content",
+    }
+    for name, metric_name in output_names.items():
         pattern = rf"{name}[^-+0-9]*([-+]?(?:\d+\.\d+|\d+)(?:[eE][-+]?\d+)?)"
         match = re.search(pattern, text, flags=re.IGNORECASE)
         if match:
-            metrics[name.lower().replace("artfid", "art_fid")] = float(match.group(1))
+            metrics[metric_name] = float(match.group(1))
     if "art_fid" not in metrics:
         metrics["art_fid"] = parse_first_float(text)
     return metrics, text.strip()
@@ -566,13 +604,27 @@ def run(args: argparse.Namespace) -> None:
     group_metrics = {}
     raw_logs = {}
     if args.compute_fid:
-        if args.ttur_fid_py is None:
-            unavailable["fid"] = "pass --ttur-fid-py /path/to/TTUR/fid.py"
+        if args.fid_backend == "ttur":
+            if args.ttur_fid_py is None:
+                unavailable["fid"] = "pass --ttur-fid-py /path/to/TTUR/fid.py when --fid-backend ttur"
+            else:
+                for key, dirs in tqdm(stage_dirs.items(), desc="fid-ttur", disable=args.quiet):
+                    score, raw = run_ttur_fid(args.fid_python, args.ttur_fid_py, dirs["generated"], dirs["gt"])
+                    group_metrics.setdefault(key, {})["fid"] = score
+                    raw_logs[f"fid_ttur/{key[0]}/{key[1]}"] = raw
         else:
             for key, dirs in tqdm(stage_dirs.items(), desc="fid", disable=args.quiet):
-                score, raw = run_official_fid(args.fid_python, args.ttur_fid_py, dirs["generated"], dirs["gt"])
+                score, raw = run_pytorch_fid(
+                    args.fid_python,
+                    dirs["generated"],
+                    dirs["gt"],
+                    device=args.device,
+                    batch_size=args.fid_batch_size,
+                    dims=args.fid_dims,
+                    num_workers=args.fid_num_workers,
+                )
                 group_metrics.setdefault(key, {})["fid"] = score
-                raw_logs[f"fid/{key[0]}/{key[1]}"] = raw
+                raw_logs[f"fid_pytorch/{key[0]}/{key[1]}"] = raw
 
     if args.compute_artfid:
         for key, dirs in tqdm(stage_dirs.items(), desc="artfid", disable=args.quiet):
@@ -622,7 +674,7 @@ def run(args: argparse.Namespace) -> None:
         "unavailable_metrics": unavailable,
         "notes": [
             "No PSNR or SSIM is computed or reported.",
-            "FID is run only through the official TTUR fid.py when --ttur-fid-py is supplied.",
+            "FID defaults to mseitzer/pytorch-fid, the PyTorch implementation recommended by the official TTUR README; use --fid-backend ttur for the original TensorFlow fid.py.",
             "ArtFID is run only through the official art-fid package and only for task-B style_transfer pairs.",
             "CIEDE2000 is applied only to task-B colorization/style_transfer pairs unless --ciede-all is set.",
             "DISTS is full-reference IQA for restoration/perceptual quality; it is not a deraining-specific metric.",
@@ -658,12 +710,16 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--lpips-net", default="alex", choices=["alex", "vgg", "squeeze"])
     parser.add_argument("--compute-dists", action="store_true")
     parser.add_argument("--compute-fid", action="store_true")
-    parser.add_argument("--ttur-fid-py", type=Path, help="Path to official bioinf-jku/TTUR/fid.py.")
+    parser.add_argument("--fid-backend", default="pytorch_fid", choices=["pytorch_fid", "ttur"])
+    parser.add_argument("--fid-batch-size", type=int, default=50)
+    parser.add_argument("--fid-num-workers", type=int)
+    parser.add_argument("--fid-dims", type=int, default=2048, choices=[64, 192, 768, 2048])
+    parser.add_argument("--ttur-fid-py", type=Path, help="Path to official bioinf-jku/TTUR/fid.py, only used with --fid-backend ttur.")
     parser.add_argument("--compute-artfid", action="store_true")
     parser.add_argument("--artfid-batch-size", type=int, default=32)
     parser.add_argument("--artfid-num-workers", type=int, default=4)
     parser.add_argument("--artfid-content-metric", default="lpips", choices=["lpips", "vgg", "alexnet"])
-    parser.add_argument("--fid-python", default=sys.executable)
+    parser.add_argument("--fid-python", default=sys.executable, help="Python executable containing pytorch-fid, or TF1 when --fid-backend ttur.")
     parser.add_argument("--artfid-python", default=sys.executable)
     parser.add_argument("--device", default="cuda")
 
