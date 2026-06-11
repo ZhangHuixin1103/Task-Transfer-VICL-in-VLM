@@ -322,25 +322,40 @@ def link_or_copy(src: Path, dst: Path, copy: bool) -> None:
         os.symlink(src.resolve(), dst)
 
 
+def write_resized_rgb(src: Path, dst: Path, size: int) -> None:
+    dst.parent.mkdir(parents=True, exist_ok=True)
+    with Image.open(src) as image:
+        image = image.convert("RGB").resize((size, size), Image.Resampling.BICUBIC)
+        image.save(dst)
+
+
 def materialize_metric_dirs(
     rows: List[dict],
     result_dir: Path,
     data_tasks_dir: Path,
     copy_images: bool,
+    distribution_image_size: int,
 ) -> Dict[Tuple[str, str], Dict[str, Path]]:
     grouped: Dict[Tuple[str, str], List[dict]] = {}
     for row in rows:
         grouped.setdefault((row["run"], row["pair_key"]), []).append(row)
 
     stage_root = result_dir / "metric_dirs"
+    distribution_stage_root = result_dir / f"metric_dirs_{distribution_image_size}px"
     out = {}
     for (run_name, pair_key), items in grouped.items():
         base = stage_root / run_name / pair_key
+        dist_base = distribution_stage_root / run_name / pair_key
         dirs = {
             "gt": base / "gt",
             "generated": base / "generated",
             "content": base / "content",
             "style": base / "style",
+            "fid_gt": dist_base / "gt",
+            "fid_generated": dist_base / "generated",
+            "artfid_content": dist_base / "content",
+            "artfid_style": dist_base / "style",
+            "artfid_generated": dist_base / "generated",
         }
         for item in items:
             stem = item["combo_id"]
@@ -354,6 +369,14 @@ def materialize_metric_dirs(
             # ArtFID needs a style image distribution. For this benchmark, the closest
             # available style distribution is the task-B ground-truth output set.
             link_or_copy(gt_path, dirs["style"] / f"{stem}{gt_path.suffix.lower()}", copy_images)
+
+            # pytorch-fid and art-fid batch images with torch.stack, so all images
+            # in their staged directories must have identical spatial dimensions.
+            write_resized_rgb(gt_path, dirs["fid_gt"] / f"{stem}.png", distribution_image_size)
+            write_resized_rgb(gen_path, dirs["fid_generated"] / f"{stem}.png", distribution_image_size)
+            write_resized_rgb(content_path, dirs["artfid_content"] / f"{stem}.png", distribution_image_size)
+            write_resized_rgb(gt_path, dirs["artfid_style"] / f"{stem}.png", distribution_image_size)
+            write_resized_rgb(gen_path, dirs["artfid_generated"] / f"{stem}.png", distribution_image_size)
         out[(run_name, pair_key)] = dirs
     return out
 
@@ -578,6 +601,7 @@ def run(args: argparse.Namespace) -> None:
         result_dir=args.result_dir,
         data_tasks_dir=args.data_tasks_dir,
         copy_images=args.copy_images,
+        distribution_image_size=args.distribution_image_size,
     )
 
     unavailable = {}
@@ -615,15 +639,15 @@ def run(args: argparse.Namespace) -> None:
                 unavailable["fid"] = "pass --ttur-fid-py /path/to/TTUR/fid.py when --fid-backend ttur"
             else:
                 for key, dirs in tqdm(stage_dirs.items(), desc="fid-ttur", disable=args.quiet):
-                    score, raw = run_ttur_fid(args.fid_python, args.ttur_fid_py, dirs["generated"], dirs["gt"])
+                    score, raw = run_ttur_fid(args.fid_python, args.ttur_fid_py, dirs["fid_generated"], dirs["fid_gt"])
                     group_metrics.setdefault(key, {})["fid"] = score
                     raw_logs[f"fid_ttur/{key[0]}/{key[1]}"] = raw
         else:
             for key, dirs in tqdm(stage_dirs.items(), desc="fid", disable=args.quiet):
                 score, raw = run_pytorch_fid(
                     args.fid_python,
-                    dirs["generated"],
-                    dirs["gt"],
+                    dirs["fid_generated"],
+                    dirs["fid_gt"],
                     device=args.device,
                     batch_size=args.fid_batch_size,
                     dims=args.fid_dims,
@@ -639,9 +663,9 @@ def run(args: argparse.Namespace) -> None:
                 continue
             metrics, raw = run_official_artfid(
                 args.artfid_python,
-                content_dir=dirs["content"],
-                style_dir=dirs["style"],
-                generated_dir=dirs["generated"],
+                content_dir=dirs["artfid_content"],
+                style_dir=dirs["artfid_style"],
+                generated_dir=dirs["artfid_generated"],
                 device=args.device,
                 batch_size=args.artfid_batch_size,
                 num_workers=args.artfid_num_workers,
@@ -709,6 +733,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--run", action="append", default=[], metavar="NAME=PATH")
     parser.add_argument("--quiet", action="store_true")
     parser.add_argument("--copy-images", action="store_true", help="Copy staged metric images instead of symlinking.")
+    parser.add_argument("--distribution-image-size", type=int, default=299, help="Resize staged images for batched FID/ArtFID directory metrics.")
 
     parser.add_argument("--compute-ciede2000", action="store_true")
     parser.add_argument("--ciede-all", action="store_true", help="Also run CIEDE2000 outside colorization/style-transfer targets.")
