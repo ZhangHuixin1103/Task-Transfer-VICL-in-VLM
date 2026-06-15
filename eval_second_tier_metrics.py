@@ -73,6 +73,14 @@ DEFAULT_RUNS = {
     "gemini_qwen": OUTPUT_ROOT / "output_qwen",
     "seedream_fix": OUTPUT_ROOT / "baseline" / "seedream" / "output_fix",
     "seedream_qwen": OUTPUT_ROOT / "baseline" / "seedream" / "output_qwen",
+    "firered_fix": OUTPUT_ROOT / "baseline" / "firered" / "output_fix",
+    "firered_qwen": OUTPUT_ROOT / "baseline" / "firered" / "output_qwen",
+    "flux_fix": OUTPUT_ROOT / "baseline" / "flux" / "output_fix",
+    "flux_qwen": OUTPUT_ROOT / "baseline" / "flux" / "output_qwen",
+    "omnigen_fix": OUTPUT_ROOT / "baseline" / "omnigen" / "output_fix",
+    "omnigen_qwen": OUTPUT_ROOT / "baseline" / "omnigen" / "output_qwen",
+    "qwen_fix": OUTPUT_ROOT / "baseline" / "qwen" / "output_fix",
+    "qwen_qwen": OUTPUT_ROOT / "baseline" / "qwen" / "output_qwen",
 }
 
 METRIC_SOURCES = {
@@ -558,6 +566,36 @@ def write_sample_manifest(path: Path, rows: List[dict]) -> None:
             writer.writerow({field: row.get(field) for field in fields})
 
 
+def row_sort_key(row: dict) -> Tuple[Tuple[int, str], Tuple[int, str], str]:
+    return (run_sort_key(row["run"]), pair_sort_key(row["pair_key"]), row.get("combo_id", ""))
+
+
+def summary_sort_key(item: Tuple[str, dict]) -> Tuple[Tuple[int, str], Tuple[int, str]]:
+    row = item[1]
+    return (run_sort_key(row["run"]), pair_sort_key(row["pair_key"]))
+
+
+def load_json(path: Path, default):
+    if not path.exists():
+        return default
+    with path.open("r") as f:
+        return json.load(f)
+
+
+def load_existing_jsonl(path: Path) -> List[dict]:
+    if not path.exists():
+        return []
+    return [row for row in read_jsonl(path) or []]
+
+
+def filter_existing_rows(rows: List[dict], keep_keys: set) -> List[dict]:
+    return [
+        row
+        for row in rows
+        if (row.get("run"), row.get("pair_key")) in keep_keys
+    ]
+
+
 def mean(values: List[float]) -> Optional[float]:
     vals = [value for value in values if isinstance(value, (int, float)) and np.isfinite(value)]
     return float(np.mean(vals)) if vals else None
@@ -609,11 +647,41 @@ def run(args: argparse.Namespace) -> None:
     samples = load_eval_samples(args.eval_json, target_pairs)
     args.result_dir.mkdir(parents=True, exist_ok=True)
 
-    rows, missing = collect_rows(args, samples)
-    write_jsonl(args.result_dir / "sample_details.jsonl", rows)
-    write_sample_manifest(args.result_dir / "sample_manifest.csv", rows)
-    with (args.result_dir / "missing_images.json").open("w") as f:
-        json.dump(missing, f, indent=2)
+    requested_keys = {
+        (run_name, pair_key)
+        for run_name in args.runs
+        for pair_key in target_pairs
+    }
+    existing_summaries = load_json(args.result_dir / "summary.json", {}) if args.resume_existing else {}
+    existing_raw_logs = load_json(args.result_dir / "official_metric_raw_logs.json", {}) if args.resume_existing else {}
+    existing_missing = load_json(args.result_dir / "missing_images.json", []) if args.resume_existing else []
+    existing_rows = load_existing_jsonl(args.result_dir / "sample_details.jsonl") if args.resume_existing else []
+
+    reusable_keys = set()
+    if args.resume_existing:
+        reusable_keys = {
+            (row.get("run"), row.get("pair_key"))
+            for row in existing_summaries.values()
+            if (row.get("run"), row.get("pair_key")) in requested_keys
+        }
+    compute_keys = requested_keys - reusable_keys
+    compute_run_names = {
+        run_name
+        for run_name, _ in compute_keys
+    }
+    compute_args = argparse.Namespace(**vars(args))
+    compute_args.runs = {
+        run_name: run_root
+        for run_name, run_root in args.runs.items()
+        if run_name in compute_run_names
+    }
+
+    rows, missing = collect_rows(compute_args, samples) if compute_args.runs else ([], [])
+    rows = [row for row in rows if (row["run"], row["pair_key"]) in compute_keys]
+    missing = [row for row in missing if (row["run"], row["pair_key"]) in compute_keys]
+
+    kept_existing_rows = filter_existing_rows(existing_rows, reusable_keys)
+    kept_existing_missing = filter_existing_rows(existing_missing, reusable_keys)
 
     stage_dirs = materialize_metric_dirs(
         rows,
@@ -648,7 +716,6 @@ def run(args: argparse.Namespace) -> None:
                 row["metrics"].update(lpips(gt_path, gen_path))
             if args.compute_dists and dists.available:
                 row["metrics"].update(dists(gt_path, gen_path))
-        write_jsonl(args.result_dir / "sample_details.jsonl", rows)
 
     group_metrics = {}
     raw_logs = {}
@@ -693,20 +760,43 @@ def run(args: argparse.Namespace) -> None:
             group_metrics.setdefault(key, {}).update(metrics)
             raw_logs[f"artfid/{run_name}/{pair_key}"] = raw
 
-    summaries = aggregate(rows, group_metrics)
+    new_summaries = aggregate(rows, group_metrics)
+    summaries = {
+        key: row
+        for key, row in existing_summaries.items()
+        if (row.get("run"), row.get("pair_key")) in reusable_keys
+    }
+    summaries.update(new_summaries)
+    summaries = dict(sorted(summaries.items(), key=summary_sort_key))
+    final_rows = sorted([*kept_existing_rows, *rows], key=row_sort_key)
+    final_missing = sorted([*kept_existing_missing, *missing], key=row_sort_key)
+    final_raw_logs = {
+        key: value
+        for key, value in existing_raw_logs.items()
+        if any(f"/{run_name}/{pair_key}" in key for run_name, pair_key in reusable_keys)
+    }
+    final_raw_logs.update(raw_logs)
+
+    write_jsonl(args.result_dir / "sample_details.jsonl", final_rows)
+    write_sample_manifest(args.result_dir / "sample_manifest.csv", final_rows)
+    with (args.result_dir / "missing_images.json").open("w") as f:
+        json.dump(final_missing, f, indent=2)
     with (args.result_dir / "summary.json").open("w") as f:
         json.dump(summaries, f, indent=2)
     write_summary_csv(args.result_dir / "summary.csv", summaries)
     with (args.result_dir / "official_metric_raw_logs.json").open("w") as f:
-        json.dump(raw_logs, f, indent=2)
+        json.dump(final_raw_logs, f, indent=2)
 
     manifest = {
         "target_tasks": sorted(TARGET_TASKS),
         "target_pairs": sorted(target_pairs, key=pair_sort_key),
         "all_pair_order": list(ALL_PAIR_ORDER),
         "runs": {name: str(path) for name, path in args.runs.items()},
-        "num_samples_found": len(rows),
-        "num_missing_images": len(missing),
+        "resume_existing": args.resume_existing,
+        "reused_run_pairs": [f"{run_name}/{pair_key}" for run_name, pair_key in sorted(reusable_keys, key=lambda item: (run_sort_key(item[0]), pair_sort_key(item[1])))],
+        "computed_run_pairs": [f"{run_name}/{pair_key}" for run_name, pair_key in sorted(compute_keys, key=lambda item: (run_sort_key(item[0]), pair_sort_key(item[1])))],
+        "num_samples_found": len(final_rows),
+        "num_missing_images": len(final_missing),
         "metric_sources": METRIC_SOURCES,
         "appendix_d3_reference_mapping": {
             "colorization": [
@@ -736,9 +826,10 @@ def run(args: argparse.Namespace) -> None:
     with (args.result_dir / "manifest.json").open("w") as f:
         json.dump(manifest, f, indent=2)
 
-    print(f"Prepared {len(rows)} existing generated-image rows in {args.result_dir}")
-    if missing:
-        print(f"Missing generated images: {len(missing)}")
+    print(f"Prepared {len(final_rows)} existing generated-image rows in {args.result_dir}")
+    print(f"Reused run/pairs: {len(reusable_keys)}; computed run/pairs: {len(compute_keys)}")
+    if final_missing:
+        print(f"Missing generated images: {len(final_missing)}")
     if unavailable:
         print(f"Unavailable/skipped official metrics: {unavailable}")
 
@@ -753,6 +844,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--pair", action="append", choices=TARGET_PAIRS)
     parser.add_argument("--run", action="append", default=[], metavar="NAME=PATH")
     parser.add_argument("--quiet", action="store_true")
+    parser.add_argument("--force", action="store_true", help="Recompute all requested run/pairs instead of reusing existing summary.json results.")
     parser.add_argument("--copy-images", action="store_true", help="Copy staged metric images instead of symlinking.")
     parser.add_argument("--distribution-image-size", type=int, default=299, help="Resize staged images for batched FID/ArtFID directory metrics.")
 
@@ -776,6 +868,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--device", default="cuda")
 
     args = parser.parse_args()
+    args.resume_existing = not args.force
     if args.run:
         runs = {}
         for item in args.run:
