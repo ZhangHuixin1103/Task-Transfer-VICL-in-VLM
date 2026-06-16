@@ -13,6 +13,7 @@
   --soft-yellow: #fff4c4;
   --soft-blue: #e7f4fb;
   --shadow: 0 12px 36px rgba(24, 25, 28, 0.08);
+  --content-width: 880px;
 }
 
 * {
@@ -69,7 +70,6 @@ img {
   color: var(--teal);
 }
 
-.venue,
 .eyebrow {
   margin: 0 0 10px;
   color: var(--red);
@@ -87,10 +87,18 @@ h3 {
 
 h1 {
   max-width: 1040px;
-  margin: 0 auto 26px;
+  margin: 0 auto 14px;
   font-size: clamp(2.2rem, 5.3vw, 4.65rem);
   line-height: 1.04;
   font-weight: 850;
+}
+
+.submission-note {
+  margin: 0 0 26px;
+  color: var(--red);
+  font-size: 0.78rem;
+  font-weight: 850;
+  letter-spacing: 0.04em;
 }
 
 .author-grid {
@@ -169,7 +177,7 @@ h1 {
 }
 
 .section-copy {
-  width: min(880px, 100%);
+  width: min(var(--content-width), 100%);
   margin: 0 auto 28px;
   text-align: left;
 }
@@ -225,6 +233,7 @@ h1 {
 }
 
 .figure-frame {
+  width: min(var(--content-width), 100%);
   margin: 0 auto;
   background: var(--paper);
   border: 1px solid var(--line);
