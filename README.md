@@ -4,7 +4,9 @@
 <img width="720" alt="T2T-VICL framework" src="assets/framework.png" />
 </div>
 
-<p style="margin-top: 20px; margin-bottom: 20px" align="center">
+---
+
+<p style="margin-top: 0px; margin-bottom: 10px" align="center">
   <a href="https://arxiv.org/abs/2511.16107"><img src="https://img.shields.io/badge/arXiv-Paper-b31b1b?logo=arxiv&logoColor=white" alt="Paper"></a>
   <a href="https://github.com/ZhangHuixin1103/Task-Transfer-VICL-in-VLM"><img src="https://img.shields.io/badge/GitHub-Code-181717?logo=github&logoColor=white" alt="Code"></a>
   <a href="https://zhanghuixin1103.github.io/Task-Transfer-VICL-in-VLM/"><img src="https://img.shields.io/badge/%F0%9F%8C%90-Project%20Page-0A7F72" alt="Project Page"></a>
@@ -15,7 +17,7 @@
 This repository contains the official implementation of **T2T-VICL**, a collaborative framework for studying **cross-task visual in-context learning (VICL)**. In standard VICL, the demonstration pair and the query usually belong to the same visual task. T2T-VICL studies a harder setting: the visual prompt comes from **Task A**, while the query image requires **Task B**.
 
 <div style="margin-top: 10px; margin-bottom: 10px" align="center">
-<img height="450" alt="T2T-VICL overview" src="assets/VICL.png" />
+<img width="680" alt="T2T-VICL overview" src="assets/VICL.png" />
 </div>
 
 The core idea is to translate mismatched visual demonstrations into **implicit textual guidance**. A large teacher VLM first describes the relationship between two low-level vision tasks without explicitly naming the tasks. A smaller Qwen-VL student is then fine-tuned to generate such content-dependent prompts from three images: Task A input, Task A output, and Task B input. The generated prompt guides a frozen image-editing VLM, and multiple candidates are evaluated with PSNR, SSIM, and VIEScore.
