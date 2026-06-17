@@ -56,7 +56,7 @@ img {
   justify-content: center;
   gap: 18px;
   flex-wrap: wrap;
-  margin-bottom: 46px;
+  margin-bottom: 34px;
 }
 
 .top-nav a {
@@ -86,10 +86,10 @@ h3 {
 }
 
 h1 {
-  max-width: 1040px;
+  max-width: 960px;
   margin: 0 auto 14px;
-  font-size: clamp(2.2rem, 5.3vw, 4.65rem);
-  line-height: 1.04;
+  font-size: clamp(1.72rem, 2.6vw, 2.35rem);
+  line-height: 1.14;
   font-weight: 850;
 }
 
@@ -184,8 +184,8 @@ h1 {
 
 .section-copy h2 {
   margin: 0;
-  font-size: clamp(1.7rem, 3.2vw, 2.85rem);
-  line-height: 1.13;
+  font-size: clamp(1.16rem, 1.65vw, 1.5rem);
+  line-height: 1.24;
   font-weight: 820;
 }
 
@@ -247,16 +247,17 @@ h1 {
 }
 
 .scroll-figure {
-  overflow-x: auto;
+  overflow: hidden;
 }
 
 .scroll-figure img {
-  max-width: none;
-  min-width: 1120px;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
 }
 
 .visual-results img {
-  min-width: 1240px;
+  min-width: 0;
 }
 
 figcaption {
@@ -432,7 +433,7 @@ pre {
   }
 
   h1 {
-    font-size: 2rem;
+    font-size: 1.46rem;
   }
 
   .author-grid {
@@ -456,7 +457,7 @@ pre {
   }
 
   .section-copy h2 {
-    font-size: 1.62rem;
+    font-size: 1.14rem;
   }
 
   .section-copy p,
