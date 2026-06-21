@@ -41,20 +41,6 @@ T2T-VICL has three main stages:
    - Candidate outputs are evaluated using PSNR, SSIM, and VIEScore.
    - For stochastic APIs such as Gemini and Seedream, the paper samples multiple candidates and selects the highest-PSNR output before reporting SSIM and VIEScore.
 
-## Gemini Results
-
-The qualitative examples below show how Gemini adapts across diverse cross-task pairs under the implicit prompt.
-
-<div style="margin-top: 10px; margin-bottom: 10px" align="center">
-<img width="1080" alt="Representative Gemini top-tier cross-task results" src="docs/assets/top-tier-examples.png" />
-</div>
-
-The quantitive results on Gemini 2.5 Flash and Seedream 4.0 are also shown below. Each "Ours" column uses the Qwen-enhanced implicit prompt, compared with the fixed-prompt baseline.
-
-<div style="margin-top: 10px; margin-bottom: 10px" align="center">
-<img width="840" alt="Gemini top-tier cross-task metric results" src="docs/assets/top-tier-table.png" />
-</div>
-
 ## Vision Tasks
 
 The benchmark covers 12 low-level vision tasks:
@@ -229,6 +215,20 @@ Some scripts contain placeholder keys or machine-specific paths from the origina
 - `viescore_path` in evaluation scripts if your checkout path differs from the authors' machine.
 - `annotation_path` and `data_path` for the `VICL` entry in `Qwen3-VL/qwen-vl-finetune/qwenvl/data/__init__.py`.
 - `CHECKPOINT_PATH` if the Qwen prompt generator checkpoint is saved elsewhere.
+
+## Our Results
+
+The qualitative examples below show how Gemini adapts across diverse cross-task pairs under the implicit prompt.
+
+<div style="margin-top: 10px; margin-bottom: 10px" align="center">
+<img width="1080" alt="Representative Gemini top-tier cross-task results" src="docs/assets/top-tier-examples.png" />
+</div>
+
+The quantitive results on Gemini 2.5 Flash and Seedream 4.0 are also shown below. Each "Ours" column uses the Qwen-enhanced implicit prompt, compared with the fixed-prompt baseline.
+
+<div style="margin-top: 10px; margin-bottom: 10px" align="center">
+<img width="840" alt="Gemini top-tier cross-task metric results" src="docs/assets/top-tier-table.png" />
+</div>
 
 ## Citation
 
