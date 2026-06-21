@@ -1,15 +1,15 @@
 <h1 style = "text-align:center;">T2T-VICL: Cross-Task Visual In-Context Learning via Implicit Text-Driven VLMs</h1>
 
 <div align="center">
-<img width="720" alt="T2T-VICL framework" src="assets/framework.png" />
+<img width="720" alt="T2T-VICL framework" src="docs/assets/framework.png" />
 </div>
 
 ---
 
 <p style="margin-top: 0px; margin-bottom: 10px" align="center">
   <a href="https://arxiv.org/abs/2511.16107"><img src="https://img.shields.io/badge/arXiv-Paper-b31b1b?logo=arxiv&logoColor=white" alt="Paper"></a>
-  <a href="https://github.com/ZhangHuixin1103/Task-Transfer-VICL-in-VLM"><img src="https://img.shields.io/badge/GitHub-Code-181717?logo=github&logoColor=white" alt="Code"></a>
-  <a href="https://zhanghuixin1103.github.io/Task-Transfer-VICL-in-VLM/"><img src="https://img.shields.io/badge/%F0%9F%8C%90-Project%20Page-0A7F72" alt="Project Page"></a>
+  <a href="https://github.com/ZhangHuixin1103/Task-Transfer-VICL-VLMs"><img src="https://img.shields.io/badge/GitHub-Code-181717?logo=github&logoColor=white" alt="Code"></a>
+  <a href="https://zhanghuixin1103.github.io/Task-Transfer-VICL-VLMs"><img src="https://img.shields.io/badge/%F0%9F%8C%90-Project%20Page-0A7F72" alt="Project Page"></a>
   <a href="https://docs.google.com/forms/d/e/1FAIpQLSdMN7YiLaKvHdzYKIs8X_EFIAXFZZuTsysBZYj6iD8fZD1EkA/viewform"><img src="https://img.shields.io/badge/Google%20Drive-Data-4285F4?logo=googledrive&logoColor=white" alt="Google Drive Data"></a>
   <a href="https://huggingface.co/datasets/ZhangHuixin/VICL"><img src="https://img.shields.io/badge/Hugging%20Face-Data-FFD21E?logo=huggingface&logoColor=white" alt="Hugging Face Data"></a>
 </p>
@@ -17,7 +17,7 @@
 This repository contains the official implementation of **T2T-VICL**, a collaborative framework for studying **cross-task visual in-context learning (VICL)**. In standard VICL, the demonstration pair and the query usually belong to the same visual task. T2T-VICL studies a harder setting: the visual prompt comes from **Task A**, while the query image requires **Task B**.
 
 <div style="margin-top: 10px; margin-bottom: 10px" align="center">
-<img width="680" alt="T2T-VICL overview" src="assets/VICL.png" />
+<img width="680" alt="T2T-VICL overview" src="docs/assets/vicl-overview.png" />
 </div>
 
 The core idea is to translate mismatched visual demonstrations into **implicit textual guidance**. A large teacher VLM first describes the relationship between two low-level vision tasks without explicitly naming the tasks. A smaller Qwen-VL student is then fine-tuned to generate such content-dependent prompts from three images: Task A input, Task A output, and Task B input. The generated prompt guides a frozen image-editing VLM, and multiple candidates are evaluated with PSNR, SSIM, and VIEScore.
@@ -40,6 +40,20 @@ T2T-VICL has three main stages:
    - The generated implicit prompt is passed to an image-editing VLM together with the three input images.
    - Candidate outputs are evaluated using PSNR, SSIM, and VIEScore.
    - For stochastic APIs such as Gemini and Seedream, the paper samples multiple candidates and selects the highest-PSNR output before reporting SSIM and VIEScore.
+
+## Gemini Results
+
+The qualitative examples below show how Gemini adapts across diverse cross-task pairs under the implicit prompt.
+
+<div style="margin-top: 10px; margin-bottom: 10px" align="center">
+<img width="1080" alt="Representative Gemini top-tier cross-task results" src="docs/assets/top-tier-examples.png" />
+</div>
+
+The quantitive results on Gemini 2.5 Flash and Seedream 4.0 are also shown below. Each "Ours" column uses the Qwen-enhanced implicit prompt, compared with the fixed-prompt baseline.
+
+<div style="margin-top: 10px; margin-bottom: 10px" align="center">
+<img width="840" alt="Gemini top-tier cross-task metric results" src="docs/assets/top-tier-table.png" />
+</div>
 
 ## Vision Tasks
 
@@ -169,6 +183,7 @@ If you save the checkpoint elsewhere, update `CHECKPOINT_PATH` in the correspond
 ## Evaluation
 
 Main experiments on Gemini:
+
 - Run cross-task evaluation with the learned Qwen prompt.
 
    ```bash
