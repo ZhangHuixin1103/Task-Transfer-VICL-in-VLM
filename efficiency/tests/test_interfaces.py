@@ -3,6 +3,7 @@ from __future__ import annotations
 import ast
 import json
 import os
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -40,7 +41,21 @@ def definitions(path: Path):
 
 class InterfaceContractTest(unittest.TestCase):
     def test_t2t_import_path_does_not_import_external_adapters(self):
-        self.assertNotIn("efficiency.adapters.external", sys.modules)
+        result = subprocess.run(
+            [
+                sys.executable,
+                "-c",
+                (
+                    "import sys; import efficiency.adapters; "
+                    "assert 'efficiency.adapters.external' not in sys.modules"
+                ),
+            ],
+            cwd=TASK_TRANSFER,
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        self.assertEqual(result.returncode, 0, result.stderr)
 
     def test_paired_image_json_maps_to_vicl_sample_with_explicit_demo(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -310,6 +325,11 @@ class InterfaceContractTest(unittest.TestCase):
         instruct = definitions(EXTERNAL_ROOT / "InstructDiffusion" / "edit_cli.py")
         self.assertIn("CFGDenoiser", instruct)
         self.assertIn("load_model_from_config", instruct)
+        hidden_shot = definitions(EXTERNAL_ROOT / "Hidden-Shot" / "models_painter2.py")
+        self.assertIn(
+            "painter_vit_large_patch16_input896x448_win_dec64_8glb_sl1",
+            hidden_shot,
+        )
 
     def test_condition_resources_are_isolated(self):
         class LifecycleAdapter(EfficiencyAdapter):

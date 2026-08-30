@@ -61,17 +61,22 @@ def system_metadata(project_root: Path) -> Dict[str, Any]:
     for package in (
         "accelerate",
         "bitsandbytes",
+        "detectron2",
         "diffusers",
+        "fairscale",
         "flash-attn",
         "k-diffusion",
         "numpy",
         "optimum",
         "pillow",
         "peft",
+        "pytorch-lightning",
         "safetensors",
+        "timm",
         "tokenizers",
         "transformers",
         "triton",
+        "torchmetrics",
         "torchvision",
         "xformers",
     ):
@@ -134,8 +139,8 @@ def _external_repository(*parts: str) -> Path:
     if not configured:
         raise ValueError(
             f"{EXTERNAL_ROOT_ENV} is required for external baseline adapters. "
-            "Set it to the directory containing Painter, Prompt-Diffusion, and "
-            "InstructDiffusion."
+            "Set it to the directory containing Painter, Prompt-Diffusion, "
+            "InstructDiffusion, and Hidden-Shot."
         )
     root = Path(configured).expanduser().resolve()
     if not root.is_dir():
@@ -192,6 +197,26 @@ def build_adapter(args, project_root: Path):
             demo_input=args.demo_input,
             demo_output=args.demo_output,
         )
+    if args.adapter == "hidden-shot":
+        from .adapters.external import HiddenShotAdapter
+
+        if not args.checkpoint:
+            raise ValueError("--checkpoint is required for hidden-shot")
+        return HiddenShotAdapter(
+            repository=_external_repository("Hidden-Shot"),
+            dataset_json=dataset_json,
+            data_root=data_root,
+            checkpoint=args.checkpoint,
+            sample_index=args.sample_index,
+            device=args.device,
+            dtype=args.dtype or "fp32",
+            resolution=args.resolution or 448,
+            clip_architecture=args.hidden_clip_architecture,
+            pgn_model_type=args.hidden_pgn_model,
+            task_name=args.hidden_task_name,
+            demo_input=args.demo_input,
+            demo_output=args.demo_output,
+        )
     if args.adapter == "prompt-diffusion":
         from .adapters.external import PromptDiffusionAdapter
 
@@ -242,6 +267,8 @@ def build_adapter(args, project_root: Path):
 def run_benchmark(args) -> Dict[str, Any]:
     if args.warmup < 0 or args.repeats < 1:
         raise ValueError("--warmup must be >= 0 and --repeats must be >= 1")
+    if args.system_concurrency < 1:
+        raise ValueError("--system-concurrency must be positive")
     if args.steps is not None and args.steps < 1:
         raise ValueError("--steps must be >= 1")
     if args.resolution is not None and args.resolution < 1:
@@ -269,6 +296,9 @@ def run_benchmark(args) -> Dict[str, Any]:
             "warmup": args.warmup,
             "repeats": args.repeats,
             "batch_size": 1,
+            "per_process_concurrency": 1,
+            "declared_system_concurrency": args.system_concurrency,
+            "concurrent_workloads_note": args.concurrent_workloads_note,
             "profile_flops": args.profile_flops,
             "parameters_only": args.parameters_only,
             "condition_resources_are_isolated": True,
@@ -340,6 +370,7 @@ def parser() -> argparse.ArgumentParser:
         choices=[
             *T2T_NAMES,
             "painter",
+            "hidden-shot",
             "prompt-diffusion",
             "instruct-diffusion",
             "toy",
@@ -376,6 +407,25 @@ def parser() -> argparse.ArgumentParser:
         default="restoration",
     )
     result.add_argument("--painter-include-script-loss", action="store_true")
+    result.add_argument(
+        "--hidden-pgn-model",
+        choices=[
+            "auto",
+            "resnet10",
+            "resnet18",
+            "densenet18",
+            "densenet121",
+            "densenet161",
+            "densenet169",
+            "densenet201",
+        ],
+        default="auto",
+        help="Hidden-Shot PGN backbone; auto infers it from checkpoint tensor names/shapes",
+    )
+    result.add_argument(
+        "--hidden-clip-architecture", choices=["ViT-B/32"], default="ViT-B/32"
+    )
+    result.add_argument("--hidden-task-name", default="restoration")
     result.add_argument("--seed", type=int)
     result.add_argument("--text-prompt", default="perform the demonstrated visual task")
     result.add_argument("--cfg-text", type=float, default=3.5)
@@ -386,6 +436,17 @@ def parser() -> argparse.ArgumentParser:
     result.add_argument("--profile-flops", action="store_true")
     result.add_argument("--flops-top-k", type=int, default=20)
     result.add_argument("--parameters-only", action="store_true")
+    result.add_argument(
+        "--system-concurrency",
+        type=int,
+        default=1,
+        help="Declared maximum number of model processes sharing the server during timing",
+    )
+    result.add_argument(
+        "--concurrent-workloads-note",
+        default="none",
+        help="Free-text record of other jobs sharing GPUs/host resources",
+    )
     result.add_argument("--output-dir", type=Path, default=Path("efficiency/results"))
     return result
 

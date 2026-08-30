@@ -60,8 +60,11 @@ def _select_warmup_indices(
     )
 
 
-def _set_task_prompt(adapter, prompt: str) -> None:
-    if hasattr(adapter, "text_prompt"):
+def _set_task_prompt(adapter, prompt: str, task_name: str) -> None:
+    setter = getattr(adapter, "set_task_prompt", None)
+    if callable(setter):
+        setter(task_name, prompt)
+    elif hasattr(adapter, "text_prompt"):
         adapter.text_prompt = prompt
 
 
@@ -101,6 +104,8 @@ def _suite_signature(adapter, args, manifest_path: Path, conditions: list[str]) 
         "cfg_text": getattr(adapter, "cfg_text", None),
         "cfg_image": getattr(adapter, "cfg_image", None),
         "painter_task": getattr(adapter, "task_protocol", None),
+        "hidden_pgn_model": getattr(adapter, "pgn_model_type", None),
+        "hidden_clip_architecture": getattr(adapter, "clip_architecture", None),
     }
 
 
@@ -347,18 +352,20 @@ def run_suite(args) -> dict[str, Any]:
         raise ValueError("--resolution must be positive")
     if args.flops_samples_per_task < 1:
         raise ValueError("--flops-samples-per-task must be positive")
+    if args.system_concurrency < 1:
+        raise ValueError("--system-concurrency must be positive")
     if args.adapter == "toy":
         raise ValueError(
             "The toy adapter is only for efficiency.benchmark smoke tests, not the "
             "multi-task suite"
         )
     if (
-        args.adapter == "painter"
+        args.adapter in {"painter", "hidden-shot"}
         and not args.checkpoint
         and not args.parameters_only
     ):
         raise ValueError(
-            "Painter latency/FLOPs require the official checkpoint; use "
+            f"{args.adapter} latency/FLOPs require the official checkpoint; use "
             "--parameters-only to inspect architecture parameters without weights"
         )
 
@@ -446,7 +453,9 @@ def run_suite(args) -> dict[str, Any]:
         "resume_signature": resume_signature,
         "benchmark": {
             "batch_size": 1,
-            "concurrency": 1,
+            "per_process_concurrency": 1,
+            "declared_system_concurrency": args.system_concurrency,
+            "concurrent_workloads_note": args.concurrent_workloads_note,
             "profile_flops": args.profile_flops,
             "parameters_only": args.parameters_only,
             "condition_order": conditions,
@@ -493,7 +502,7 @@ def run_suite(args) -> dict[str, Any]:
                         demo_output=task.demo_output,
                         record_indices=record_indices,
                     )
-                    _set_task_prompt(adapter, task.text_prompt)
+                    _set_task_prompt(adapter, task.text_prompt, task.name)
                     count = adapter.sample_count()
                     target_indices = select_indices(
                         count,
@@ -594,7 +603,7 @@ def run_suite(args) -> dict[str, Any]:
                                 "source_record_indices"
                             ],
                         )
-                        _set_task_prompt(adapter, task.text_prompt)
+                        _set_task_prompt(adapter, task.text_prompt, task.name)
                         profiles = []
                         for sample_index in task_result[
                             "flops_profile_sample_indices"

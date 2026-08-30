@@ -1,7 +1,7 @@
 # Efficiency Benchmark
 
 This package measures logical parameters, runtime formula FLOPs, and actual inference
-latency for the original T2T-VICL pipeline and three locally vendored VICL/generalist
+latency for the original T2T-VICL pipeline and four locally vendored VICL/generalist
 vision baselines. It reuses the inference functions in `eval_qwen.py`, `eval_flux.py`,
 `eval_omnigen.py`, and `eval_firered.py` instead of maintaining a second set of model
 calls.
@@ -66,7 +66,8 @@ third-party code use different datasets:
 - `efficiency/t2t_tasks.json` is exclusively for the four original T2T-VICL backends. It
   uses `data/dataset/eval_dataset.json` plus images in `data/tasks`, and selects all 26
   directional `Task A -> Task B` groups, exactly 100 original records per group.
-- `efficiency/tasks.json` is for Painter, Prompt-Diffusion, and InstructDiffusion.
+- `efficiency/tasks.json` is for Painter, Hidden-Shot, Prompt-Diffusion, and
+  InstructDiffusion.
   Each restoration task supplies one same-task
   degraded/target demonstration and distinct query pairs from `data/others`.
 
@@ -173,8 +174,8 @@ updates only their columns in a supplied TeX table.
 ## Supported Adapters
 
 The original T2T adapters need no external source-tree setting. For Painter,
-Prompt-Diffusion, or InstructDiffusion, point one environment variable at the directory
-that contains those three repositories:
+Hidden-Shot, Prompt-Diffusion, or InstructDiffusion, point one environment variable at
+the directory that contains those four repositories:
 
 ```bash
 export VICL_EXTERNAL_ROOT=/absolute/path/to/external-models
@@ -187,14 +188,20 @@ export VICL_EXTERNAL_ROOT=/absolute/path/to/external-models
 | `t2t-omnigen2` | `[A_in, A_out, B_in] + prompt -> B_out` | `eval_omnigen.py` |
 | `t2t-firered` | `[A_in, A_out, B_in] + prompt -> B_out` | `eval_firered.py` |
 | `painter` | visual demo pair + query -> output | `$VICL_EXTERNAL_ROOT/Painter/Painter` |
+| `hidden-shot` | visual demo pair + query + task name -> output | `$VICL_EXTERNAL_ROOT/Hidden-Shot` |
 | `prompt-diffusion` | visual demo pair + query + text -> output | `$VICL_EXTERNAL_ROOT/Prompt-Diffusion` |
 | `instruct-diffusion` | source image + instruction -> output | `$VICL_EXTERNAL_ROOT/InstructDiffusion` |
 
-The three third-party methods are not interchangeable:
+The four third-party methods are not interchangeable:
 
 - **Painter** converts task outputs into images and performs one masked-completion
   forward pass over a vertically stitched demo/query canvas. Its official ViT-Large
   architecture uses a `896 x 448` input.
+- **Hidden-Shot** uses the released `models_painter2` path: PGNCLIP derives a learned
+  task-conditioned prompt from the stitched image canvas and task-name tokens before
+  the Painter decoder. One selected trained checkpoint is required. The adapter detects
+  its PGN CNN from checkpoint keys instead of trusting the scripts' stale `resnet10`
+  default.
 - **Prompt-Diffusion** adds both the demo pair and query condition to a
   ControlNet-style Stable Diffusion pipeline. Every denoising step runs the custom
   Prompt-Diffusion ControlNet and the SD UNet.
@@ -310,6 +317,9 @@ fails. Per-model logs and `launch_manifest.json` are written below the output ro
 GPU visibility is isolated, but CPU, RAM, storage, PCIe, and host power are shared.
 Parameter and FLOP counts are unaffected by concurrent execution; paper-facing latency
 must be checked against exclusive one-model runs, especially for CPU-offloaded FLUX.2.
+When jobs intentionally share a server, pass `--system-concurrency` and
+`--concurrent-workloads-note`. The JSON then distinguishes concurrency 1 inside each
+model process from the maximum number of competing server processes.
 
 Use `--parameters-only` to audit a model before paying the cost of generation. The
 T2T-VICL prompt generator uses the same messages, sampling parameters, and
@@ -354,6 +364,25 @@ layout, exposing the released `8glb` constructor's tuple-of-lists anomaly.
 The released architecture has a fixed `896 x 448` patch layout, so the adapter rejects
 other `--resolution` values instead of failing later with a misleading mask-shape error.
 
+Hidden-Shot also has a fixed `896 x 448` Painter canvas and released FP32 inference:
+
+```bash
+python -m efficiency.benchmark \
+  --adapter hidden-shot \
+  --checkpoint /path/to/one/selected/hidden-shot-checkpoint.pth \
+  --hidden-pgn-model auto \
+  --dtype fp32 \
+  --warmup 1 \
+  --repeats 10 \
+  --profile-flops \
+  --output-dir efficiency/results/hidden_shot
+```
+
+The checkpoint contains Painter, frozen CLIP, PGN, and learned prompt tensors. Total
+parameters and FLOPs include all of them. Hidden-Shot is not registered with
+`efficiency.quality`; its efficiency call still executes and validates a real 448x448
+generated image, then discards it so image saving cannot contaminate latency.
+
 Prompt-Diffusion uses its official Diffusers model and DDIM call:
 
 ```bash
@@ -395,6 +424,7 @@ produce one command.
 python -m efficiency.report \
   efficiency/results/qwen/t2t-qwen_suite_latest.json \
   efficiency/results/painter/painter_suite_latest.json \
+  efficiency/results/hidden_shot/hidden-shot_suite_latest.json \
   efficiency/results/prompt_diffusion/prompt-diffusion_suite_latest.json \
   efficiency/results/instruct_diffusion/instruct-diffusion_suite_latest.json \
   --output-dir efficiency/results/paper_table

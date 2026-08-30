@@ -32,6 +32,60 @@ IMAGENET_STD = np.array([0.229, 0.224, 0.225])
 RESAMPLING = getattr(Image, "Resampling", Image)
 
 
+HIDDEN_SHOT_TASK_LABELS = {
+    "deblurring": "deblurring",
+    "dehazing": "dehazing",
+    "demoireing": "demoire",
+    "denoising": "denoising",
+    "deraining": "deraining",
+    "low_light_enhancement": "enhancement",
+    "shadow_removal": "shadow removal",
+    "reflection_removal": "reflection removal",
+    "relighting": "relighting",
+    "inpainting": "inpainting",
+}
+
+
+def _infer_hidden_pgn_model(state_dict: Mapping[str, Any]) -> str:
+    """Infer the PGN CNN required to instantiate a released Hidden-Shot checkpoint."""
+    keys = tuple(str(key) for key in state_dict)
+    marker = "prompt_module.pgn_module.model."
+    pgn_keys = [key[key.index(marker) + len(marker) :] for key in keys if marker in key]
+    if any(key.startswith("input_net.") for key in pgn_keys):
+        return "resnet10"
+    if any(key.startswith("layer1.") for key in pgn_keys):
+        return "resnet18"
+    if any(key.startswith("features.denseblock") for key in pgn_keys):
+        classifier = next(
+            (
+                value
+                for key, value in state_dict.items()
+                if str(key).endswith(
+                    "prompt_module.pgn_module.model.classifier.weight"
+                )
+            ),
+            None,
+        )
+        in_features = (
+            int(classifier.shape[1])
+            if isinstance(classifier, torch.Tensor) and classifier.ndim == 2
+            else None
+        )
+        by_width = {
+            96: "densenet18",
+            512: "densenet121",
+            832: "densenet169",
+            960: "densenet201",
+            2208: "densenet161",
+        }
+        if in_features in by_width:
+            return by_width[in_features]
+    raise ValueError(
+        "Could not infer Hidden-Shot's PGN backbone from the checkpoint. "
+        "Pass --hidden-pgn-model explicitly."
+    )
+
+
 class PainterAdapter(EfficiencyAdapter):
     name = "painter"
     protocol = (
@@ -254,6 +308,302 @@ class PainterAdapter(EfficiencyAdapter):
                 "The default prediction-only path skips the "
                 "unused SmoothL1 loss computed by the released evaluation scripts. A cross-task "
                 "VICL sample is used only to keep input image count and resolution comparable."
+            ),
+        }
+
+
+class HiddenShotAdapter(EfficiencyAdapter):
+    name = "hidden-shot"
+    protocol = (
+        "[demo input, demo output, query] + task name -> query output "
+        "(learned prompt + masked image completion)"
+    )
+
+    def __init__(
+        self,
+        repository: Path,
+        dataset_json: Path,
+        data_root: Path,
+        checkpoint: str,
+        sample_index: int = 0,
+        device: str = "cuda",
+        dtype: str = "fp32",
+        resolution: int = 448,
+        clip_architecture: str = "ViT-B/32",
+        pgn_model_type: str = "auto",
+        task_name: str = "restoration",
+        demo_input: str | None = None,
+        demo_output: str | None = None,
+    ):
+        if resolution != 448:
+            raise ValueError(
+                "Hidden-Shot inherits Painter's fixed 896x448 patch layout; "
+                "--resolution must be 448."
+            )
+        if torch_dtype(dtype) != torch.float32:
+            raise ValueError(
+                "The released Hidden-Shot inference path is FP32 and its PGN mixes "
+                "plain FP32 tensors with model parameters; use --dtype fp32."
+            )
+        self.repository = repository.resolve()
+        self.dataset_json = dataset_json.resolve()
+        self.data_root = data_root.resolve()
+        self.checkpoint = resolve_model_reference(checkpoint, self.repository)
+        self.sample_index = sample_index
+        self.device = device
+        self.dtype = torch.float32
+        self.resolution = resolution
+        self.clip_architecture = clip_architecture
+        self.requested_pgn_model_type = pgn_model_type
+        self.pgn_model_type: str | None = None
+        self.task_name = task_name
+        self.task_label = HIDDEN_SHOT_TASK_LABELS.get(
+            task_name, task_name.replace("_", " ")
+        )
+        self.manifest_text_prompt: str | None = None
+        self.demo_input = demo_input
+        self.demo_output = demo_output
+        self.records: list[dict[str, Any]] = []
+        self._record_cache: dict[Path, list[dict[str, Any]]] = {}
+        self.sample: VICLSample | None = None
+        self.model = None
+        self.clip = None
+        self.checkpoint_missing_keys: list[str] = []
+        self.checkpoint_unexpected_keys: list[str] = []
+
+    @property
+    def conditions(self) -> Iterable[str]:
+        return ("official",)
+
+    def setup(self) -> None:
+        checkpoint_path = Path(self.checkpoint)
+        if not checkpoint_path.is_file():
+            raise FileNotFoundError(
+                "Hidden-Shot requires one released trained .pth checkpoint; "
+                f"not found: {checkpoint_path}"
+            )
+        initial_index = self.sample_index
+        self.configure_samples(
+            self.dataset_json,
+            demo_input=self.demo_input,
+            demo_output=self.demo_output,
+        )
+        self.select_sample(initial_index)
+
+        checkpoint = torch.load(checkpoint_path, map_location="cpu")
+        state_dict = (
+            checkpoint.get("model", checkpoint)
+            if isinstance(checkpoint, Mapping)
+            else checkpoint
+        )
+        if not isinstance(state_dict, Mapping):
+            raise TypeError("Hidden-Shot checkpoint must contain a model state dict")
+        self.pgn_model_type = (
+            _infer_hidden_pgn_model(state_dict)
+            if self.requested_pgn_model_type == "auto"
+            else self.requested_pgn_model_type
+        )
+        pgn_settings = {
+            "prompt_mode": "pgn",
+            "pgn_resolution": 224,
+            "nr_output_vectors": 16,
+            "vector_dim": 768,
+            "mixture_size": 256,
+            "pretrained_pgn": False,
+            "model_type": self.pgn_model_type,
+            "proj_type": "linear",
+            "pgn_act_fn": "softmax",
+            "nr_groups": 4,
+            "blocks_per_group": 1,
+            "initial_channels": 16,
+            "init_max_pool": True,
+        }
+        module = import_from_root("models_painter2", self.repository)
+        self.model = module.painter_vit_large_patch16_input896x448_win_dec64_8glb_sl1(
+            clip_architecture=self.clip_architecture,
+            pgn_settings=pgn_settings,
+        )
+        incompatible = self.model.load_state_dict(state_dict, strict=False)
+        self.checkpoint_missing_keys = list(incompatible.missing_keys)
+        self.checkpoint_unexpected_keys = list(incompatible.unexpected_keys)
+        critical = [
+            key
+            for key in self.checkpoint_missing_keys + self.checkpoint_unexpected_keys
+            if "prompt_module" in key
+        ]
+        if critical:
+            raise RuntimeError(
+                "Hidden-Shot checkpoint does not match the inferred/configured prompt "
+                f"architecture ({self.pgn_model_type}); first incompatible keys: "
+                f"{critical[:10]}"
+            )
+        del checkpoint, state_dict
+        self.model.eval().to(device=self.device, dtype=self.dtype)
+        with working_directory(self.repository):
+            from clip import clip
+
+        self.clip = clip
+
+    def set_task_prompt(self, task_name: str, manifest_prompt: str) -> None:
+        self.task_name = task_name
+        self.task_label = HIDDEN_SHOT_TASK_LABELS.get(
+            task_name, task_name.replace("_", " ")
+        )
+        self.manifest_text_prompt = manifest_prompt
+
+    def _open_resized(self, relative_path: str) -> np.ndarray:
+        with Image.open(self.data_root / relative_path) as source:
+            image = source.convert("RGB")
+            image = image.resize(
+                (self.resolution, self.resolution), RESAMPLING.BICUBIC
+            )
+            return np.asarray(image, dtype=np.float32) / 255.0
+
+    def run(self, condition: str) -> InferenceResult:
+        if (
+            condition != "official"
+            or self.sample is None
+            or self.model is None
+            or self.clip is None
+        ):
+            raise ValueError(condition)
+        stages: Dict[str, Any] = {}
+        text = f"This is a photo of a {self.task_label} task"
+        with StageTimer(stages, "preprocess"):
+            demo_input = self._open_resized(self.sample.task_a_input)
+            demo_output = self._open_resized(self.sample.task_a_output)
+            query = self._open_resized(self.sample.task_b_input)
+            images = np.concatenate((demo_input, query), axis=0)
+            targets = np.concatenate((demo_output, demo_output), axis=0)
+            images = (images - IMAGENET_MEAN) / IMAGENET_STD
+            targets = (targets - IMAGENET_MEAN) / IMAGENET_STD
+            images_tensor = torch.from_numpy(images).permute(2, 0, 1).unsqueeze(0)
+            targets_tensor = torch.from_numpy(targets).permute(2, 0, 1).unsqueeze(0)
+            images_tensor = images_tensor.to(device=self.device, dtype=self.dtype)
+            targets_tensor = targets_tensor.to(device=self.device, dtype=self.dtype)
+            text_tokens = self.clip.tokenize(text).to(self.device)
+            mask = torch.zeros(self.model.patch_embed.num_patches, device=self.device)
+            mask[self.model.patch_embed.num_patches // 2 :] = 1
+            mask = mask.unsqueeze(0)
+
+        with StageTimer(stages, "model_forward"):
+            with torch.inference_mode():
+                latent = self.model.forward_encoder(
+                    images_tensor, targets_tensor, mask
+                )
+                prediction = self.model.forward_decoder(
+                    latent, images_tensor, text_tokens
+                )
+
+        with StageTimer(stages, "postprocess"):
+            prediction = prediction.permute(0, 2, 3, 1).detach().cpu()
+            output = prediction[0, prediction.shape[1] // 2 :, :, :]
+            output = torch.clip(
+                (
+                    output * torch.as_tensor(IMAGENET_STD)
+                    + torch.as_tensor(IMAGENET_MEAN)
+                )
+                * 255,
+                0,
+                255,
+            )
+            image = Image.fromarray(output.to(torch.uint8).numpy())
+        if image.size != (self.resolution, self.resolution):
+            raise RuntimeError(
+                "Hidden-Shot output-size mismatch: expected "
+                f"{(self.resolution, self.resolution)}, got {image.size}"
+            )
+        return InferenceResult(
+            output=image,
+            stage_seconds=stages,
+            metadata={
+                "output_size": list(image.size),
+                "input_direction": (
+                    "[demo input, demo output, query input] + task name -> query output"
+                ),
+                "task_name": self.task_name,
+                "task_label": self.task_label,
+                "clip_text": text,
+                "sample": self.sample.as_dict(),
+            },
+        )
+
+    def parameter_components(self, condition: str) -> Mapping[str, Any]:
+        if condition != "official" or self.model is None:
+            raise ValueError(condition)
+        return {
+            "hidden_shot_complete": self.model,
+            "learned_prompt_module": self.model.prompt_module,
+        }
+
+    def trained_parameter_count(self, condition: str) -> int | None:
+        if condition != "official" or self.model is None:
+            raise ValueError(condition)
+        return sum(
+            parameter.numel()
+            for parameter in self.model.parameters()
+            if parameter.requires_grad
+        )
+
+    def configure_samples(
+        self,
+        dataset_json: Path,
+        demo_input: str | None = None,
+        demo_output: str | None = None,
+        record_indices: Sequence[int] | None = None,
+    ) -> None:
+        self.dataset_json = dataset_json.resolve()
+        self.demo_input = demo_input
+        self.demo_output = demo_output
+        source_records = self._record_cache.get(self.dataset_json)
+        if source_records is None:
+            source_records = load_dataset_records(self.dataset_json)
+            self._record_cache[self.dataset_json] = source_records
+        self.records = select_dataset_records(source_records, record_indices)
+        self.select_sample(0)
+
+    def sample_count(self) -> int:
+        return len(self.records)
+
+    def select_sample(self, sample_index: int) -> None:
+        self.sample_index = sample_index
+        self.sample = vicl_sample_from_records(
+            self.records,
+            sample_index,
+            demo_input=self.demo_input,
+            demo_output=self.demo_output,
+            source=str(self.dataset_json),
+        )
+
+    def condition_metadata(self, condition: str) -> Dict[str, Any]:
+        return {
+            "condition": condition,
+            "architecture": "models_painter2.Painter + PGNCLIP",
+            "checkpoint": self.checkpoint,
+            "checkpoint_missing_keys": self.checkpoint_missing_keys,
+            "checkpoint_unexpected_keys": self.checkpoint_unexpected_keys,
+            "clip_architecture": self.clip_architecture,
+            "pgn_model_type": self.pgn_model_type,
+            "pgn_model_type_source": (
+                "checkpoint_auto_detection"
+                if self.requested_pgn_model_type == "auto"
+                else "command_line"
+            ),
+            "resolution": [self.resolution * 2, self.resolution],
+            "output_resolution": [self.resolution, self.resolution],
+            "device": self.device,
+            "dtype": str(self.dtype),
+            "task_name": self.task_name,
+            "task_label": self.task_label,
+            "clip_text": f"This is a photo of a {self.task_label} task",
+            "manifest_text_prompt": self.manifest_text_prompt,
+            "sample": self.sample.as_dict() if self.sample else None,
+            "protocol_note": (
+                "The released models_painter2 inference path is preserved: the Painter "
+                "canvas contains demo input/query as image and demo output/placeholder as "
+                "target; PGNCLIP receives the image canvas and task-name tokens. The unused "
+                "SmoothL1 evaluation loss is skipped. Parameters, FLOPs, and latency include "
+                "the learned PGN, frozen CLIP encoders, and Painter image generator."
             ),
         }
 
