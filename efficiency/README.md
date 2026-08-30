@@ -321,6 +321,12 @@ Gemini, GrAInS, VIEScore, or other evaluation-only packages; the test fails if i
 relation-request text drifts from `eval.py`. Console printing from the evaluation loop is
 not part of timed inference.
 
+To expand a completed smoke run without repeating its measured queries, pass its suite
+JSON to `--resume-from`, increase `--max-samples`, and optionally add
+`--reverse-order`. The merged JSON recomputes statistics from all raw rows and records
+reused/new indices plus a cross-process latency warning. Model, manifest, condition,
+seed, resolution, and checkpoint signatures must match exactly.
+
 ## Third-Party Models
 
 Painter can report architecture parameters without a checkpoint, but paper latency

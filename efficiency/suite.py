@@ -21,6 +21,7 @@ from .metrics import (
     benchmark_dataset_callable,
     parameter_report,
     profile_flops,
+    summarize_seconds,
 )
 
 
@@ -78,6 +79,147 @@ def _select_and_prime_inputs(adapter, sample_index: int) -> None:
         with path.open("rb") as handle:
             while handle.read(1024 * 1024):
                 pass
+
+
+def _suite_signature(adapter, args, manifest_path: Path, conditions: list[str]) -> dict[str, Any]:
+    return {
+        "adapter": adapter.name,
+        "conditions": conditions,
+        "task_manifest": str(manifest_path),
+        "data_root": str(args.data_root),
+        "sampling_seed": args.sampling_seed,
+        "resolution": args.resolution,
+        "model_id": getattr(adapter, "model_id", None),
+        "checkpoint": getattr(adapter, "checkpoint", None),
+        "prompt_checkpoint": getattr(adapter, "prompt_checkpoint", None),
+        "prompt_base_model": getattr(adapter, "prompt_base_model", None),
+        "steps": getattr(adapter, "steps", None),
+        "seed": getattr(adapter, "seed", None),
+        "dtype": str(getattr(adapter, "dtype", None)),
+        "optimized": getattr(adapter, "optimized", None),
+        "config": str(getattr(adapter, "config_path", None)),
+        "cfg_text": getattr(adapter, "cfg_text", None),
+        "cfg_image": getattr(adapter, "cfg_image", None),
+        "painter_task": getattr(adapter, "task_protocol", None),
+    }
+
+
+def _load_resume_document(path: Path | None, signature: dict[str, Any]) -> tuple[Path | None, dict[str, Any] | None]:
+    if path is None:
+        return None, None
+    resolved = path.expanduser().resolve()
+    document = json.loads(resolved.read_text(encoding="utf-8"))
+    if document.get("kind") != "multi_task_efficiency_suite":
+        raise ValueError(f"--resume-from is not a multi-task suite JSON: {resolved}")
+    if document.get("resume_signature") != signature:
+        raise ValueError(
+            "--resume-from model/task/seed/resolution configuration does not match "
+            f"the current run: {resolved}"
+        )
+    return resolved, document
+
+
+def _resume_task_latency(
+    document: dict[str, Any] | None, condition: str, task: str
+) -> dict[str, Any] | None:
+    if document is None:
+        return None
+    condition_result = next(
+        (item for item in document.get("conditions", []) if item.get("condition") == condition),
+        None,
+    )
+    if condition_result is None:
+        return None
+    task_result = next(
+        (item for item in condition_result.get("tasks", []) if item.get("task") == task),
+        None,
+    )
+    return task_result.get("latency") if task_result is not None else None
+
+
+def _maximum_memory_reports(*reports: dict[str, Any] | None, key: str) -> dict[str, int]:
+    merged: dict[str, int] = {}
+    for report in reports:
+        for device, value in (report or {}).get(key, {}).items():
+            merged[device] = max(merged.get(device, 0), int(value))
+    return merged
+
+
+def _merge_latency_reports(
+    previous: dict[str, Any] | None,
+    current: dict[str, Any] | None,
+    target_indices: list[int],
+    resume_source: Path | None,
+    processing_order: str,
+) -> dict[str, Any]:
+    rows_by_index: dict[int, dict[str, Any]] = {}
+    previous_indices = list((previous or {}).get("measured_indices", []))
+    if not set(previous_indices).issubset(target_indices):
+        raise ValueError(
+            "--resume-from contains measured indices outside the current target set"
+        )
+    for report in (previous, current):
+        for row in (report or {}).get("samples", []):
+            index = int(row["sample_index"])
+            if index in rows_by_index:
+                raise ValueError(f"Duplicate resumed latency sample index: {index}")
+            rows_by_index[index] = row
+    missing = [index for index in target_indices if index not in rows_by_index]
+    if missing:
+        raise ValueError(f"Missing merged latency indices: {missing[:20]}")
+
+    rows = [rows_by_index[index] for index in target_indices]
+    stage_names = sorted(
+        {name for row in rows for name in row.get("stages_s", {})}
+    )
+    template = current or previous or {}
+    merged = dict(template)
+    merged.update(
+        {
+            "end_to_end": summarize_seconds(
+                [float(row["end_to_end_s"]) for row in rows]
+            ),
+            "stages": {
+                name: summarize_seconds(
+                    [
+                        float(row["stages_s"][name])
+                        for row in rows
+                        if name in row.get("stages_s", {})
+                    ]
+                )
+                for name in stage_names
+            },
+            "samples": rows,
+            "measured_indices": target_indices,
+            "resident_cuda_memory_bytes": _maximum_memory_reports(
+                previous, current, key="resident_cuda_memory_bytes"
+            ),
+            "peak_cuda_memory_allocated_bytes": _maximum_memory_reports(
+                previous, current, key="peak_cuda_memory_allocated_bytes"
+            ),
+            "peak_cuda_memory_reserved_bytes": _maximum_memory_reports(
+                previous, current, key="peak_cuda_memory_reserved_bytes"
+            ),
+            "peak_cuda_memory_bytes": _maximum_memory_reports(
+                previous, current, key="peak_cuda_memory_bytes"
+            ),
+            "resume": {
+                "source": str(resume_source) if resume_source else None,
+                "cross_process_reuse": previous is not None,
+                "reused_indices": previous_indices,
+                "newly_measured_indices": list(
+                    (current or {}).get("measured_indices", [])
+                ),
+                "processing_order": processing_order,
+                "warning": (
+                    "Raw latency samples were combined across two model processes."
+                    if previous is not None
+                    else None
+                ),
+            },
+        }
+    )
+    return merged
 
 
 def _aggregate_tasks(tasks: list[dict[str, Any]]) -> dict[str, Any] | None:
@@ -279,6 +421,10 @@ def run_suite(args) -> dict[str, Any]:
     invalid = set(conditions) - set(adapter.conditions)
     if invalid:
         raise ValueError(f"Unsupported conditions for {adapter.name}: {sorted(invalid)}")
+    resume_signature = _suite_signature(adapter, args, manifest_path, conditions)
+    resume_path, resume_document = _load_resume_document(
+        args.resume_from, resume_signature
+    )
 
     document: dict[str, Any] = {
         "schema_version": 1,
@@ -297,6 +443,7 @@ def run_suite(args) -> dict[str, Any]:
         },
         "system": system_metadata(project_root),
         "model_setup_seconds": setup_seconds,
+        "resume_signature": resume_signature,
         "benchmark": {
             "batch_size": 1,
             "concurrency": 1,
@@ -311,6 +458,8 @@ def run_suite(args) -> dict[str, Any]:
             ),
             "flops_samples_per_task_for_variable_ours": args.flops_samples_per_task,
             "flops_samples_per_task_for_fixed_or_official": 1,
+            "resume_from": str(resume_path) if resume_path else None,
+            "reverse_order": args.reverse_order,
         },
         "conditions": [],
     }
@@ -346,35 +495,69 @@ def run_suite(args) -> dict[str, Any]:
                     )
                     _set_task_prompt(adapter, task.text_prompt)
                     count = adapter.sample_count()
-                    indices = select_indices(
+                    target_indices = select_indices(
                         count,
                         args.max_samples,
                         _sampling_seed(args.sampling_seed, task.name),
                     )
+                    previous_latency = _resume_task_latency(
+                        resume_document, condition, task.name
+                    )
+                    if resume_document is not None and previous_latency is None:
+                        raise ValueError(
+                            f"--resume-from has no latency rows for {condition}/{task.name}"
+                        )
+                    reused_indices = set(
+                        (previous_latency or {}).get("measured_indices", [])
+                    )
+                    if not reused_indices.issubset(target_indices):
+                        raise ValueError(
+                            f"Resume indices for {condition}/{task.name} are not a "
+                            "subset of the requested target indices"
+                        )
+                    remaining_indices = [
+                        index for index in target_indices if index not in reused_indices
+                    ]
+                    processing_indices = (
+                        list(reversed(remaining_indices))
+                        if args.reverse_order
+                        else remaining_indices
+                    )
                     warmup_indices, warmup_policy = _select_warmup_indices(
                         count,
-                        indices,
+                        processing_indices,
                         args.warmup,
                         _sampling_seed(args.sampling_seed, task.name),
-                    )
+                    ) if processing_indices else ([], "skipped_no_new_queries")
                     measurement_seed = getattr(adapter, "seed", args.seed)
                     def run_sample(_index: int, selected_condition=condition):
                         return adapter.run(selected_condition)
 
-                    latency = benchmark_dataset_callable(
-                        run_sample,
-                        sample_indices=indices,
-                        warmup_indices=warmup_indices,
-                        seed=measurement_seed,
-                        prepare_sample=lambda index: _select_and_prime_inputs(
-                            adapter, index
-                        ),
+                    current_latency = (
+                        benchmark_dataset_callable(
+                            run_sample,
+                            sample_indices=processing_indices,
+                            warmup_indices=warmup_indices,
+                            seed=measurement_seed,
+                            prepare_sample=lambda index: _select_and_prime_inputs(
+                                adapter, index
+                            ),
+                        )
+                        if processing_indices
+                        else None
+                    )
+                    latency = _merge_latency_reports(
+                        previous_latency,
+                        current_latency,
+                        target_indices,
+                        resume_path,
+                        "reverse" if args.reverse_order else "forward",
                     )
                     flop_sample_limit = (
                         args.flops_samples_per_task if condition == "ours" else 1
                     )
                     flop_sample_indices = _select_flop_indices(
-                        indices, flop_sample_limit
+                        target_indices, flop_sample_limit
                     )
                     adapter.select_sample(flop_sample_indices[0])
                     task_result: dict[str, Any] = {
@@ -393,6 +576,7 @@ def run_suite(args) -> dict[str, Any]:
                         "metadata": adapter.condition_metadata(condition),
                         "latency": latency,
                         "warmup_policy": warmup_policy,
+                        "target_sample_indices": target_indices,
                         "representative_flops_sample_index": flop_sample_indices[0],
                         "flops_profile_sample_indices": flop_sample_indices,
                         "flops": None,
@@ -560,6 +744,19 @@ def parser():
     result.add_argument("--tasks", nargs="+")
     result.add_argument("--max-samples", type=int, default=100)
     result.add_argument("--sampling-seed", type=int, default=2026)
+    result.add_argument(
+        "--resume-from",
+        type=Path,
+        help=(
+            "Reuse raw latency rows from a smaller compatible suite JSON and measure "
+            "only missing target indices"
+        ),
+    )
+    result.add_argument(
+        "--reverse-order",
+        action="store_true",
+        help="Measure missing query indices from highest to lowest",
+    )
     result.add_argument(
         "--flops-samples-per-task",
         type=int,

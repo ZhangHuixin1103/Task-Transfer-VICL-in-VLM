@@ -496,6 +496,119 @@ class InterfaceContractTest(unittest.TestCase):
             policy, "reuses_measured_indices_because_the_full_split_is_measured"
         )
 
+    def test_suite_resume_expands_limit_and_measures_missing_indices_in_reverse(self):
+        class DatasetAdapter(EfficiencyAdapter):
+            name = "dataset-resume-test"
+            protocol = "test"
+
+            def __init__(self):
+                self.model = torch.nn.Linear(2, 2)
+                self.records = []
+                self.index = 0
+                self.visited = []
+
+            @property
+            def conditions(self):
+                return ("official",)
+
+            def setup(self):
+                pass
+
+            def configure_samples(self, dataset_json, **kwargs):
+                self.records = json.loads(Path(dataset_json).read_text())
+
+            def sample_count(self):
+                return len(self.records)
+
+            def select_sample(self, sample_index):
+                self.index = sample_index
+
+            def run(self, condition):
+                self.visited.append(self.index)
+                return InferenceResult(output=torch.ones(1))
+
+            def parameter_components(self, condition):
+                return {"model": self.model}
+
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            data_root = root / "data"
+            data_root.mkdir()
+            records = [
+                {"image_path": f"input_{index}.png", "target_path": f"target_{index}.png"}
+                for index in range(4)
+            ]
+            (data_root / "pairs.json").write_text(
+                json.dumps(records), encoding="utf-8"
+            )
+            manifest = root / "tasks.json"
+            manifest.write_text(
+                json.dumps(
+                    {
+                        "schema_version": 1,
+                        "data_root": "data",
+                        "controlled_protocol": {"resolution": 448},
+                        "tasks": [
+                            {
+                                "name": "task",
+                                "eval_json": "pairs.json",
+                                "demo_input": "demo_in.png",
+                                "demo_output": "demo_out.png",
+                                "text_prompt": "test",
+                            }
+                        ],
+                    }
+                ),
+                encoding="utf-8",
+            )
+            common = [
+                "--adapter",
+                "prompt-diffusion",
+                "--conditions",
+                "official",
+                "--task-manifest",
+                str(manifest),
+                "--data-root",
+                str(data_root),
+                "--warmup",
+                "0",
+            ]
+            first_args = suite_parser().parse_args([*common, "--max-samples", "1"])
+            first_adapter = DatasetAdapter()
+            with mock.patch(
+                "efficiency.suite.build_adapter", return_value=first_adapter
+            ):
+                first_document = run_suite(first_args)
+            resume_path = root / "resume.json"
+            resume_path.write_text(json.dumps(first_document), encoding="utf-8")
+
+            second_args = suite_parser().parse_args(
+                [
+                    *common,
+                    "--max-samples",
+                    "4",
+                    "--resume-from",
+                    str(resume_path),
+                    "--reverse-order",
+                ]
+            )
+            second_adapter = DatasetAdapter()
+            with mock.patch(
+                "efficiency.suite.build_adapter", return_value=second_adapter
+            ):
+                second_document = run_suite(second_args)
+
+        first_latency = first_document["conditions"][0]["tasks"][0]["latency"]
+        latency = second_document["conditions"][0]["tasks"][0]["latency"]
+        reused = first_latency["measured_indices"]
+        expected_new = list(reversed([index for index in range(4) if index not in reused]))
+        self.assertEqual(second_adapter.visited, expected_new)
+        self.assertEqual(latency["end_to_end"]["count"], 4)
+        self.assertEqual(latency["measured_indices"], [0, 1, 2, 3])
+        self.assertEqual(latency["resume"]["reused_indices"], reused)
+        self.assertEqual(latency["resume"]["newly_measured_indices"], expected_new)
+        self.assertTrue(latency["resume"]["cross_process_reuse"])
+
     def test_cross_task_suite_filters_directional_records_before_sampling(self):
         class FilterAdapter(EfficiencyAdapter):
             name = "t2t-filter-test"
