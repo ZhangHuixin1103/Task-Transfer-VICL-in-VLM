@@ -56,7 +56,7 @@ The released training set contains implicit descriptions for 26 cross-task pairs
 ## Structure
 
 ```text
-Task-Transfer/
+Root Directory/
 |-- data.py                     # Generate teacher implicit descriptions
 |-- data_process.py             # Convert descriptions to Qwen-VL SFT format
 |-- eval.py                     # Main Gemini-based cross-task evaluation pipeline
@@ -205,6 +205,50 @@ python eval_2.py --use_qwen_for_prompt
 All commands above can be found in `eval.sh`.
 
 Outputs are written under `data/output/`. Each task-pair directory contains generated images, `evaluation_log.jsonl`, and averaged `evaluation_results.json`.
+
+## Supplementary Analyses
+
+The `eval_gemini.py` compares `fixed`, `qwen`, `task_name`, `target_desc`, and
+task-term-masked `qwen_masked` prompts. Set `GEMINI_API_KEY`, `GEMINI_BASE_URL`, and
+`GEMINI_MODEL`, then pass a comma-separated pair list:
+
+```bash
+export PAIR_LIST="deblurring__dehazing,deblurring__deraining,deblurring__demoireing,demoireing__dehazing,harmonization__light_enhancement,inpainting__light_enhancement,inpainting__style_transfer,style_transfer__light_enhancement,denoising__light_enhancement,light_enhancement__deraining,light_enhancement__shadow_removal,reflection_removal__dehazing,inpainting__colorization,colorization__style_transfer,harmonization__style_transfer,shadow_removal__reflection_removal"
+
+python eval_gemini.py --prompt_mode fixed --pairs "$PAIR_LIST" --max_samples_per_pair 20 --num_tries 10 --evaluate_viescore none --summary_every 0
+python eval_gemini.py --prompt_mode qwen --pairs "$PAIR_LIST" --max_samples_per_pair 20 --num_tries 10 --evaluate_viescore none --summary_every 0
+python eval_gemini.py --prompt_mode task_name --pairs "$PAIR_LIST" --max_samples_per_pair 10 --num_tries 1 --evaluate_viescore none --summary_every 0  # repeat with target_desc
+python eval_gemini.py --prompt_mode qwen_masked --pairs "$PAIR_LIST" --max_samples_per_pair 10 --num_tries 1 --regenerate_prompts --require_saved_qwen_prompts --evaluate_viescore first_best --summary_every 0
+python eval_gemini.py --prompt_mode qwen --pairs "$PAIR_LIST" --max_samples_per_pair 20 --num_tries 10 --viescore_only --force_viescore --evaluate_viescore first_best --summary_every 0
+
+python summarize_gemini.py
+python analyze_prompt_leakage.py
+```
+
+Blind A/B evaluation uses the generated `fixed` and `qwen` outputs:
+
+```bash
+python make_human_eval.py --left_mode fixed --right_mode qwen --max_items 100
+python human_eval_html.py
+python summarize_human_eval.py --responses responses_1.jsonl responses_2.jsonl
+```
+
+These tools write to `data/output/supplementary/`. The HTML page exports response
+JSONL files; keep response files disjoint when summarizing.
+
+## Efficiency Benchmark
+
+The reproducible efficiency suite in [`efficiency/`](efficiency/README.md) measures unique logical and method-trained parameters, audited runtime-formula full-pipeline FLOPs, synchronized end-to-end inference latency, stage latency, and peak GPU memory. It directly reuses the existing Qwen-Image, FLUX.2, OmniGen2, and FireRed evaluation calls and also provides official-protocol adapters for Painter, Prompt-Diffusion, and InstructDiffusion. The paper protocol uses five warm-up queries followed by up to 100 distinct query pairs per task at a controlled `448 x 448` processed resolution.
+
+```bash
+python -m efficiency.preflight --require-dispatch-flops
+python -m efficiency.benchmark --adapter toy --device cpu --profile-flops
+python -m efficiency.suite --adapter t2t-qwen --conditions fixed ours --max-samples 100 --warmup 5 --profile-flops
+```
+
+`python -m efficiency.launch_t2t` launches one T2T model per physical GPU and accepts a
+separate Python executable for each backend. See [`efficiency/README.md`](efficiency/README.md)
+for the job syntax and latency-isolation caveat.
 
 ## API Keys and Paths
 

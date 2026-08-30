@@ -1,38 +1,13 @@
 import argparse
-import base64
-import hashlib
 import json
 import logging
 import os
-import random
-import re
-import shutil
-import sys
-import time
-from io import BytesIO
-from typing import Optional, Tuple
 
 import numpy as np
 import torch
-from google import genai
-from google.genai import types
-from peft import PeftModel
-from PIL import Image, ImageFilter
-from qwen_vl_utils import process_vision_info
-from skimage.metrics import peak_signal_noise_ratio, structural_similarity
-from tqdm import tqdm
-from transformers import AutoProcessor, Qwen3VLForConditionalGeneration
+from PIL import Image
 
-from eval import (evaluate_generated, generate_eval_dataset,
-                  generate_text_prompt, hashed_id)
-from VIEScore.paper_implementation.imagen_museum.utils import \
-    write_entry_to_json_file
 from diffusers import QwenImageEditPlusPipeline
-
-# Add VIEScore path
-viescore_path = '/data1/tzz/huixin/Task-Transfer/VIEScore'
-if viescore_path not in sys.path:
-    sys.path.append(viescore_path)
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s - %(message)s")
 
@@ -46,30 +21,74 @@ QWEN_MODEL = "qwen-3-vl-4b-instruct"
 CHECKPOINT_PATH = "Qwen3-VL/qwen-vl-finetune/output/checkpoint-4875"
 
 
-def generate_image_qwen(pipeline, img_paths, text_prompt):
+def _load_rgb(path, input_resolution=None):
+    with Image.open(path) as source:
+        image = source.convert("RGB").copy()
+    if input_resolution is not None:
+        image = image.resize(
+            (input_resolution, input_resolution), Image.Resampling.BICUBIC
+        )
+    return image
+
+
+def generate_image_qwen(
+    pipeline,
+    img_paths,
+    text_prompt,
+    seed=42,
+    generator_device=None,
+    num_inference_steps=40,
+    input_resolution=None,
+    height=None,
+    width=None,
+):
     """
     Generate image using Qwen-Image-Edit-2511.
     img_paths: [taskA_input, taskA_output, taskB_input]
     """
-    images = [Image.open(os.path.join(DATA_TASKS_DIR, p)).convert("RGB") for p in img_paths]
+    images = [
+        _load_rgb(os.path.join(DATA_TASKS_DIR, path), input_resolution)
+        for path in img_paths
+    ]
+
+    generator = (
+        torch.manual_seed(seed)
+        if generator_device is None
+        else torch.Generator(device=generator_device).manual_seed(seed)
+    )
 
     inputs = {
         "image": images,
         "prompt": text_prompt,
         "negative_prompt": "低分辨率, 低画质, 肢体畸形, 手指畸形, 画面过饱和, 蜡像感, 人脸无细节, 过度光滑, 画面具有AI感。构图混乱。文字模糊, 扭曲",
-        "generator": torch.manual_seed(42),
+        "generator": generator,
         "true_cfg_scale": 4.0,
-        "num_inference_steps": 40,
+        "num_inference_steps": num_inference_steps,
         "guidance_scale": 1.0,
         "num_images_per_prompt": 1,
     }
+    if height is not None:
+        inputs["height"] = height
+    if width is not None:
+        inputs["width"] = width
 
-    with torch.inference_mode():
-        output = pipeline(**inputs)
-        return output.images[0]
+    try:
+        with torch.inference_mode():
+            output = pipeline(**inputs)
+            return output.images[0]
+    finally:
+        for image in images:
+            image.close()
 
 
 def run_evaluation(args):
+    from eval import (
+        evaluate_generated,
+        generate_eval_dataset,
+        generate_text_prompt,
+        hashed_id,
+    )
+
     eval_data, grouped = generate_eval_dataset()
 
     print(f"Loading Pipeline: {args.model_id}")

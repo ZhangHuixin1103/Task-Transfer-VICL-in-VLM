@@ -9,15 +9,9 @@ import torch
 from diffusers import QwenImageEditPlusPipeline
 from PIL import Image
 
-from eval import hashed_id, generate_text_prompt, evaluate_generated
-
 firered_root = os.path.join(os.getcwd(), "model/FireRed-Image-Edit")
 if firered_root not in sys.path:
     sys.path.append(firered_root)
-
-viescore_path = '/data1/tzz/huixin/Task-Transfer/VIEScore'
-if viescore_path not in sys.path:
-    sys.path.append(viescore_path)
 
 DATA_TASKS_DIR = "data/tasks"
 EVAL_DATASET_JSON = "data/dataset/eval_dataset.json"
@@ -57,12 +51,32 @@ def load_firered_pipeline(model_path, optimized=False):
     return pipe
 
 
-def generate_image_firered(pipe, taskA_in, taskA_out, taskB_in, text_prompt,
-                           seed=42, true_cfg_scale=4.0, num_inference_steps=40):
+def _load_rgb(path, input_resolution=None):
+    with Image.open(path) as source:
+        image = source.convert("RGB").copy()
+    if input_resolution is not None:
+        image = image.resize(
+            (input_resolution, input_resolution), Image.Resampling.BICUBIC
+        )
+    return image
+
+
+def generate_image_firered(
+    pipe,
+    taskA_in,
+    taskA_out,
+    taskB_in,
+    text_prompt,
+    seed=42,
+    true_cfg_scale=4.0,
+    num_inference_steps=40,
+    input_resolution=None,
+    height=None,
+    width=None,
+):
     images = [
-        Image.open(os.path.join(DATA_TASKS_DIR, taskA_in)).convert("RGB"),
-        Image.open(os.path.join(DATA_TASKS_DIR, taskA_out)).convert("RGB"),
-        Image.open(os.path.join(DATA_TASKS_DIR, taskB_in)).convert("RGB"),
+        _load_rgb(os.path.join(DATA_TASKS_DIR, path), input_resolution)
+        for path in (taskA_in, taskA_out, taskB_in)
     ]
 
     try:
@@ -75,6 +89,10 @@ def generate_image_firered(pipe, taskA_in, taskA_out, taskB_in, text_prompt,
             "num_inference_steps": num_inference_steps,
             "num_images_per_prompt": 1,
         }
+        if height is not None:
+            inputs["height"] = height
+        if width is not None:
+            inputs["width"] = width
 
         with torch.inference_mode():
             output = pipe(**inputs)
@@ -82,9 +100,14 @@ def generate_image_firered(pipe, taskA_in, taskA_out, taskB_in, text_prompt,
     except Exception as e:
         logging.error(f"FireRed generation failed: {e}")
         return None
+    finally:
+        for image in images:
+            image.close()
 
 
 def run_evaluation(args):
+    from eval import evaluate_generated, generate_text_prompt, hashed_id
+
     with open(EVAL_DATASET_JSON, 'r') as f:
         eval_data = json.load(f)
         # eval_data.reverse()

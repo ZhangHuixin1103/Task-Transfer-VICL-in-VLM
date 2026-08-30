@@ -1,27 +1,14 @@
 import argparse
-import hashlib
 import json
 import logging
 import os
-import shutil
-import sys
 
 import numpy as np
 import torch
 from diffusers import AutoModel, Flux2Pipeline
 from diffusers.utils import load_image
 from PIL import Image
-from tqdm import tqdm
 from transformers import Mistral3ForConditionalGeneration
-
-viescore_path = '/data1/tzz/huixin/Task-Transfer/VIEScore'
-if viescore_path not in sys.path:
-    sys.path.append(viescore_path)
-
-from VIEScore.paper_implementation.imagen_museum.utils import \
-    write_entry_to_json_file
-
-from eval import hashed_id, generate_text_prompt, evaluate_generated
 
 DATA_TASKS_DIR = "data/tasks"
 EVAL_DATASET_JSON = "data/dataset/eval_dataset.json"
@@ -51,28 +38,59 @@ def load_flux_pipeline():
     return pipe
 
 
-def generate_image_flux(pipe, taskA_in, taskA_out, taskB_in, text_prompt):
+def generate_image_flux(
+    pipe,
+    taskA_in,
+    taskA_out,
+    taskB_in,
+    text_prompt,
+    seed=42,
+    num_inference_steps=30,
+    input_resolution=None,
+    height=None,
+    width=None,
+):
     ref_images = [
         load_image(os.path.join(DATA_TASKS_DIR, taskA_in)),
         load_image(os.path.join(DATA_TASKS_DIR, taskA_out)),
         load_image(os.path.join(DATA_TASKS_DIR, taskB_in))
     ]
+    if input_resolution is not None:
+        resized_images = []
+        for image in ref_images:
+            resized_images.append(
+                image.resize(
+                    (input_resolution, input_resolution), Image.Resampling.BICUBIC
+                )
+            )
+            image.close()
+        ref_images = resized_images
 
     try:
-        output = pipe(
+        inputs = dict(
             prompt=text_prompt,
             image=ref_images,
-            generator=torch.Generator(device="cuda:0").manual_seed(42),
-            num_inference_steps=30,
+            generator=torch.Generator(device="cuda:0").manual_seed(seed),
+            num_inference_steps=num_inference_steps,
             guidance_scale=4.0,
-        ).images[0]
+        )
+        if height is not None:
+            inputs["height"] = height
+        if width is not None:
+            inputs["width"] = width
+        output = pipe(**inputs).images[0]
         return output
     except Exception as e:
         logging.error(f"FLUX.2 generation failed: {e}")
         return None
+    finally:
+        for image in ref_images:
+            image.close()
 
 
 def run_evaluation(args):
+    from eval import evaluate_generated, generate_text_prompt, hashed_id
+
     with open(EVAL_DATASET_JSON, 'r') as f:
         eval_data = json.load(f)
 

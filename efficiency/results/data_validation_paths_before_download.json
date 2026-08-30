@@ -1,0 +1,379 @@
+{
+  "schema_version": 1,
+  "manifest": "/Users/dylanxin/Project/Previous/VICL/Task-Transfer/efficiency/tasks.json",
+  "data_root": "/Users/dylanxin/Project/Previous/VICL/Task-Transfer/data/others",
+  "tasks": [
+    {
+      "task": "deblurring",
+      "spec": {
+        "name": "deblurring",
+        "eval_json": "GOPRO_Large/deblur_gopro_test.json",
+        "demo_input": "GOPRO_Large/train/GOPR0384_11_04/blur/002849.png",
+        "demo_output": "GOPRO_Large/train/GOPR0384_11_04/sharp/002849.png",
+        "text_prompt": "remove motion or defocus blur and restore sharp details"
+      },
+      "json_path": "/Users/dylanxin/Project/Previous/VICL/Task-Transfer/data/others/GOPRO_Large/deblur_gopro_test.json",
+      "json_exists": true,
+      "records": 1111,
+      "missing_paths": [
+        {
+          "index": 0,
+          "field": "image_path",
+          "path": "GOPRO_Large/test/GOPR0868_11_00/blur/000023.png"
+        }
+      ],
+      "unreadable_paths": [],
+      "pair_size_mismatches": [],
+      "input_sizes": {},
+      "target_sizes": {},
+      "demo": {
+        "demo_input": {
+          "path": "GOPRO_Large/train/GOPR0384_11_04/blur/002849.png",
+          "exists": false
+        },
+        "demo_output": {
+          "path": "GOPRO_Large/train/GOPR0384_11_04/sharp/002849.png",
+          "exists": false
+        }
+      },
+      "missing_path_count": 2222,
+      "demo_missing_count": 2,
+      "status": "incomplete"
+    },
+    {
+      "task": "dehazing",
+      "spec": {
+        "name": "dehazing",
+        "eval_json": "D-HAZY/dehaze_d-hazy_test.json",
+        "demo_input": "D-HAZY/NYU_Hazy/100_Hazy.bmp",
+        "demo_output": "D-HAZY/NYU_GT/100_Image_.bmp",
+        "text_prompt": "remove haze and fog and recover clear contrast and natural colors"
+      },
+      "json_path": "/Users/dylanxin/Project/Previous/VICL/Task-Transfer/data/others/D-HAZY/dehaze_d-hazy_test.json",
+      "json_exists": true,
+      "records": 435,
+      "missing_paths": [
+        {
+          "index": 0,
+          "field": "image_path",
+          "path": "D-HAZY/NYU_Hazy/627_Hazy.bmp"
+        }
+      ],
+      "unreadable_paths": [],
+      "pair_size_mismatches": [],
+      "input_sizes": {},
+      "target_sizes": {},
+      "demo": {
+        "demo_input": {
+          "path": "D-HAZY/NYU_Hazy/100_Hazy.bmp",
+          "exists": false
+        },
+        "demo_output": {
+          "path": "D-HAZY/NYU_GT/100_Image_.bmp",
+          "exists": false
+        }
+      },
+      "missing_path_count": 870,
+      "demo_missing_count": 2,
+      "status": "incomplete"
+    },
+    {
+      "task": "demoireing",
+      "spec": {
+        "name": "demoireing",
+        "eval_json": "UHDM/image_demoire_test.json",
+        "demo_input": "UHDM/test/test/0000_moire.jpg",
+        "demo_output": "UHDM/test/test/0000_gt.jpg",
+        "text_prompt": "remove moire and restore fine details with natural colors"
+      },
+      "json_path": "/Users/dylanxin/Project/Previous/VICL/Task-Transfer/data/others/UHDM/image_demoire_test.json",
+      "json_exists": true,
+      "records": 500,
+      "missing_paths": [
+        {
+          "index": 0,
+          "field": "image_path",
+          "path": "UHDM/test/test/0393_moire.jpg"
+        }
+      ],
+      "unreadable_paths": [],
+      "pair_size_mismatches": [],
+      "input_sizes": {},
+      "target_sizes": {},
+      "demo": {
+        "demo_input": {
+          "path": "UHDM/test/test/0000_moire.jpg",
+          "exists": false
+        },
+        "demo_output": {
+          "path": "UHDM/test/test/0000_gt.jpg",
+          "exists": false
+        }
+      },
+      "missing_path_count": 1000,
+      "demo_missing_count": 2,
+      "status": "incomplete"
+    },
+    {
+      "task": "denoising",
+      "spec": {
+        "name": "denoising",
+        "eval_json": "SIDD/denoise_ssid_val.json",
+        "demo_input": "SIDD/train/input/116_149.png",
+        "demo_output": "SIDD/train/groundtruth/116_149.png",
+        "text_prompt": "remove noise and grain while preserving edges and fine details"
+      },
+      "json_path": "/Users/dylanxin/Project/Previous/VICL/Task-Transfer/data/others/SIDD/denoise_ssid_val.json",
+      "json_exists": true,
+      "records": 1280,
+      "missing_paths": [
+        {
+          "index": 0,
+          "field": "image_path",
+          "path": "SIDD/val/input/0021_15.png"
+        }
+      ],
+      "unreadable_paths": [],
+      "pair_size_mismatches": [],
+      "input_sizes": {},
+      "target_sizes": {},
+      "demo": {
+        "demo_input": {
+          "path": "SIDD/train/input/116_149.png",
+          "exists": false
+        },
+        "demo_output": {
+          "path": "SIDD/train/groundtruth/116_149.png",
+          "exists": false
+        }
+      },
+      "missing_path_count": 2560,
+      "demo_missing_count": 2,
+      "status": "incomplete"
+    },
+    {
+      "task": "deraining",
+      "spec": {
+        "name": "deraining",
+        "eval_json": "derain/derain_test_rain100h.json",
+        "demo_input": "derain/train/input/100.jpg",
+        "demo_output": "derain/train/target/100.jpg",
+        "text_prompt": "remove rain streaks and raindrops while restoring a clean sharp background"
+      },
+      "json_path": "/Users/dylanxin/Project/Previous/VICL/Task-Transfer/data/others/derain/derain_test_rain100h.json",
+      "json_exists": true,
+      "records": 100,
+      "missing_paths": [
+        {
+          "index": 0,
+          "field": "image_path",
+          "path": "derain/test/Rain100H/input/11.png"
+        }
+      ],
+      "unreadable_paths": [],
+      "pair_size_mismatches": [],
+      "input_sizes": {},
+      "target_sizes": {},
+      "demo": {
+        "demo_input": {
+          "path": "derain/train/input/100.jpg",
+          "exists": false
+        },
+        "demo_output": {
+          "path": "derain/train/target/100.jpg",
+          "exists": false
+        }
+      },
+      "missing_path_count": 200,
+      "demo_missing_count": 2,
+      "status": "incomplete"
+    },
+    {
+      "task": "low_light_enhancement",
+      "spec": {
+        "name": "low_light_enhancement",
+        "eval_json": "LOL/enhance_lol_val.json",
+        "demo_input": "LOL/our485/low/100.png",
+        "demo_output": "LOL/our485/high/100.png",
+        "text_prompt": "enhance brightness and contrast while preserving natural colors and fine details"
+      },
+      "json_path": "/Users/dylanxin/Project/Previous/VICL/Task-Transfer/data/others/LOL/enhance_lol_val.json",
+      "json_exists": true,
+      "records": 15,
+      "missing_paths": [
+        {
+          "index": 0,
+          "field": "image_path",
+          "path": "LOL/eval15/low/79.png"
+        }
+      ],
+      "unreadable_paths": [],
+      "pair_size_mismatches": [],
+      "input_sizes": {},
+      "target_sizes": {},
+      "demo": {
+        "demo_input": {
+          "path": "LOL/our485/low/100.png",
+          "exists": false
+        },
+        "demo_output": {
+          "path": "LOL/our485/high/100.png",
+          "exists": false
+        }
+      },
+      "missing_path_count": 30,
+      "demo_missing_count": 2,
+      "status": "incomplete"
+    },
+    {
+      "task": "shadow_removal",
+      "spec": {
+        "name": "shadow_removal",
+        "eval_json": "ISTD_Dataset/shadow_removal_istd_test.json",
+        "demo_input": "ISTD_Dataset/train/train_A/56-13.png",
+        "demo_output": "ISTD_Dataset/train/train_C/56-13.png",
+        "text_prompt": "remove cast shadows and reconstruct plausible content in the shadow regions"
+      },
+      "json_path": "/Users/dylanxin/Project/Previous/VICL/Task-Transfer/data/others/ISTD_Dataset/shadow_removal_istd_test.json",
+      "json_exists": true,
+      "records": 540,
+      "missing_paths": [
+        {
+          "index": 0,
+          "field": "image_path",
+          "path": "ISTD_Dataset/test/test_A/121-6.png"
+        }
+      ],
+      "unreadable_paths": [],
+      "pair_size_mismatches": [],
+      "input_sizes": {},
+      "target_sizes": {},
+      "demo": {
+        "demo_input": {
+          "path": "ISTD_Dataset/train/train_A/56-13.png",
+          "exists": false
+        },
+        "demo_output": {
+          "path": "ISTD_Dataset/train/train_C/56-13.png",
+          "exists": false
+        }
+      },
+      "missing_path_count": 1080,
+      "demo_missing_count": 2,
+      "status": "incomplete"
+    },
+    {
+      "task": "reflection_removal",
+      "spec": {
+        "name": "reflection_removal",
+        "eval_json": "SIR2/reflection_removal_test.json",
+        "demo_input": "SIR2/WildScene/87/m.jpg",
+        "demo_output": "SIR2/WildScene/87/g.jpg",
+        "text_prompt": "remove glass reflections and restore a clean background behind the glass"
+      },
+      "json_path": "/Users/dylanxin/Project/Previous/VICL/Task-Transfer/data/others/SIR2/reflection_removal_test.json",
+      "json_exists": true,
+      "records": 101,
+      "missing_paths": [
+        {
+          "index": 0,
+          "field": "image_path",
+          "path": "SIR2/WildScene/45/m.jpg"
+        }
+      ],
+      "unreadable_paths": [],
+      "pair_size_mismatches": [],
+      "input_sizes": {},
+      "target_sizes": {},
+      "demo": {
+        "demo_input": {
+          "path": "SIR2/WildScene/87/m.jpg",
+          "exists": false
+        },
+        "demo_output": {
+          "path": "SIR2/WildScene/87/g.jpg",
+          "exists": false
+        }
+      },
+      "missing_path_count": 202,
+      "demo_missing_count": 2,
+      "status": "incomplete"
+    },
+    {
+      "task": "relighting",
+      "spec": {
+        "name": "relighting",
+        "eval_json": "VIDIT/illumination_transfer_test.json",
+        "demo_input": "VIDIT/validation/Image300.png",
+        "demo_output": "VIDIT/validation_gt/Image300.png",
+        "text_prompt": "change the lighting to natural well-exposed illumination while preserving scene structure"
+      },
+      "json_path": "/Users/dylanxin/Project/Previous/VICL/Task-Transfer/data/others/VIDIT/illumination_transfer_test.json",
+      "json_exists": true,
+      "records": 45,
+      "missing_paths": [
+        {
+          "index": 0,
+          "field": "image_path",
+          "path": "VIDIT/validation/Image342.png"
+        }
+      ],
+      "unreadable_paths": [],
+      "pair_size_mismatches": [],
+      "input_sizes": {},
+      "target_sizes": {},
+      "demo": {
+        "demo_input": {
+          "path": "VIDIT/validation/Image300.png",
+          "exists": false
+        },
+        "demo_output": {
+          "path": "VIDIT/validation_gt/Image300.png",
+          "exists": false
+        }
+      },
+      "missing_path_count": 90,
+      "demo_missing_count": 2,
+      "status": "incomplete"
+    },
+    {
+      "task": "inpainting",
+      "spec": {
+        "name": "inpainting",
+        "eval_json": "inpainting/image_inpainting_test.json",
+        "demo_input": "inpainting/masked/image_0_0.png",
+        "demo_output": "inpainting/full/image_0_0.png",
+        "text_prompt": "fill the masked regions while keeping structure colors and lighting consistent"
+      },
+      "json_path": "/Users/dylanxin/Project/Previous/VICL/Task-Transfer/data/others/inpainting/image_inpainting_test.json",
+      "json_exists": true,
+      "records": 6895,
+      "missing_paths": [],
+      "unreadable_paths": [],
+      "pair_size_mismatches": [],
+      "input_sizes": {},
+      "target_sizes": {},
+      "demo": {
+        "demo_input": {
+          "path": "inpainting/masked/image_0_0.png",
+          "exists": true
+        },
+        "demo_output": {
+          "path": "inpainting/full/image_0_0.png",
+          "exists": true
+        }
+      },
+      "missing_path_count": 0,
+      "demo_missing_count": 0,
+      "status": "ok"
+    }
+  ],
+  "summary": {
+    "tasks": 10,
+    "ok": 1,
+    "missing_paths": 8254,
+    "missing_demos": 18,
+    "unreadable_paths": 0,
+    "pair_size_mismatches": 0
+  }
+}

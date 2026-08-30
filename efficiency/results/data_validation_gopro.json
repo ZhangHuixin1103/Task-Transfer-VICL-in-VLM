@@ -1,0 +1,799 @@
+{
+  "schema_version": 1,
+  "manifest": "/Users/dylanxin/Project/Previous/VICL/Task-Transfer/efficiency/tasks.json",
+  "data_root": "/Users/dylanxin/Project/Previous/VICL/Task-Transfer/data/others",
+  "tasks": [
+    {
+      "task": "deblurring",
+      "spec": {
+        "name": "deblurring",
+        "eval_json": "GOPRO_Large/deblur_gopro_test.json",
+        "demo_input": "GOPRO_Large/train/GOPR0384_11_04/blur/002849.png",
+        "demo_output": "GOPRO_Large/train/GOPR0384_11_04/sharp/002849.png",
+        "text_prompt": "remove motion or defocus blur and restore sharp details"
+      },
+      "json_path": "/Users/dylanxin/Project/Previous/VICL/Task-Transfer/data/others/GOPRO_Large/deblur_gopro_test.json",
+      "json_exists": true,
+      "records": 1111,
+      "missing_paths": [],
+      "unreadable_paths": [],
+      "pair_size_mismatches": [],
+      "input_sizes": {
+        "1280x720": 1111
+      },
+      "target_sizes": {
+        "1280x720": 1111
+      },
+      "demo": {
+        "demo_input": {
+          "path": "GOPRO_Large/train/GOPR0384_11_04/blur/002849.png",
+          "exists": true
+        },
+        "demo_output": {
+          "path": "GOPRO_Large/train/GOPR0384_11_04/sharp/002849.png",
+          "exists": true
+        }
+      },
+      "missing_path_count": 0,
+      "demo_missing_count": 0,
+      "checked_image_pairs": 1111,
+      "unreadable_path_count": 0,
+      "pair_size_mismatch_count": 0,
+      "status": "ok"
+    }
+  ],
+  "json_files": [
+    {
+      "json_path": "/Users/dylanxin/Project/Previous/VICL/Task-Transfer/data/others/D-HAZY/dehaze_d-hazy_test.json",
+      "relative_json_path": "D-HAZY/dehaze_d-hazy_test.json",
+      "records": 435,
+      "missing_paths": [],
+      "unreadable_paths": [],
+      "pair_size_mismatches": [],
+      "input_sizes": {
+        "640x480": 435
+      },
+      "target_sizes": {
+        "640x480": 435
+      },
+      "malformed_record_count": 0,
+      "missing_path_count": 0,
+      "checked_image_pairs": 435,
+      "unreadable_path_count": 0,
+      "pair_size_mismatch_count": 0,
+      "status": "ok"
+    },
+    {
+      "json_path": "/Users/dylanxin/Project/Previous/VICL/Task-Transfer/data/others/D-HAZY/dehaze_d-hazy_train.json",
+      "relative_json_path": "D-HAZY/dehaze_d-hazy_train.json",
+      "records": 1014,
+      "missing_paths": [],
+      "unreadable_paths": [],
+      "pair_size_mismatches": [],
+      "input_sizes": {
+        "640x480": 1014
+      },
+      "target_sizes": {
+        "640x480": 1014
+      },
+      "malformed_record_count": 0,
+      "missing_path_count": 0,
+      "checked_image_pairs": 1014,
+      "unreadable_path_count": 0,
+      "pair_size_mismatch_count": 0,
+      "status": "ok"
+    },
+    {
+      "json_path": "/Users/dylanxin/Project/Previous/VICL/Task-Transfer/data/others/GOPRO_Large/deblur_gopro_test.json",
+      "relative_json_path": "GOPRO_Large/deblur_gopro_test.json",
+      "records": 1111,
+      "missing_paths": [],
+      "unreadable_paths": [],
+      "pair_size_mismatches": [],
+      "input_sizes": {
+        "1280x720": 1111
+      },
+      "target_sizes": {
+        "1280x720": 1111
+      },
+      "malformed_record_count": 0,
+      "missing_path_count": 0,
+      "checked_image_pairs": 1111,
+      "unreadable_path_count": 0,
+      "pair_size_mismatch_count": 0,
+      "status": "ok"
+    },
+    {
+      "json_path": "/Users/dylanxin/Project/Previous/VICL/Task-Transfer/data/others/GOPRO_Large/deblur_gopro_test_gamma.json",
+      "relative_json_path": "GOPRO_Large/deblur_gopro_test_gamma.json",
+      "records": 1111,
+      "missing_paths": [],
+      "unreadable_paths": [],
+      "pair_size_mismatches": [],
+      "input_sizes": {
+        "1280x720": 1111
+      },
+      "target_sizes": {
+        "1280x720": 1111
+      },
+      "malformed_record_count": 0,
+      "missing_path_count": 0,
+      "checked_image_pairs": 1111,
+      "unreadable_path_count": 0,
+      "pair_size_mismatch_count": 0,
+      "status": "ok"
+    },
+    {
+      "json_path": "/Users/dylanxin/Project/Previous/VICL/Task-Transfer/data/others/GOPRO_Large/deblur_gopro_train.json",
+      "relative_json_path": "GOPRO_Large/deblur_gopro_train.json",
+      "records": 2103,
+      "missing_paths": [],
+      "unreadable_paths": [],
+      "pair_size_mismatches": [],
+      "input_sizes": {
+        "1280x720": 2103
+      },
+      "target_sizes": {
+        "1280x720": 2103
+      },
+      "malformed_record_count": 0,
+      "missing_path_count": 0,
+      "checked_image_pairs": 2103,
+      "unreadable_path_count": 0,
+      "pair_size_mismatch_count": 0,
+      "status": "ok"
+    },
+    {
+      "json_path": "/Users/dylanxin/Project/Previous/VICL/Task-Transfer/data/others/GOPRO_Large/deblur_gopro_train_gamma.json",
+      "relative_json_path": "GOPRO_Large/deblur_gopro_train_gamma.json",
+      "records": 2103,
+      "missing_paths": [],
+      "unreadable_paths": [],
+      "pair_size_mismatches": [],
+      "input_sizes": {
+        "1280x720": 2103
+      },
+      "target_sizes": {
+        "1280x720": 2103
+      },
+      "malformed_record_count": 0,
+      "missing_path_count": 0,
+      "checked_image_pairs": 2103,
+      "unreadable_path_count": 0,
+      "pair_size_mismatch_count": 0,
+      "status": "ok"
+    },
+    {
+      "json_path": "/Users/dylanxin/Project/Previous/VICL/Task-Transfer/data/others/ISTD_Dataset/shadow_removal_istd_test.json",
+      "relative_json_path": "ISTD_Dataset/shadow_removal_istd_test.json",
+      "records": 540,
+      "missing_paths": [],
+      "unreadable_paths": [],
+      "pair_size_mismatches": [],
+      "input_sizes": {
+        "640x480": 540
+      },
+      "target_sizes": {
+        "640x480": 540
+      },
+      "malformed_record_count": 0,
+      "missing_path_count": 0,
+      "checked_image_pairs": 540,
+      "unreadable_path_count": 0,
+      "pair_size_mismatch_count": 0,
+      "status": "ok"
+    },
+    {
+      "json_path": "/Users/dylanxin/Project/Previous/VICL/Task-Transfer/data/others/ISTD_Dataset/shadow_removal_istd_train.json",
+      "relative_json_path": "ISTD_Dataset/shadow_removal_istd_train.json",
+      "records": 1330,
+      "missing_paths": [],
+      "unreadable_paths": [],
+      "pair_size_mismatches": [],
+      "input_sizes": {
+        "640x480": 1330
+      },
+      "target_sizes": {
+        "640x480": 1330
+      },
+      "malformed_record_count": 0,
+      "missing_path_count": 0,
+      "checked_image_pairs": 1330,
+      "unreadable_path_count": 0,
+      "pair_size_mismatch_count": 0,
+      "status": "ok"
+    },
+    {
+      "json_path": "/Users/dylanxin/Project/Previous/VICL/Task-Transfer/data/others/LOL/enhance_lol_train.json",
+      "relative_json_path": "LOL/enhance_lol_train.json",
+      "records": 485,
+      "missing_paths": [],
+      "unreadable_paths": [],
+      "pair_size_mismatches": [],
+      "input_sizes": {
+        "600x400": 485
+      },
+      "target_sizes": {
+        "600x400": 485
+      },
+      "malformed_record_count": 0,
+      "missing_path_count": 0,
+      "checked_image_pairs": 485,
+      "unreadable_path_count": 0,
+      "pair_size_mismatch_count": 0,
+      "status": "ok"
+    },
+    {
+      "json_path": "/Users/dylanxin/Project/Previous/VICL/Task-Transfer/data/others/LOL/enhance_lol_val.json",
+      "relative_json_path": "LOL/enhance_lol_val.json",
+      "records": 15,
+      "missing_paths": [],
+      "unreadable_paths": [],
+      "pair_size_mismatches": [],
+      "input_sizes": {
+        "600x400": 15
+      },
+      "target_sizes": {
+        "600x400": 15
+      },
+      "malformed_record_count": 0,
+      "missing_path_count": 0,
+      "checked_image_pairs": 15,
+      "unreadable_path_count": 0,
+      "pair_size_mismatch_count": 0,
+      "status": "ok"
+    },
+    {
+      "json_path": "/Users/dylanxin/Project/Previous/VICL/Task-Transfer/data/others/SIDD/denoise_ssid_train.json",
+      "relative_json_path": "SIDD/denoise_ssid_train.json",
+      "records": 96000,
+      "missing_paths": [
+        {
+          "index": 0,
+          "field": "image_path",
+          "path": "SIDD/train/input/116_149.png"
+        },
+        {
+          "index": 0,
+          "field": "target_path",
+          "path": "SIDD/train/groundtruth/116_149.png"
+        },
+        {
+          "index": 1,
+          "field": "image_path",
+          "path": "SIDD/train/input/26_241.png"
+        },
+        {
+          "index": 1,
+          "field": "target_path",
+          "path": "SIDD/train/groundtruth/26_241.png"
+        },
+        {
+          "index": 2,
+          "field": "image_path",
+          "path": "SIDD/train/input/47_208.png"
+        },
+        {
+          "index": 2,
+          "field": "target_path",
+          "path": "SIDD/train/groundtruth/47_208.png"
+        },
+        {
+          "index": 3,
+          "field": "image_path",
+          "path": "SIDD/train/input/177_100.png"
+        },
+        {
+          "index": 3,
+          "field": "target_path",
+          "path": "SIDD/train/groundtruth/177_100.png"
+        },
+        {
+          "index": 4,
+          "field": "image_path",
+          "path": "SIDD/train/input/204_121.png"
+        },
+        {
+          "index": 4,
+          "field": "target_path",
+          "path": "SIDD/train/groundtruth/204_121.png"
+        },
+        {
+          "index": 5,
+          "field": "image_path",
+          "path": "SIDD/train/input/163_38.png"
+        },
+        {
+          "index": 5,
+          "field": "target_path",
+          "path": "SIDD/train/groundtruth/163_38.png"
+        },
+        {
+          "index": 6,
+          "field": "image_path",
+          "path": "SIDD/train/input/265_168.png"
+        },
+        {
+          "index": 6,
+          "field": "target_path",
+          "path": "SIDD/train/groundtruth/265_168.png"
+        },
+        {
+          "index": 7,
+          "field": "image_path",
+          "path": "SIDD/train/input/154_71.png"
+        },
+        {
+          "index": 7,
+          "field": "target_path",
+          "path": "SIDD/train/groundtruth/154_71.png"
+        },
+        {
+          "index": 8,
+          "field": "image_path",
+          "path": "SIDD/train/input/156_237.png"
+        },
+        {
+          "index": 8,
+          "field": "target_path",
+          "path": "SIDD/train/groundtruth/156_237.png"
+        },
+        {
+          "index": 9,
+          "field": "image_path",
+          "path": "SIDD/train/input/292_290.png"
+        },
+        {
+          "index": 9,
+          "field": "target_path",
+          "path": "SIDD/train/groundtruth/292_290.png"
+        }
+      ],
+      "unreadable_paths": [],
+      "pair_size_mismatches": [],
+      "input_sizes": {},
+      "target_sizes": {},
+      "malformed_record_count": 0,
+      "missing_path_count": 192000,
+      "status": "incomplete"
+    },
+    {
+      "json_path": "/Users/dylanxin/Project/Previous/VICL/Task-Transfer/data/others/SIDD/denoise_ssid_val.json",
+      "relative_json_path": "SIDD/denoise_ssid_val.json",
+      "records": 1280,
+      "missing_paths": [],
+      "unreadable_paths": [],
+      "pair_size_mismatches": [],
+      "input_sizes": {
+        "256x256": 1280
+      },
+      "target_sizes": {
+        "256x256": 1280
+      },
+      "malformed_record_count": 0,
+      "missing_path_count": 0,
+      "checked_image_pairs": 1280,
+      "unreadable_path_count": 0,
+      "pair_size_mismatch_count": 0,
+      "status": "ok"
+    },
+    {
+      "json_path": "/Users/dylanxin/Project/Previous/VICL/Task-Transfer/data/others/SIR2/reflection_removal_test.json",
+      "relative_json_path": "SIR2/reflection_removal_test.json",
+      "records": 101,
+      "missing_paths": [],
+      "unreadable_paths": [],
+      "pair_size_mismatches": [],
+      "input_sizes": {
+        "540x400": 98,
+        "400x540": 3
+      },
+      "target_sizes": {
+        "540x400": 98,
+        "400x540": 3
+      },
+      "malformed_record_count": 0,
+      "missing_path_count": 0,
+      "checked_image_pairs": 101,
+      "unreadable_path_count": 0,
+      "pair_size_mismatch_count": 0,
+      "status": "ok"
+    },
+    {
+      "json_path": "/Users/dylanxin/Project/Previous/VICL/Task-Transfer/data/others/UHDM/image_demoire_test.json",
+      "relative_json_path": "UHDM/image_demoire_test.json",
+      "records": 500,
+      "missing_paths": [
+        {
+          "index": 0,
+          "field": "image_path",
+          "path": "UHDM/test/test/0393_moire.jpg"
+        },
+        {
+          "index": 0,
+          "field": "target_path",
+          "path": "UHDM/test/test/0393_gt.jpg"
+        },
+        {
+          "index": 1,
+          "field": "image_path",
+          "path": "UHDM/test/test/0236_moire.jpg"
+        },
+        {
+          "index": 1,
+          "field": "target_path",
+          "path": "UHDM/test/test/0236_gt.jpg"
+        },
+        {
+          "index": 2,
+          "field": "image_path",
+          "path": "UHDM/test/test/0045_moire.jpg"
+        },
+        {
+          "index": 2,
+          "field": "target_path",
+          "path": "UHDM/test/test/0045_gt.jpg"
+        },
+        {
+          "index": 3,
+          "field": "image_path",
+          "path": "UHDM/test/test/0268_moire.jpg"
+        },
+        {
+          "index": 3,
+          "field": "target_path",
+          "path": "UHDM/test/test/0268_gt.jpg"
+        },
+        {
+          "index": 4,
+          "field": "image_path",
+          "path": "UHDM/test/test/0438_moire.jpg"
+        },
+        {
+          "index": 4,
+          "field": "target_path",
+          "path": "UHDM/test/test/0438_gt.jpg"
+        },
+        {
+          "index": 5,
+          "field": "image_path",
+          "path": "UHDM/test/test/0356_moire.jpg"
+        },
+        {
+          "index": 5,
+          "field": "target_path",
+          "path": "UHDM/test/test/0356_gt.jpg"
+        },
+        {
+          "index": 6,
+          "field": "image_path",
+          "path": "UHDM/test/test/0125_moire.jpg"
+        },
+        {
+          "index": 6,
+          "field": "target_path",
+          "path": "UHDM/test/test/0125_gt.jpg"
+        },
+        {
+          "index": 7,
+          "field": "image_path",
+          "path": "UHDM/test/test/0080_moire.jpg"
+        },
+        {
+          "index": 7,
+          "field": "target_path",
+          "path": "UHDM/test/test/0080_gt.jpg"
+        },
+        {
+          "index": 8,
+          "field": "image_path",
+          "path": "UHDM/test/test/0308_moire.jpg"
+        },
+        {
+          "index": 8,
+          "field": "target_path",
+          "path": "UHDM/test/test/0308_gt.jpg"
+        },
+        {
+          "index": 9,
+          "field": "image_path",
+          "path": "UHDM/test/test/0466_moire.jpg"
+        },
+        {
+          "index": 9,
+          "field": "target_path",
+          "path": "UHDM/test/test/0466_gt.jpg"
+        }
+      ],
+      "unreadable_paths": [],
+      "pair_size_mismatches": [],
+      "input_sizes": {},
+      "target_sizes": {},
+      "malformed_record_count": 0,
+      "missing_path_count": 1000,
+      "status": "incomplete"
+    },
+    {
+      "json_path": "/Users/dylanxin/Project/Previous/VICL/Task-Transfer/data/others/VIDIT/illumination_transfer_test.json",
+      "relative_json_path": "VIDIT/illumination_transfer_test.json",
+      "records": 45,
+      "missing_paths": [],
+      "unreadable_paths": [],
+      "pair_size_mismatches": [],
+      "input_sizes": {
+        "1024x1024": 45
+      },
+      "target_sizes": {
+        "1024x1024": 45
+      },
+      "malformed_record_count": 0,
+      "missing_path_count": 0,
+      "checked_image_pairs": 45,
+      "unreadable_path_count": 0,
+      "pair_size_mismatch_count": 0,
+      "status": "ok"
+    },
+    {
+      "json_path": "/Users/dylanxin/Project/Previous/VICL/Task-Transfer/data/others/derain/derain_test_rain100h.json",
+      "relative_json_path": "derain/derain_test_rain100h.json",
+      "records": 100,
+      "missing_paths": [
+        {
+          "index": 0,
+          "field": "image_path",
+          "path": "derain/test/Rain100H/input/11.png"
+        },
+        {
+          "index": 0,
+          "field": "target_path",
+          "path": "derain/test/Rain100H/target/11.png"
+        },
+        {
+          "index": 1,
+          "field": "image_path",
+          "path": "derain/test/Rain100H/input/16.png"
+        },
+        {
+          "index": 1,
+          "field": "target_path",
+          "path": "derain/test/Rain100H/target/16.png"
+        },
+        {
+          "index": 2,
+          "field": "image_path",
+          "path": "derain/test/Rain100H/input/64.png"
+        },
+        {
+          "index": 2,
+          "field": "target_path",
+          "path": "derain/test/Rain100H/target/64.png"
+        },
+        {
+          "index": 3,
+          "field": "image_path",
+          "path": "derain/test/Rain100H/input/18.png"
+        },
+        {
+          "index": 3,
+          "field": "target_path",
+          "path": "derain/test/Rain100H/target/18.png"
+        },
+        {
+          "index": 4,
+          "field": "image_path",
+          "path": "derain/test/Rain100H/input/63.png"
+        },
+        {
+          "index": 4,
+          "field": "target_path",
+          "path": "derain/test/Rain100H/target/63.png"
+        },
+        {
+          "index": 5,
+          "field": "image_path",
+          "path": "derain/test/Rain100H/input/56.png"
+        },
+        {
+          "index": 5,
+          "field": "target_path",
+          "path": "derain/test/Rain100H/target/56.png"
+        },
+        {
+          "index": 6,
+          "field": "image_path",
+          "path": "derain/test/Rain100H/input/87.png"
+        },
+        {
+          "index": 6,
+          "field": "target_path",
+          "path": "derain/test/Rain100H/target/87.png"
+        },
+        {
+          "index": 7,
+          "field": "image_path",
+          "path": "derain/test/Rain100H/input/51.png"
+        },
+        {
+          "index": 7,
+          "field": "target_path",
+          "path": "derain/test/Rain100H/target/51.png"
+        },
+        {
+          "index": 8,
+          "field": "image_path",
+          "path": "derain/test/Rain100H/input/9.png"
+        },
+        {
+          "index": 8,
+          "field": "target_path",
+          "path": "derain/test/Rain100H/target/9.png"
+        },
+        {
+          "index": 9,
+          "field": "image_path",
+          "path": "derain/test/Rain100H/input/80.png"
+        },
+        {
+          "index": 9,
+          "field": "target_path",
+          "path": "derain/test/Rain100H/target/80.png"
+        }
+      ],
+      "unreadable_paths": [],
+      "pair_size_mismatches": [],
+      "input_sizes": {},
+      "target_sizes": {},
+      "malformed_record_count": 0,
+      "missing_path_count": 200,
+      "status": "incomplete"
+    },
+    {
+      "json_path": "/Users/dylanxin/Project/Previous/VICL/Task-Transfer/data/others/derain/derain_train.json",
+      "relative_json_path": "derain/derain_train.json",
+      "records": 13711,
+      "missing_paths": [
+        {
+          "index": 0,
+          "field": "image_path",
+          "path": "derain/train/input/10243.jpg"
+        },
+        {
+          "index": 0,
+          "field": "target_path",
+          "path": "derain/train/target/10243.jpg"
+        },
+        {
+          "index": 1,
+          "field": "image_path",
+          "path": "derain/train/input/9107.jpg"
+        },
+        {
+          "index": 1,
+          "field": "target_path",
+          "path": "derain/train/target/9107.jpg"
+        },
+        {
+          "index": 2,
+          "field": "image_path",
+          "path": "derain/train/input/5160.jpg"
+        },
+        {
+          "index": 2,
+          "field": "target_path",
+          "path": "derain/train/target/5160.jpg"
+        },
+        {
+          "index": 3,
+          "field": "image_path",
+          "path": "derain/train/input/10996.jpg"
+        },
+        {
+          "index": 3,
+          "field": "target_path",
+          "path": "derain/train/target/10996.jpg"
+        },
+        {
+          "index": 4,
+          "field": "image_path",
+          "path": "derain/train/input/4087.jpg"
+        },
+        {
+          "index": 4,
+          "field": "target_path",
+          "path": "derain/train/target/4087.jpg"
+        },
+        {
+          "index": 5,
+          "field": "image_path",
+          "path": "derain/train/input/11871.jpg"
+        },
+        {
+          "index": 5,
+          "field": "target_path",
+          "path": "derain/train/target/11871.jpg"
+        },
+        {
+          "index": 6,
+          "field": "image_path",
+          "path": "derain/train/input/11403.jpg"
+        },
+        {
+          "index": 6,
+          "field": "target_path",
+          "path": "derain/train/target/11403.jpg"
+        },
+        {
+          "index": 7,
+          "field": "image_path",
+          "path": "derain/train/input/4720.jpg"
+        },
+        {
+          "index": 7,
+          "field": "target_path",
+          "path": "derain/train/target/4720.jpg"
+        },
+        {
+          "index": 8,
+          "field": "image_path",
+          "path": "derain/train/input/8747.jpg"
+        },
+        {
+          "index": 8,
+          "field": "target_path",
+          "path": "derain/train/target/8747.jpg"
+        },
+        {
+          "index": 9,
+          "field": "image_path",
+          "path": "derain/train/input/12516.jpg"
+        },
+        {
+          "index": 9,
+          "field": "target_path",
+          "path": "derain/train/target/12516.jpg"
+        }
+      ],
+      "unreadable_paths": [],
+      "pair_size_mismatches": [],
+      "input_sizes": {},
+      "target_sizes": {},
+      "malformed_record_count": 0,
+      "missing_path_count": 27422,
+      "status": "incomplete"
+    },
+    {
+      "json_path": "/Users/dylanxin/Project/Previous/VICL/Task-Transfer/data/others/inpainting/image_inpainting_test.json",
+      "relative_json_path": "inpainting/image_inpainting_test.json",
+      "records": 6895,
+      "missing_paths": [],
+      "unreadable_paths": [],
+      "pair_size_mismatches": [],
+      "input_sizes": {
+        "256x256": 6895
+      },
+      "target_sizes": {
+        "256x256": 6895
+      },
+      "malformed_record_count": 0,
+      "missing_path_count": 0,
+      "checked_image_pairs": 6895,
+      "unreadable_path_count": 0,
+      "pair_size_mismatch_count": 0,
+      "status": "ok"
+    }
+  ],
+  "summary": {
+    "tasks": 1,
+    "ok": 1,
+    "missing_paths": 0,
+    "missing_demos": 0,
+    "unreadable_paths": 0,
+    "pair_size_mismatches": 0,
+    "all_json_files": 18,
+    "all_json_ok": 14,
+    "all_json_missing_paths": 220622,
+    "all_json_malformed_records": 0,
+    "all_json_unreadable_paths": 0,
+    "all_json_pair_size_mismatches": 0
+  }
+}

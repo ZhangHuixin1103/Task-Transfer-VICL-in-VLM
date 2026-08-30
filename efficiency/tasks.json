@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "data_root": "data/others",
+  "benchmark_family": "same-task-third-party-and-others",
+  "controlled_protocol": {
+    "resolution": 448,
+    "batch_size": 1,
+    "warmup_queries": 5,
+    "measured_queries_per_task": 100,
+    "sampling_seed": 2026,
+    "resize": "direct bicubic resize to a 448x448 square for every demo, query, and requested output",
+    "note": "Native-resolution latency is a separate supplementary protocol and must not be mixed into the controlled table."
+  },
+  "tasks": [
+    {
+      "name": "deblurring",
+      "eval_json": "GOPRO_Large/deblur_gopro_test.json",
+      "demo_input": "GOPRO_Large/train/GOPR0384_11_04/blur/002849.png",
+      "demo_output": "GOPRO_Large/train/GOPR0384_11_04/sharp/002849.png",
+      "text_prompt": "remove motion or defocus blur and restore sharp details"
+    },
+    {
+      "name": "dehazing",
+      "eval_json": "D-HAZY/dehaze_d-hazy_test.json",
+      "demo_input": "D-HAZY/NYU_Hazy/100_Hazy.bmp",
+      "demo_output": "D-HAZY/NYU_GT/100_Image_.bmp",
+      "text_prompt": "remove haze and fog and recover clear contrast and natural colors"
+    },
+    {
+      "name": "demoireing",
+      "eval_json": "UHDM/image_demoire_test.json",
+      "demo_input": "UHDM/test/test/0000_moire.jpg",
+      "demo_output": "UHDM/test/test/0000_gt.jpg",
+      "text_prompt": "remove moire and restore fine details with natural colors"
+    },
+    {
+      "name": "denoising",
+      "eval_json": "SIDD/denoise_ssid_val.json",
+      "demo_input": "SIDD/train/input/116_149.png",
+      "demo_output": "SIDD/train/groundtruth/116_149.png",
+      "text_prompt": "remove noise and grain while preserving edges and fine details"
+    },
+    {
+      "name": "deraining",
+      "eval_json": "derain/derain_test_rain100h.json",
+      "demo_input": "derain/train/input/100.jpg",
+      "demo_output": "derain/train/target/100.jpg",
+      "text_prompt": "remove rain streaks and raindrops while restoring a clean sharp background"
+    },
+    {
+      "name": "low_light_enhancement",
+      "eval_json": "LOL/enhance_lol_val.json",
+      "demo_input": "LOL/our485/low/100.png",
+      "demo_output": "LOL/our485/high/100.png",
+      "text_prompt": "enhance brightness and contrast while preserving natural colors and fine details"
+    },
+    {
+      "name": "shadow_removal",
+      "eval_json": "ISTD_Dataset/shadow_removal_istd_test.json",
+      "demo_input": "ISTD_Dataset/train/train_A/56-13.png",
+      "demo_output": "ISTD_Dataset/train/train_C/56-13.png",
+      "text_prompt": "remove cast shadows and reconstruct plausible content in the shadow regions"
+    },
+    {
+      "name": "reflection_removal",
+      "eval_json": "SIR2/reflection_removal_test.json",
+      "demo_input": "SIR2/WildScene/87/m.jpg",
+      "demo_output": "SIR2/WildScene/87/g.jpg",
+      "text_prompt": "remove glass reflections and restore a clean background behind the glass"
+    },
+    {
+      "name": "relighting",
+      "eval_json": "VIDIT/illumination_transfer_test.json",
+      "demo_input": "VIDIT/validation/Image300.png",
+      "demo_output": "VIDIT/validation_gt/Image300.png",
+      "text_prompt": "change the lighting to natural well-exposed illumination while preserving scene structure"
+    },
+    {
+      "name": "inpainting",
+      "eval_json": "inpainting/image_inpainting_test.json",
+      "demo_input": "inpainting/masked/image_0_0.png",
+      "demo_output": "inpainting/full/image_0_0.png",
+      "text_prompt": "fill the masked regions while keeping structure colors and lighting consistent"
+    }
+  ]
+}

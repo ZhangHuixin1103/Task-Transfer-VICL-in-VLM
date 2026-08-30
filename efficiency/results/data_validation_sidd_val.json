@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "manifest": "/Users/dylanxin/Project/Previous/VICL/Task-Transfer/efficiency/tasks.json",
+  "data_root": "/Users/dylanxin/Project/Previous/VICL/Task-Transfer/data/others",
+  "tasks": [
+    {
+      "task": "denoising",
+      "spec": {
+        "name": "denoising",
+        "eval_json": "SIDD/denoise_ssid_val.json",
+        "demo_input": "SIDD/train/input/116_149.png",
+        "demo_output": "SIDD/train/groundtruth/116_149.png",
+        "text_prompt": "remove noise and grain while preserving edges and fine details"
+      },
+      "json_path": "/Users/dylanxin/Project/Previous/VICL/Task-Transfer/data/others/SIDD/denoise_ssid_val.json",
+      "json_exists": true,
+      "records": 1280,
+      "missing_paths": [],
+      "unreadable_paths": [],
+      "pair_size_mismatches": [],
+      "input_sizes": {
+        "256x256": 1280
+      },
+      "target_sizes": {
+        "256x256": 1280
+      },
+      "demo": {
+        "demo_input": {
+          "path": "SIDD/train/input/116_149.png",
+          "exists": false
+        },
+        "demo_output": {
+          "path": "SIDD/train/groundtruth/116_149.png",
+          "exists": false
+        }
+      },
+      "missing_path_count": 0,
+      "demo_missing_count": 2,
+      "checked_image_pairs": 1280,
+      "unreadable_path_count": 0,
+      "pair_size_mismatch_count": 0,
+      "status": "incomplete"
+    }
+  ],
+  "json_files": [],
+  "summary": {
+    "tasks": 1,
+    "ok": 0,
+    "missing_paths": 0,
+    "missing_demos": 2,
+    "unreadable_paths": 0,
+    "pair_size_mismatches": 0,
+    "all_json_files": 0,
+    "all_json_ok": 0,
+    "all_json_missing_paths": 0,
+    "all_json_malformed_records": 0,
+    "all_json_unreadable_paths": 0,
+    "all_json_pair_size_mismatches": 0
+  }
+}

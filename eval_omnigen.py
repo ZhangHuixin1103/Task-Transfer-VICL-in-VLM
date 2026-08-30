@@ -1,5 +1,4 @@
 import argparse
-import hashlib
 import json
 import logging
 import os
@@ -9,9 +8,6 @@ import numpy as np
 import torch
 from diffusers.utils import load_image
 from PIL import Image
-from tqdm import tqdm
-
-from eval import hashed_id, generate_text_prompt, evaluate_generated
 
 omnigen_root = os.path.join(os.getcwd(), "model/OmniGen2")
 if omnigen_root not in sys.path:
@@ -19,10 +15,6 @@ if omnigen_root not in sys.path:
 
 from model.OmniGen2.omnigen2.pipelines.omnigen2.pipeline_omnigen2 import \
     OmniGen2Pipeline
-
-viescore_path = '/data1/tzz/huixin/Task-Transfer/VIEScore'
-if viescore_path not in sys.path:
-    sys.path.append(viescore_path)
 
 DATA_TASKS_DIR = "data/tasks"
 EVAL_DATASET_JSON = "data/dataset/eval_dataset.json"
@@ -62,36 +54,67 @@ def load_omnigen_pipeline():
     return pipe
 
 
-def generate_image_omnigen(pipe, taskA_in, taskA_out, taskB_in, text_prompt):
+def generate_image_omnigen(
+    pipe,
+    taskA_in,
+    taskA_out,
+    taskB_in,
+    text_prompt,
+    seed=None,
+    num_inference_steps=50,
+    input_resolution=None,
+    height=1024,
+    width=1024,
+):
     # Prepare input images for in-context generation
     input_images = [
         load_image(os.path.join(DATA_TASKS_DIR, taskA_in)),
         load_image(os.path.join(DATA_TASKS_DIR, taskA_out)),
         load_image(os.path.join(DATA_TASKS_DIR, taskB_in))
     ]
+    if input_resolution is not None:
+        resized_images = []
+        for image in input_images:
+            resized_images.append(
+                image.resize(
+                    (input_resolution, input_resolution), Image.Resampling.BICUBIC
+                )
+            )
+            image.close()
+        input_images = resized_images
 
     try:
         # Based on Usage Tips for in-context generation
         with torch.no_grad():
             with torch.autocast("cuda", dtype=torch.bfloat16):
-                output = pipe(
+                inputs = dict(
                     prompt=text_prompt,
                     input_images=input_images,
-                    height=1024,
-                    width=1024,
-                    num_inference_steps=50,
+                    height=height,
+                    width=width,
+                    num_inference_steps=num_inference_steps,
                     text_guidance_scale=5.0,
                     image_guidance_scale=3.0,
                     num_images_per_prompt=1,
-                    output_type="pil"
+                    output_type="pil",
                 )
+                if seed is not None:
+                    inputs["generator"] = torch.Generator(device="cuda").manual_seed(
+                        seed
+                    )
+                output = pipe(**inputs)
         return output.images[0]
     except Exception as e:
         logging.error(f"OmniGen2 generation failed: {e}")
         return None
+    finally:
+        for image in input_images:
+            image.close()
 
 
 def run_evaluation(args):
+    from eval import evaluate_generated, generate_text_prompt, hashed_id
+
     with open(EVAL_DATASET_JSON, 'r') as f:
         eval_data = json.load(f)
 

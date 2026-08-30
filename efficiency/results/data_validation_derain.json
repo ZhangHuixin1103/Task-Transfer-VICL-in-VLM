@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "manifest": "/Users/dylanxin/Project/Previous/VICL/Task-Transfer/efficiency/tasks.json",
+  "data_root": "/Users/dylanxin/Project/Previous/VICL/Task-Transfer/data/others",
+  "tasks": [
+    {
+      "task": "deraining",
+      "spec": {
+        "name": "deraining",
+        "eval_json": "derain/derain_test_rain100h.json",
+        "demo_input": "derain/train/input/100.jpg",
+        "demo_output": "derain/train/target/100.jpg",
+        "text_prompt": "remove rain streaks and raindrops while restoring a clean sharp background",
+        "task_a": null,
+        "task_b": null
+      },
+      "json_path": "/Users/dylanxin/Project/Previous/VICL/Task-Transfer/data/others/derain/derain_test_rain100h.json",
+      "json_exists": true,
+      "records": 100,
+      "missing_paths": [],
+      "unreadable_paths": [],
+      "pair_size_mismatches": [],
+      "input_sizes": {
+        "480x320": 66,
+        "320x480": 34
+      },
+      "target_sizes": {
+        "480x320": 66,
+        "320x480": 34
+      },
+      "demo": {
+        "demo_input": {
+          "path": "derain/train/input/100.jpg",
+          "exists": true
+        },
+        "demo_output": {
+          "path": "derain/train/target/100.jpg",
+          "exists": true
+        }
+      },
+      "source_records": 100,
+      "source_record_indices": null,
+      "missing_path_count": 0,
+      "demo_missing_count": 0,
+      "checked_image_pairs": 100,
+      "unreadable_path_count": 0,
+      "pair_size_mismatch_count": 0,
+      "native_pair_size_policy": "Recorded as a warning, not a failure: controlled efficiency adapters resize every consumed image and requested output to the manifest resolution.",
+      "status": "ok"
+    }
+  ],
+  "json_files": [],
+  "summary": {
+    "tasks": 1,
+    "ok": 1,
+    "missing_paths": 0,
+    "missing_demos": 0,
+    "unreadable_paths": 0,
+    "pair_size_mismatches": 0,
+    "all_json_files": 0,
+    "all_json_ok": 0,
+    "all_json_missing_paths": 0,
+    "all_json_malformed_records": 0,
+    "all_json_unreadable_paths": 0,
+    "all_json_pair_size_mismatches": 0
+  }
+}
