@@ -288,14 +288,18 @@ def run_quality(args) -> dict[str, Any]:
                     selected_source_indices = [
                         heldout_source_indices[index] for index in selected
                     ]
+                    processing_indices = (
+                        list(reversed(selected))
+                        if getattr(args, "reverse_order", False)
+                        else selected
+                    )
                     configuration = {
                         "adapter": adapter.name,
                         "condition": condition,
                         "task": task.name,
                         "dataset_json": str(json_path),
-                        "selected_indices": selected,
-                        "selected_source_indices": selected_source_indices,
                         "excluded_demo_record_indices": excluded_demo_indices,
+                        "sampling_seed": args.sampling_seed,
                         "model_id": getattr(adapter, "model_id", None),
                         "checkpoint": getattr(adapter, "checkpoint", None),
                         "steps": getattr(adapter, "steps", None),
@@ -329,10 +333,12 @@ def run_quality(args) -> dict[str, Any]:
                                 del completed[index]
                     print(
                         f"Quality: condition={condition}, task={task.name}, "
-                        f"queries={len(selected)}, resumed={len(completed)}"
+                        f"queries={len(selected)}, "
+                        f"resumed={sum(index in completed for index in selected)}, "
+                        f"order={'reverse' if getattr(args, 'reverse_order', False) else 'forward'}"
                     )
                     with record_path.open(mode, encoding="utf-8", buffering=1) as handle:
-                        for sample_index in selected:
+                        for sample_index in processing_indices:
                             if sample_index in completed:
                                 continue
                             adapter.select_sample(sample_index)
@@ -394,6 +400,11 @@ def run_quality(args) -> dict[str, Any]:
                             "excluded_demo_record_indices": excluded_demo_indices,
                             "selected_indices": selected,
                             "selected_source_indices": selected_source_indices,
+                            "processing_order": (
+                                "reverse"
+                                if getattr(args, "reverse_order", False)
+                                else "forward"
+                            ),
                             "demo_input": task.demo_input,
                             "demo_output": task.demo_output,
                             "text_prompt": task.text_prompt,
@@ -475,6 +486,11 @@ def parser() -> argparse.ArgumentParser:
     )
     result.add_argument("--sampling-seed", type=int, default=2026)
     result.add_argument("--resume", action="store_true")
+    result.add_argument(
+        "--reverse-order",
+        action="store_true",
+        help="Process selected queries from the highest index to the lowest",
+    )
     result.add_argument("--no-save-outputs", action="store_true")
     result.set_defaults(
         data_root=None,

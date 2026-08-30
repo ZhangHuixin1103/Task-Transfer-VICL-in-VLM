@@ -202,6 +202,139 @@ class QualityPipelineTest(unittest.TestCase):
             self.assertEqual(json.loads(result_path.read_text())["kind"], "image_quality_suite")
             self.assertTrue(adapter.closed)
 
+    def test_resume_expands_sample_limit_without_regenerating_completed_outputs(self):
+        class FakeAdapter:
+            name = "prompt-diffusion"
+            protocol = "test"
+            conditions = ("official",)
+
+            def __init__(self):
+                self.run_indices = []
+
+            def setup(self):
+                pass
+
+            def prepare_condition(self, condition):
+                pass
+
+            def release_condition(self, condition):
+                pass
+
+            def configure_samples(
+                self,
+                dataset_json,
+                demo_input=None,
+                demo_output=None,
+                record_indices=None,
+            ):
+                source = load_dataset_records(dataset_json)
+                self.records = [source[index] for index in record_indices]
+                self.demo_input = demo_input
+                self.demo_output = demo_output
+                self.select_sample(0)
+
+            def sample_count(self):
+                return len(self.records)
+
+            def select_sample(self, sample_index):
+                self.sample_index = sample_index
+                self.sample = vicl_sample_from_records(
+                    self.records,
+                    sample_index,
+                    demo_input=self.demo_input,
+                    demo_output=self.demo_output,
+                )
+
+            def run(self, condition):
+                self.run_indices.append(self.sample_index)
+                with Image.open(root / self.sample.task_b_input) as source:
+                    return InferenceResult(output=source.convert("RGB").copy())
+
+            def close(self):
+                pass
+
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            for name, value in (("demo_in.png", 1), ("demo_out.png", 2)):
+                Image.fromarray(np.full((8, 8, 3), value, dtype=np.uint8)).save(
+                    root / name
+                )
+            pairs = []
+            for index in range(3):
+                query = f"query_{index}.png"
+                target = f"target_{index}.png"
+                Image.fromarray(
+                    np.full((8, 8, 3), 10 + index, dtype=np.uint8)
+                ).save(root / query)
+                Image.fromarray(
+                    np.full((8, 8, 3), 20 + index, dtype=np.uint8)
+                ).save(root / target)
+                pairs.append({"image_path": query, "target_path": target})
+            (root / "pairs.json").write_text(json.dumps(pairs), encoding="utf-8")
+            manifest = root / "tasks.json"
+            manifest.write_text(
+                json.dumps(
+                    {
+                        "schema_version": 1,
+                        "data_root": ".",
+                        "benchmark_family": "test",
+                        "controlled_protocol": {"resolution": 8},
+                        "tasks": [
+                            {
+                                "name": "deblurring",
+                                "eval_json": "pairs.json",
+                                "demo_input": "demo_in.png",
+                                "demo_output": "demo_out.png",
+                                "text_prompt": "remove blur",
+                            }
+                        ],
+                    }
+                ),
+                encoding="utf-8",
+            )
+            output = root / "quality"
+
+            def arguments(max_samples, resume, reverse_order):
+                return SimpleNamespace(
+                    task_manifest=manifest,
+                    tasks=None,
+                    data_root=root,
+                    resolution=8,
+                    steps=1,
+                    output_dir=output,
+                    no_save_outputs=False,
+                    conditions=["official"],
+                    max_samples=max_samples,
+                    sampling_seed=2026,
+                    resume=resume,
+                    reverse_order=reverse_order,
+                    seed=3,
+                    dtype="fp32",
+                    config="config.yaml",
+                    cfg_text=3.5,
+                    cfg_image=1.25,
+                    shape_policy="fixed-square",
+                    painter_task="restoration",
+                    painter_include_script_loss=False,
+                )
+
+            first = FakeAdapter()
+            with mock.patch("efficiency.quality.build_adapter", return_value=first):
+                first_document = run_quality(arguments(1, False, False))
+            self.assertEqual(first_document["conditions"][0]["tasks"][0]["count"], 1)
+            self.assertEqual(len(first.run_indices), 1)
+
+            second = FakeAdapter()
+            with mock.patch("efficiency.quality.build_adapter", return_value=second):
+                second_document = run_quality(arguments(3, True, True))
+            task = second_document["conditions"][0]["tasks"][0]
+            self.assertEqual(task["count"], 3)
+            self.assertEqual(task["processing_order"], "reverse")
+            self.assertEqual(len(second.run_indices), 2)
+            self.assertEqual(
+                len(list((output / "images/official/deblurring").glob("*.png"))), 3
+            )
+
 
 if __name__ == "__main__":
     unittest.main()
