@@ -390,7 +390,7 @@ class HiddenShotAdapter(EfficiencyAdapter):
         )
         self.select_sample(initial_index)
 
-        checkpoint = torch.load(checkpoint_path, map_location="cpu")
+        checkpoint = torch.load(checkpoint_path, map_location="cpu", weights_only=False)
         state_dict = (
             checkpoint.get("model", checkpoint)
             if isinstance(checkpoint, Mapping)

@@ -6,6 +6,10 @@ data/output
 data/tasks
 data/tmp
 
+efficiency/logs
+efficiency/quality
+efficiency/results
+
 Qwen2.5-VL/qwen-vl-finetune/output
 Qwen3-VL/qwen-vl-finetune/output
 
