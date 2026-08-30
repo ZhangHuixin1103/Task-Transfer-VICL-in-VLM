@@ -139,6 +139,37 @@ the 896x448 prompt/query canvas. This gives 448 a method-grounded role here in a
 to being a cross-model control. It does not imply that a 448 result can be compared
 numerically with a paper's 256, 512, or 1024 result.
 
+## PSNR/SSIM Quality Pass
+
+`efficiency.suite` intentionally discards generated images after each timed query. It
+cannot fill an accuracy table. Run quality separately so PNG saving, target loading,
+PSNR, and SSIM never contaminate latency:
+
+```bash
+python -m efficiency.quality \
+  --adapter prompt-diffusion --conditions official \
+  --task-manifest efficiency/tasks_sparse.json \
+  --model-id /weights/prompt-diffusion-diffusers \
+  --steps 50 --resolution 448 --max-samples -1 --resume \
+  --output-dir efficiency/quality/prompt_diffusion
+
+python -m efficiency.quality \
+  --adapter instruct-diffusion --conditions official \
+  --task-manifest efficiency/tasks_sparse.json \
+  --checkpoint /external/InstructDiffusion/checkpoints/v1-5-pruned-emaonly-adaption-task.ckpt \
+  --steps 50 --resolution 448 --max-samples -1 --resume \
+  --output-dir efficiency/quality/instruct_diffusion
+```
+
+The quality default is every held-out record in the supplied manifest. With
+`tasks_sparse.json`, this is the same deterministic subset used for latency. A
+demonstration that also appears in the JSON is excluded and reported by source index.
+Metrics use RGB uint8 pixels at 448x448,
+per-image PSNR, and the default channel-averaged skimage SSIM convention. The runner
+writes every sample path and score, saves predictions, and supports
+configuration-checked resume. `quality_table` reads the two summary JSON files and
+updates only their columns in a supplied TeX table.
+
 ## Supported Adapters
 
 The original T2T adapters need no external source-tree setting. For Painter,

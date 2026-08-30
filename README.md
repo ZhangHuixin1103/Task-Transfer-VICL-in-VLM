@@ -238,7 +238,7 @@ JSONL files; keep response files disjoint when summarizing.
 
 ## Efficiency Benchmark
 
-The reproducible efficiency suite in [`efficiency/`](efficiency/README.md) measures unique logical and method-trained parameters, audited runtime-formula full-pipeline FLOPs, synchronized end-to-end inference latency, stage latency, and peak GPU memory. It directly reuses the existing Qwen-Image, FLUX.2, OmniGen2, and FireRed evaluation calls and also provides official-protocol adapters for Painter, Prompt-Diffusion, and InstructDiffusion. The paper protocol uses five warm-up queries followed by up to 100 distinct query pairs per task at a controlled `448 x 448` processed resolution.
+The reproducible suite in [`efficiency/`](efficiency/README.md) measures unique logical and method-trained parameters, audited runtime-formula full-pipeline FLOPs, synchronized end-to-end inference latency, stage latency, and peak GPU memory. It directly reuses the existing Qwen-Image, FLUX.2, OmniGen2, and FireRed evaluation calls and also provides official-protocol adapters for Painter, Prompt-Diffusion, and InstructDiffusion. The efficiency protocol uses five warm-up queries followed by up to 100 distinct query pairs per task at a controlled `448 x 448` processed resolution; the separate untimed quality entry point evaluates full declared splits and saves PSNR/SSIM outputs.
 
 ```bash
 python -m efficiency.preflight --require-dispatch-flops
