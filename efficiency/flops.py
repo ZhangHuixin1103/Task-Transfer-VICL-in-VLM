@@ -142,6 +142,11 @@ def _antialiased_bilinear_formula(
     )
 
 
+def _antialiased_bicubic_formula(*args, out_shape=None, **kwargs) -> int:
+    # Four horizontal and four vertical taps, each with multiply and accumulate.
+    return 16 * _output_numel(out_shape)
+
+
 def _average_pool2d_formula(
     input_shape,
     kernel_size,
@@ -160,6 +165,73 @@ def _average_pool2d_formula(
 def _vector_norm_formula(*args, out_shape=None, **kwargs) -> int:
     # Absolute value/power, reduction, and final root under one stable convention.
     return 3 * _input_numel(args) + _output_numel(out_shape)
+
+
+def _linear_formula(
+    input_shape,
+    weight_shape,
+    bias_shape=None,
+    *,
+    out_shape=None,
+    **kwargs,
+) -> int:
+    output_elements = _output_numel(out_shape)
+    if not output_elements or len(weight_shape) != 2:
+        return 0
+    value = 2 * output_elements * int(weight_shape[1])
+    return value + (output_elements if bias_shape is not None else 0)
+
+
+def _matmul_formula(a_shape, b_shape, *args, out_shape=None, **kwargs) -> int:
+    output_elements = _output_numel(out_shape)
+    if not output_elements or not a_shape or not b_shape:
+        return 0
+    reduction_width = int(a_shape[0] if len(a_shape) == 1 else a_shape[-1])
+    return 2 * output_elements * reduction_width
+
+
+def _outer_formula(a_shape, b_shape, *args, out_shape=None, **kwargs) -> int:
+    return _output_numel(out_shape)
+
+
+def _direct_convolution_formula(
+    input_shape,
+    weight_shape,
+    bias_shape=None,
+    stride=None,
+    padding=None,
+    dilation=None,
+    groups=1,
+    *,
+    out_shape=None,
+    **kwargs,
+) -> int:
+    return _convolution_formula(
+        input_shape,
+        weight_shape,
+        bias_shape,
+        stride,
+        padding,
+        dilation,
+        False,
+        None,
+        groups,
+        out_shape=out_shape,
+    )
+
+
+def _dropout_formula(
+    input_shape,
+    p=0.5,
+    train=False,
+    *args,
+    out_shape=None,
+    **kwargs,
+) -> int:
+    if not train or not p:
+        return 0
+    # Mask comparison and inverse-keep-probability scaling.
+    return 2 * _output_numel(out_shape)
 
 
 def _addmm_formula(self_shape, a_shape, b_shape, *args, out_shape=None, **kwargs):
@@ -305,6 +377,27 @@ def _biased_sdpa_formula(
     )
 
 
+def _public_sdpa_formula(
+    query_shape,
+    key_shape,
+    value_shape,
+    attn_mask=None,
+    dropout_p=0.0,
+    is_causal=False,
+    *args,
+    out_shape=None,
+    **kwargs,
+):
+    return _sdpa_formula(
+        query_shape,
+        key_shape,
+        value_shape,
+        out_shape=out_shape,
+        is_causal=is_causal,
+        has_attention_bias=attn_mask is not None,
+    )
+
+
 def _packet(name: str):
     return getattr(torch.ops.aten, name, None)
 
@@ -321,7 +414,11 @@ def enhanced_flop_mapping() -> Dict[Any, Any]:
     register(("addmm",), _addmm_formula)
     register(("baddbmm",), _baddbmm_formula)
     register(("_scaled_mm",), _scaled_mm_formula)
+    register(("linear",), _linear_formula)
+    register(("matmul",), _matmul_formula)
+    register(("outer",), _outer_formula)
     register(("convolution", "_convolution"), _convolution_formula)
+    register(("conv1d", "conv2d", "conv3d"), _direct_convolution_formula)
 
     register(
         (
@@ -337,6 +434,7 @@ def enhanced_flop_mapping() -> Dict[Any, Any]:
         ),
         _biased_sdpa_formula,
     )
+    register(("scaled_dot_product_attention",), _public_sdpa_formula)
 
     register(
         (
@@ -361,6 +459,7 @@ def enhanced_flop_mapping() -> Dict[Any, Any]:
             "clamp_min_",
             "clamp_max",
             "clamp_max_",
+            "clip",
             "relu",
             "relu_",
             "leaky_relu",
@@ -432,11 +531,14 @@ def enhanced_flop_mapping() -> Dict[Any, Any]:
         ),
         _normalization_formula,
     )
+    register(("layer_norm",), _normalization_formula)
+    register(("dropout",), _dropout_formula)
 
     register(("upsample_nearest2d", "_upsample_nearest_exact2d"), _pointwise_formula(0))
     register(("upsample_bilinear2d",), _upsample_formula(4))
     register(("upsample_bicubic2d",), _upsample_formula(16))
     register(("_upsample_bilinear2d_aa",), _antialiased_bilinear_formula)
+    register(("_upsample_bicubic2d_aa",), _antialiased_bicubic_formula)
     register(("grid_sampler_2d",), _upsample_formula(4))
     register(("avg_pool2d",), _average_pool2d_formula)
     # Max-pool comparisons are excluded by the documented FLOP convention.
@@ -447,6 +549,8 @@ def enhanced_flop_mapping() -> Dict[Any, Any]:
 
 
 ZERO_FLOP_OPERATORS = {
+    "__and__",
+    "__or__",
     "_local_scalar_dense",
     "_unsafe_index",
     "_unsafe_view",
@@ -527,7 +631,21 @@ ZERO_FLOP_OPERATORS = {
     "view",
     "argmax",
     "argmin",
+    "argwhere",
     "argsort",
+    "dequantize_4bit",
+    "expand_as",
+    "flatten",
+    "is_nonzero",
+    "item",
+    "numpy_t",
+    "pad",
+    "resolve_conj",
+    "resolve_neg",
+    "to",
+    "type_as",
+    "unflatten",
+    "unique_consecutive",
     "zeros",
     "constant_pad_nd",
     "linspace",
@@ -872,7 +990,12 @@ def opaque_module_flop_hooks(
     def linear_hook(module, inputs, output):
         output_elements = _first_tensor_numel(output)
         in_features = int(getattr(module, "in_features", 0))
-        if output_elements and in_features:
+        input_elements = _first_tensor_numel(inputs)
+        input_vectors = input_elements // in_features if in_features else 0
+        # bitsandbytes uses its opaque GEMV kernel for single-vector decoding.
+        # Multi-vector calls dequantize and execute observable aten.mm/linear ops;
+        # adding the module formula there would count the same matrix multiply twice.
+        if output_elements and in_features and input_vectors == 1:
             flops = 2 * output_elements * in_features
             if getattr(module, "bias", None) is not None:
                 flops += output_elements
@@ -1030,7 +1153,10 @@ def dispatch_flop_count(
         for operator, flops in counter.get_flop_counts().get("Global", {}).items()
         if flops
     }
-    has_bnb_custom_op = any("bitsandbytes" in name for name in unsupported_names)
+    has_bnb_gemv_op = any(
+        "bitsandbytes" in name and "gemv_4bit" in name
+        for name in unsupported_names
+    )
     has_external_attention_op = any(
         token in name
         for name in unsupported_names
@@ -1079,7 +1205,7 @@ def dispatch_flop_count(
     included_opaque_counts = {
         name: value
         for name, value in opaque_counts.items()
-        if (name.startswith("bnb4bit::") and has_bnb_custom_op)
+        if (name.startswith("bnb4bit::") and has_bnb_gemv_op)
         or (
             name.startswith(("flash_attention::", "xformers_attention::"))
             and not counted_external_attention
@@ -1101,11 +1227,7 @@ def dispatch_flop_count(
         for name, value in opaque_counts.items()
         if name not in included_opaque_counts
     }
-    unverified_opaque = {
-        name: value
-        for name, value in omitted_opaque_counts.items()
-        if name.startswith("bnb4bit::") and not has_bnb_custom_op
-    }
+    unverified_opaque: Dict[str, int] = {}
     opaque_flops = int(sum(included_opaque_counts.values()))
     quantized_linear_flops = int(
         sum(
@@ -1117,7 +1239,12 @@ def dispatch_flop_count(
     supplemented_operator_names = {
         name
         for name in counter.unsupported
-        if (has_bnb_custom_op and "bitsandbytes" in name.lower())
+        if (
+            has_bnb_gemv_op
+            and "bitsandbytes" in name.lower()
+            and "gemv_4bit" in name.lower()
+            and any(key.startswith("bnb4bit::") for key in included_opaque_counts)
+        )
         or (
             has_external_attention_op
             and any(
@@ -1180,9 +1307,10 @@ def dispatch_flop_count(
         "unverified_opaque_module_breakdown": unverified_opaque,
         "opaque_overlap_policy": (
             "Opaque hook estimates are omitted when an equivalent SDPA, normalization, "
-            "or SwiGLU dispatch formula was observed. A 4-bit linear hook is included "
-            "only when a bitsandbytes custom operator was observed; otherwise the row "
-            "is marked partial rather than risking double counting."
+            "or SwiGLU dispatch formula was observed. The 4-bit linear hook counts only "
+            "single-vector calls and is included only when bitsandbytes GEMV is observed; "
+            "multi-vector 4-bit calls remain represented by their observed aten.mm/linear "
+            "operators, preventing quantized linear double counting."
         ),
         "supplemented_operators": sorted(
             supplemented_operator_names | set(included_opaque_counts)

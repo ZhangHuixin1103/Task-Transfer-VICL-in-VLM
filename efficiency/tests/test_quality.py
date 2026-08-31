@@ -18,7 +18,7 @@ from efficiency.quality import (
     run_quality,
     write_quality,
 )
-from efficiency.quality_table import fill_table
+from efficiency.quality_table import fill_table, load_quality_result
 
 
 class QualityMetricTest(unittest.TestCase):
@@ -67,6 +67,63 @@ class QualityMetricTest(unittest.TestCase):
 
 
 class QualityTableTest(unittest.TestCase):
+    def test_load_table_accepts_finite_cap_that_covers_declared_split(self):
+        document = {
+            "kind": "image_quality_suite",
+            "adapter": "prompt-diffusion",
+            "max_samples": 100,
+            "metric_protocol": {"resolution": 448},
+            "conditions": [
+                {
+                    "condition": "official",
+                    "tasks": [
+                        {
+                            "task": "deraining",
+                            "heldout_records": 2,
+                            "selected_indices": [0, 1],
+                            "count": 2,
+                            "psnr_mean": 12.5,
+                            "ssim_mean": 0.6,
+                        }
+                    ],
+                }
+            ],
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "quality.json"
+            path.write_text(json.dumps(document), encoding="utf-8")
+            adapter, tasks = load_quality_result(path)
+        self.assertEqual(adapter, "prompt-diffusion")
+        self.assertEqual(tasks["deraining"]["psnr"], 12.5)
+
+    def test_load_table_rejects_a_capped_partial_split(self):
+        document = {
+            "kind": "image_quality_suite",
+            "adapter": "prompt-diffusion",
+            "max_samples": 1,
+            "metric_protocol": {"resolution": 448},
+            "conditions": [
+                {
+                    "condition": "official",
+                    "tasks": [
+                        {
+                            "task": "deraining",
+                            "heldout_records": 2,
+                            "selected_indices": [0],
+                            "count": 1,
+                            "psnr_mean": 12.5,
+                            "ssim_mean": 0.6,
+                        }
+                    ],
+                }
+            ],
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "quality.json"
+            path.write_text(json.dumps(document), encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "complete declared held-out"):
+                load_quality_result(path)
+
     def test_fill_table_changes_only_supplied_baseline_column(self):
         template = (
             "    \\multirow{2}{*}{Deraining}\n"

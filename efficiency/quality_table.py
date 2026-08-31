@@ -34,10 +34,6 @@ def load_quality_result(path: Path) -> tuple[str, dict[str, dict[str, float]]]:
     document = json.loads(path.read_text(encoding="utf-8"))
     if document.get("kind") != "image_quality_suite":
         raise ValueError(f"Not an image_quality_suite result: {path}")
-    if document.get("max_samples") != -1:
-        raise ValueError(
-            f"{path} is not a complete declared-split run (--max-samples -1)"
-        )
     resolution = document.get("metric_protocol", {}).get("resolution")
     if resolution != 448:
         raise ValueError(f"{path} uses resolution {resolution!r}, expected 448")
@@ -58,8 +54,16 @@ def load_quality_result(path: Path) -> tuple[str, dict[str, dict[str, float]]]:
             raise ValueError(f"Duplicate task {name!r} in {path}")
         count = int(task["count"])
         selected = task.get("selected_indices", [])
-        if count < 1 or count != len(selected):
-            raise ValueError(f"Incomplete selected-index record for task {name!r}")
+        heldout = int(task.get("heldout_records", -1))
+        if (
+            count < 1
+            or count != heldout
+            or count != len(selected)
+            or sorted(selected) != list(range(heldout))
+        ):
+            raise ValueError(
+                f"Task {name!r} is not a complete declared held-out split in {path}"
+            )
         psnr = float(task["psnr_mean"])
         ssim = float(task["ssim_mean"])
         if not math.isfinite(psnr) or not math.isfinite(ssim):

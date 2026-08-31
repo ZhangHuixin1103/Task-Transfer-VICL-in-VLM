@@ -33,11 +33,13 @@ calls.
   inference call, so the actual number of autoregressive and denoising iterations is
   included. This is PyTorch tensor arithmetic: file I/O, PIL/NumPy decoding/resizing,
   Python control flow, and data movement are not conventional model FLOPs. The registry
-  covers matrix multiplication, convolution including bias,
-  SDPA/FlashAttention, normalization, softmax, activation, reduction, indexed reduction,
-  and interpolation. Runtime hooks add logical MAC-equivalent FLOPs for opaque
-  bitsandbytes 4-bit linear layers, external fused attention, Triton normalization, and
-  FlashAttention SwiGLU modules.
+  covers both high-level and decomposed matrix multiplication, convolution including
+  bias, SDPA/FlashAttention, normalization, softmax, activation, reduction, indexed
+  reduction, and interpolation across the supported PyTorch versions. Runtime hooks add
+  logical MAC-equivalent FLOPs for opaque single-vector bitsandbytes 4-bit GEMV, external
+  fused attention, Triton normalization, and FlashAttention SwiGLU modules. Multi-vector
+  4-bit calls use their observed `aten.mm`/`aten.linear` formulas so they are not counted
+  again by the opaque hook.
 - **Coverage audit**: undecomposable operators without a formula are listed with call
   counts and output sizes. A row is marked `partial` whenever nontrivial compute remains
   unmodeled. `Status=ok` means formula-complete for the operators observed in that run

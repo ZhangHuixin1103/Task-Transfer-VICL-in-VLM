@@ -20,9 +20,15 @@ from efficiency.metrics import (
 )
 from efficiency.flops import (
     _attention_score_elements,
+    _direct_convolution_formula,
+    _dropout_formula,
     _is_structural_or_nonfloating_operator,
+    _linear_formula,
+    _matmul_formula,
+    _public_sdpa_formula,
     dispatch_flop_count,
     module_hook_flop_count,
+    opaque_module_flop_hooks,
 )
 from efficiency.report import flatten_result, write_reports
 from efficiency.suite import _aggregate_flop_profiles, _select_flop_indices
@@ -55,6 +61,14 @@ class Linear4bit(torch.nn.Module):
         self.out_features = 4
         self.weight = torch.nn.Parameter(
             torch.zeros(16, dtype=torch.uint8), requires_grad=False
+        )
+
+    def forward(self, inputs):
+        return torch.zeros(
+            *inputs.shape[:-1],
+            self.out_features,
+            dtype=inputs.dtype,
+            device=inputs.device,
         )
 
 
@@ -270,15 +284,58 @@ class MetricsTest(unittest.TestCase):
         self.assertEqual(flops["status"], "ok")
         self.assertEqual(flops["unsupported_nontrivial_operators"], [])
 
+    def test_qwen_high_level_operator_formulas(self):
+        self.assertEqual(
+            _linear_formula((2, 4), (3, 4), (3,), out_shape=(2, 3)),
+            54,
+        )
+        self.assertEqual(
+            _matmul_formula((2, 3, 4), (2, 4, 5), out_shape=(2, 3, 5)),
+            240,
+        )
+        self.assertEqual(
+            _direct_convolution_formula(
+                (1, 2, 4, 4),
+                (3, 2, 3, 3),
+                (3,),
+                out_shape=(1, 3, 2, 2),
+            ),
+            444,
+        )
+        self.assertEqual(
+            _public_sdpa_formula(
+                (1, 2, 4, 8),
+                (1, 2, 4, 8),
+                (1, 2, 4, 8),
+                out_shape=(1, 2, 4, 8),
+            ),
+            1216,
+        )
+        self.assertEqual(
+            _dropout_formula((2, 3), 0.1, False, out_shape=(2, 3)),
+            0,
+        )
+
+    def test_4bit_hook_counts_only_opaque_single_vector_gemv(self):
+        model = Linear4bit()
+        with opaque_module_flop_hooks([model]) as counts:
+            model(torch.ones(1, 8))
+            model(torch.ones(2, 8))
+        self.assertEqual(counts, {"bnb4bit::Linear4bit": 64})
+
     def test_released_model_structural_and_sampling_ops_are_zero_flop(self):
         for operator in (
             "aten._unsafe_view",
             "aten._unsafe_index",
             "aten.constant_pad_nd",
+            "bitsandbytes.dequantize_4bit",
             "aten.index_put_",
             "aten.masked_fill_",
             "aten.multinomial",
             "aten._local_scalar_dense",
+            "aten.flatten",
+            "aten.type_as",
+            "aten.to",
         ):
             self.assertTrue(_is_structural_or_nonfloating_operator(operator))
 
