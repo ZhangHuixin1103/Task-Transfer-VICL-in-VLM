@@ -52,8 +52,9 @@ coverage status. The convention is one multiply-add = two FLOPs, one operation f
 scalar elementary function, five per softmax element, and seven per normalization
 element. Quantized linear layers report dense logical MAC-equivalent FLOPs; kernel
 dequantization overhead and data movement are not folded into that conventional model
-FLOP count. Comparison, indexing, reshaping, and memory-copy operators are zero FLOPs
-under this arithmetic convention, even though they can affect latency. In an old
+FLOP count. Comparison, indexing, reshaping, padding/copy, Boolean reduction, random
+sampling, and token-selection operators are zero FLOPs under this arithmetic convention,
+even though they can affect latency. In an old
 environment without `torch.utils.flop_counter.FlopCounterMode`, the code uses dynamic
 module hooks and marks the result `partial_module_hook_fallback`.
 
@@ -335,7 +336,9 @@ To expand a completed smoke run without repeating its measured queries, pass its
 JSON to `--resume-from`, increase `--max-samples`, and optionally add
 `--reverse-order`. The merged JSON recomputes statistics from all raw rows and records
 reused/new indices plus a cross-process latency warning. Model, manifest, condition,
-seed, resolution, and checkpoint signatures must match exactly.
+seed, resolution, and checkpoint signatures must match exactly. Resume applies only to
+latency rows: when `--profile-flops` is present, every selected FLOPs sample is profiled
+again with the currently installed operator registry.
 
 ## Third-Party Models
 

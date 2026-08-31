@@ -113,6 +113,55 @@ def _upsample_formula(taps: int):
     return formula
 
 
+def _antialiased_bilinear_formula(
+    input_shape,
+    output_size,
+    align_corners=False,
+    scales_h=None,
+    scales_w=None,
+    *,
+    out_shape=None,
+    **kwargs,
+) -> int:
+    """Count the two separable antialiased bilinear filtering passes."""
+
+    if len(input_shape) != 4:
+        return 0
+    batch, channels, input_height, input_width = input_shape
+    output_elements = _output_numel(out_shape)
+    if not output_elements:
+        return 0
+    output_height, output_width = output_size
+    height_scale = input_height / output_height
+    width_scale = input_width / output_width
+    height_taps = 2 * math.ceil(max(height_scale, 1.0)) + 1
+    width_taps = 2 * math.ceil(max(width_scale, 1.0)) + 1
+    horizontal_elements = batch * channels * input_height * output_width
+    return 2 * (
+        horizontal_elements * width_taps + output_elements * height_taps
+    )
+
+
+def _average_pool2d_formula(
+    input_shape,
+    kernel_size,
+    *args,
+    out_shape=None,
+    **kwargs,
+) -> int:
+    if isinstance(kernel_size, int):
+        kernel_elements = kernel_size * kernel_size
+    else:
+        kernel_elements = math.prod(kernel_size)
+    # k-1 additions and one division for every output value.
+    return kernel_elements * _output_numel(out_shape)
+
+
+def _vector_norm_formula(*args, out_shape=None, **kwargs) -> int:
+    # Absolute value/power, reduction, and final root under one stable convention.
+    return 3 * _input_numel(args) + _output_numel(out_shape)
+
+
 def _addmm_formula(self_shape, a_shape, b_shape, *args, out_shape=None, **kwargs):
     m, k = a_shape
     _, n = b_shape
@@ -292,10 +341,14 @@ def enhanced_flop_mapping() -> Dict[Any, Any]:
     register(
         (
             "add",
+            "add_",
             "sub",
+            "sub_",
             "rsub",
             "mul",
+            "mul_",
             "div",
+            "div_",
             "true_divide",
             "floor_divide",
             "remainder",
@@ -303,33 +356,48 @@ def enhanced_flop_mapping() -> Dict[Any, Any]:
             "maximum",
             "minimum",
             "clamp",
+            "clamp_",
             "clamp_min",
+            "clamp_min_",
             "clamp_max",
+            "clamp_max_",
             "relu",
+            "relu_",
             "leaky_relu",
+            "leaky_relu_",
             "threshold",
             "abs",
+            "abs_",
             "neg",
+            "neg_",
             "sign",
             "reciprocal",
+            "reciprocal_",
             "square",
             "round",
+            "floor",
+            "ceil",
+            "frac",
             "where",
         ),
         _pointwise_formula(1),
     )
-    register(("pow", "lerp"), _pointwise_formula(2))
+    register(("pow", "pow_", "lerp"), _pointwise_formula(2))
     register(
         (
             "exp",
+            "exp_",
             "exp2",
             "expm1",
             "log",
+            "log_",
             "log2",
             "log10",
             "log1p",
             "sqrt",
+            "sqrt_",
             "rsqrt",
+            "rsqrt_",
             "sin",
             "cos",
             "tan",
@@ -337,8 +405,12 @@ def enhanced_flop_mapping() -> Dict[Any, Any]:
         ),
         _pointwise_formula(1),
     )
-    register(("sigmoid", "tanh", "silu"), _pointwise_formula(4))
+    register(
+        ("sigmoid", "sigmoid_", "tanh", "tanh_", "silu", "silu_"),
+        _pointwise_formula(4),
+    )
     register(("gelu",), _pointwise_formula(8))
+    register(("polar",), _pointwise_formula(4))
 
     register(("sum", "prod", "amax", "amin", "max", "min"), _reduction_formula())
     register(("cumsum", "cumprod"), _reduction_formula())
@@ -347,7 +419,7 @@ def enhanced_flop_mapping() -> Dict[Any, Any]:
     register(("var", "std"), _reduction_formula(cost=3, output_cost=1))
     register(("var_mean", "std_mean"), _reduction_formula(cost=3, output_cost=2))
 
-    register(("_softmax", "softmax"), _softmax_formula)
+    register(("_softmax", "_safe_softmax", "softmax"), _softmax_formula)
     register(("_log_softmax", "log_softmax"), _log_softmax_formula)
     register(
         (
@@ -355,6 +427,7 @@ def enhanced_flop_mapping() -> Dict[Any, Any]:
             "native_group_norm",
             "native_batch_norm",
             "_native_batch_norm_legit",
+            "cudnn_batch_norm",
             "rms_norm",
         ),
         _normalization_formula,
@@ -363,13 +436,23 @@ def enhanced_flop_mapping() -> Dict[Any, Any]:
     register(("upsample_nearest2d", "_upsample_nearest_exact2d"), _pointwise_formula(0))
     register(("upsample_bilinear2d",), _upsample_formula(4))
     register(("upsample_bicubic2d",), _upsample_formula(16))
+    register(("_upsample_bilinear2d_aa",), _antialiased_bilinear_formula)
     register(("grid_sampler_2d",), _upsample_formula(4))
+    register(("avg_pool2d",), _average_pool2d_formula)
+    # Max-pool comparisons are excluded by the documented FLOP convention.
+    register(("max_pool2d_with_indices",), _pointwise_formula(0))
+    register(("linalg_vector_norm",), _vector_norm_formula)
 
     return mapping
 
 
 ZERO_FLOP_OPERATORS = {
+    "_local_scalar_dense",
+    "_unsafe_index",
+    "_unsafe_view",
     "alias",
+    "all",
+    "any",
     "arange",
     "as_strided",
     "bitwise",
@@ -379,29 +462,42 @@ ZERO_FLOP_OPERATORS = {
     "contiguous",
     "copy",
     "detach",
+    "detach_",
     "empty",
     "embedding",
     "eq",
+    "equal",
     "expand",
     "fill",
+    "fill_",
     "full",
     "gather",
     "ge",
     "gt",
     "index",
+    "index_put_",
     "index_select",
     "isfinite",
     "isinf",
     "isnan",
+    "isin",
     "le",
     "lift",
+    "lift_fresh",
     "logical",
     "lt",
+    "masked_fill",
+    "masked_fill_",
+    "masked_scatter",
     "masked_select",
+    "multinomial",
     "ne",
     "new_empty",
+    "new_ones",
+    "new_zeros",
     "nonzero",
     "ones",
+    "ones_like",
     "permute",
     "pixel_shuffle",
     "pixel_unshuffle",
@@ -412,6 +508,7 @@ ZERO_FLOP_OPERATORS = {
     "reshape",
     "scalar_tensor",
     "scatter",
+    "scatter_",
     "select",
     "slice",
     "split",
@@ -432,6 +529,8 @@ ZERO_FLOP_OPERATORS = {
     "argmin",
     "argsort",
     "zeros",
+    "constant_pad_nd",
+    "linspace",
 }
 
 ZERO_FLOP_PREFIXES = (

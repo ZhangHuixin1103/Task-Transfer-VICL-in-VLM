@@ -20,6 +20,7 @@ from efficiency.metrics import (
 )
 from efficiency.flops import (
     _attention_score_elements,
+    _is_structural_or_nonfloating_operator,
     dispatch_flop_count,
     module_hook_flop_count,
 )
@@ -245,6 +246,41 @@ class MetricsTest(unittest.TestCase):
         )
         self.assertEqual(flops["estimated_total_flops"], 10752)
         self.assertEqual(flops["unsupported_nontrivial_operators"], [])
+
+    def test_extended_runtime_formulas_cover_released_model_operators(self):
+        pool_input = torch.ones(1, 1, 4, 4)
+        polar_abs = torch.ones(4)
+        polar_angle = torch.zeros(4)
+
+        def inference():
+            pooled = torch.nn.functional.avg_pool2d(pool_input, 2, stride=2)
+            activated = pooled.relu_()
+            probabilities = torch.ops.aten._safe_softmax.default(activated, -1)
+            complex_values = torch.polar(polar_abs, polar_angle)
+            norm = torch.linalg.vector_norm(polar_abs)
+            return type(
+                "Result",
+                (),
+                {"output": (probabilities, complex_values, norm)},
+            )()
+
+        flops = profile_flops(inference, top_k=10)
+        # Pool 16, ReLU 4, softmax 20, polar 16, and vector norm 13.
+        self.assertEqual(flops["estimated_total_flops"], 69)
+        self.assertEqual(flops["status"], "ok")
+        self.assertEqual(flops["unsupported_nontrivial_operators"], [])
+
+    def test_released_model_structural_and_sampling_ops_are_zero_flop(self):
+        for operator in (
+            "aten._unsafe_view",
+            "aten._unsafe_index",
+            "aten.constant_pad_nd",
+            "aten.index_put_",
+            "aten.masked_fill_",
+            "aten.multinomial",
+            "aten._local_scalar_dense",
+        ):
+            self.assertTrue(_is_structural_or_nonfloating_operator(operator))
 
     def test_causal_attention_counts_only_visible_scores(self):
         model = AttentionModel()
