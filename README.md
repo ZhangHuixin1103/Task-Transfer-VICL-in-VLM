@@ -208,9 +208,7 @@ Outputs are written under `data/output/`. Each task-pair directory contains gene
 
 ## Supplementary Analyses
 
-The `eval_gemini.py` compares `fixed`, `qwen`, `task_name`, `target_desc`, and
-task-term-masked `qwen_masked` prompts. Set `GEMINI_API_KEY`, `GEMINI_BASE_URL`, and
-`GEMINI_MODEL`, then pass a comma-separated pair list:
+The `eval_gemini.py` compares `fixed`, `qwen`, `task_name`, `target_desc`, and task-term-masked `qwen_masked` prompts. Set `GEMINI_API_KEY`, `GEMINI_BASE_URL`, and `GEMINI_MODEL`, then pass a comma-separated pair list:
 
 ```bash
 export PAIR_LIST="deblurring__dehazing,deblurring__deraining,deblurring__demoireing,demoireing__dehazing,harmonization__light_enhancement,inpainting__light_enhancement,inpainting__style_transfer,style_transfer__light_enhancement,denoising__light_enhancement,light_enhancement__deraining,light_enhancement__shadow_removal,reflection_removal__dehazing,inpainting__colorization,colorization__style_transfer,harmonization__style_transfer,shadow_removal__reflection_removal"
@@ -233,22 +231,20 @@ python human_eval_html.py
 python summarize_human_eval.py --responses responses_1.jsonl responses_2.jsonl
 ```
 
-These tools write to `data/output/supplementary/`. The HTML page exports response
-JSONL files; keep response files disjoint when summarizing.
+These tools write to `data/output/supplementary/`. The HTML page exports response JSONL files; keep response files disjoint when summarizing.
 
-## Efficiency Benchmark
+## Model Comparison Suite
 
-The reproducible suite in [`efficiency/`](efficiency/README.md) measures unique logical and method-trained parameters, audited runtime-formula full-pipeline FLOPs, synchronized end-to-end inference latency, stage latency, and peak GPU memory. It directly reuses the existing Qwen-Image, FLUX.2, OmniGen2, and FireRed evaluation calls and also provides official-protocol adapters for Painter, Prompt-Diffusion, and InstructDiffusion. The efficiency protocol uses five warm-up queries followed by up to 100 distinct query pairs per task at a controlled `448 x 448` processed resolution; the separate untimed quality entry point evaluates full declared splits and saves PSNR/SSIM outputs.
+[`comparison/`](comparison/README.md) runs inference-only PSNR/SSIM and resource comparisons for six baselines on the 11-task, 100-pair split.
+We ignore `inpainting` here, as this task never appears in T2T-VICL's task B.
 
 ```bash
-python -m efficiency.preflight --require-dispatch-flops
-python -m efficiency.benchmark --adapter toy --device cpu --profile-flops
-python -m efficiency.suite --adapter t2t-qwen --conditions fixed ours --max-samples 100 --warmup 5 --profile-flops
+python -m comparison.prepare_same_task_eval
+python -m comparison.prepare_same_task_eval --check
+python -m unittest discover -s comparison/tests -p 'test_*.py'
 ```
 
-`python -m efficiency.launch_t2t` launches one T2T model per physical GPU and accepts a
-separate Python executable for each backend. See [`efficiency/README.md`](efficiency/README.md)
-for the job syntax and latency-isolation caveat.
+The six baseline commands and result-table commands are in [`comparison/README.md`](comparison/README.md).
 
 ## API Keys and Paths
 

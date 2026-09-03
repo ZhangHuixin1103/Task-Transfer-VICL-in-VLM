@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "data_root": "data/tasks",
+  "benchmark_family": "t2t-vicl-on-unique-target-task-queries",
+  "controlled_protocol": {
+    "model_resolution": "released/default",
+    "metric_resolution": "target-native",
+    "batch_size": 1,
+    "warmup_queries": 5,
+    "maximum_queries_per_target_task": 100,
+    "sampling_seed": 2026,
+    "source": "data/dataset/eval_dataset.json",
+    "derived_json": "data/dataset/eval_dataset_target_task.json",
+    "competitor_json": "data/dataset/eval_dataset_same_task.json",
+    "query_policy": "Globally deduplicate Task-B input/output pairs across all source Task-A groups, then sample at most 100 unique queries per target task.",
+    "note": "This is an auditable 1,055-query view of records available in eval_dataset.json, not the 1,100-query competitor split. It is retained for optional T2T reruns and resource tests; existing paper T2T quality results are not regenerated. task_a='*' means that the retained source Task-A varies by query while task_b is fixed."
+  },
+  "tasks": [
+    {"name": "colorization", "eval_json": "../dataset/eval_dataset_target_task.json", "task_a": "*", "task_b": "colorization"},
+    {"name": "deblurring", "eval_json": "../dataset/eval_dataset_target_task.json", "task_a": "*", "task_b": "deblurring"},
+    {"name": "dehazing", "eval_json": "../dataset/eval_dataset_target_task.json", "task_a": "*", "task_b": "dehazing"},
+    {"name": "demoireing", "eval_json": "../dataset/eval_dataset_target_task.json", "task_a": "*", "task_b": "demoireing"},
+    {"name": "denoising", "eval_json": "../dataset/eval_dataset_target_task.json", "task_a": "*", "task_b": "denoising"},
+    {"name": "deraining", "eval_json": "../dataset/eval_dataset_target_task.json", "task_a": "*", "task_b": "deraining"},
+    {"name": "harmonization", "eval_json": "../dataset/eval_dataset_target_task.json", "task_a": "*", "task_b": "harmonization"},
+    {"name": "light_enhancement", "eval_json": "../dataset/eval_dataset_target_task.json", "task_a": "*", "task_b": "light_enhancement"},
+    {"name": "reflection_removal", "eval_json": "../dataset/eval_dataset_target_task.json", "task_a": "*", "task_b": "reflection_removal"},
+    {"name": "shadow_removal", "eval_json": "../dataset/eval_dataset_target_task.json", "task_a": "*", "task_b": "shadow_removal"},
+    {"name": "style_transfer", "eval_json": "../dataset/eval_dataset_target_task.json", "task_a": "*", "task_b": "style_transfer"}
+  ]
+}

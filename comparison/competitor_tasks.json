@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "data_root": "data/tasks",
+  "benchmark_family": "same-task-competitors-on-balanced-target-task-queries",
+  "controlled_protocol": {
+    "model_resolution": "released/default",
+    "metric_resolution": "target-native",
+    "batch_size": 1,
+    "warmup_queries": 5,
+    "queries_per_target_task": 100,
+    "sampling_seed": 2026,
+    "source": "data/dataset/eval_dataset.json",
+    "available_t2t_json": "data/dataset/eval_dataset_target_task.json",
+    "derived_json": "data/dataset/eval_dataset_same_task.json",
+    "query_policy": "Merge and globally deduplicate Task-B pairs from eval_dataset.json, sample with seed 2026, and fill short target tasks from eval_dataset_1.json and paired files already in data/tasks to obtain exactly 100 unique queries per task.",
+    "demo_policy": "For each query, use a different input/output pair from the same Task B as the one-shot demonstration.",
+    "note": "There are 11 target tasks and 1,100 competitor queries; inpainting is excluded because it is not a Task B in the source graph. Model inference uses each official default. Metrics follow the existing T2T evaluation by resizing each prediction to its native target size."
+  },
+  "tasks": [
+    {
+      "name": "colorization",
+      "eval_json": "../dataset/eval_dataset_same_task.json",
+      "task_a": "colorization",
+      "task_b": "colorization",
+      "text_prompt": "colorize the query image with natural and plausible colors"
+    },
+    {
+      "name": "deblurring",
+      "eval_json": "../dataset/eval_dataset_same_task.json",
+      "task_a": "deblurring",
+      "task_b": "deblurring",
+      "text_prompt": "remove blur and restore sharp image details"
+    },
+    {
+      "name": "dehazing",
+      "eval_json": "../dataset/eval_dataset_same_task.json",
+      "task_a": "dehazing",
+      "task_b": "dehazing",
+      "text_prompt": "remove haze and recover clear contrast and natural colors"
+    },
+    {
+      "name": "demoireing",
+      "eval_json": "../dataset/eval_dataset_same_task.json",
+      "task_a": "demoireing",
+      "task_b": "demoireing",
+      "text_prompt": "remove moire patterns and restore fine details"
+    },
+    {
+      "name": "denoising",
+      "eval_json": "../dataset/eval_dataset_same_task.json",
+      "task_a": "denoising",
+      "task_b": "denoising",
+      "text_prompt": "remove image noise while preserving edges and fine details"
+    },
+    {
+      "name": "deraining",
+      "eval_json": "../dataset/eval_dataset_same_task.json",
+      "task_a": "deraining",
+      "task_b": "deraining",
+      "text_prompt": "remove rain streaks and restore a clean background"
+    },
+    {
+      "name": "harmonization",
+      "eval_json": "../dataset/eval_dataset_same_task.json",
+      "task_a": "harmonization",
+      "task_b": "harmonization",
+      "text_prompt": "harmonize the composite foreground with the background"
+    },
+    {
+      "name": "light_enhancement",
+      "eval_json": "../dataset/eval_dataset_same_task.json",
+      "task_a": "light_enhancement",
+      "task_b": "light_enhancement",
+      "text_prompt": "enhance brightness and contrast while preserving natural colors"
+    },
+    {
+      "name": "reflection_removal",
+      "eval_json": "../dataset/eval_dataset_same_task.json",
+      "task_a": "reflection_removal",
+      "task_b": "reflection_removal",
+      "text_prompt": "remove reflections and restore the clean scene"
+    },
+    {
+      "name": "shadow_removal",
+      "eval_json": "../dataset/eval_dataset_same_task.json",
+      "task_a": "shadow_removal",
+      "task_b": "shadow_removal",
+      "text_prompt": "remove cast shadows and reconstruct natural illumination"
+    },
+    {
+      "name": "style_transfer",
+      "eval_json": "../dataset/eval_dataset_same_task.json",
+      "task_a": "style_transfer",
+      "task_b": "style_transfer",
+      "text_prompt": "apply the demonstrated visual style to the query image"
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "verified_at": "2026-09-03",
+  "sources": {
+    "Painter": {
+      "repository": "https://github.com/baaivision/Painter.git",
+      "commit": "cfec84587da2a2cc4e0b9acebe6fba1666e66477",
+      "license": "MIT",
+      "vendored_from": "tracked source snapshot from a clean official clone",
+      "local_changes": "none"
+    },
+    "Prompt-Diffusion": {
+      "repository": "https://github.com/Zhendong-Wang/Prompt-Diffusion.git",
+      "commit": "8ecd2d126d9f9e17b80d9655bf8ed2df2e93f660",
+      "license": "Apache-2.0",
+      "vendored_from": "tracked source snapshot from a clean official clone",
+      "local_changes": "none"
+    },
+    "InstructDiffusion": {
+      "repository": "https://github.com/cientgu/InstructDiffusion.git",
+      "commit": "435f0c3e4bd4dce4223df6ad4de1b511498a6138",
+      "license": "MIT (with additional upstream component terms)",
+      "vendored_from": "tracked source snapshot from a clean official clone",
+      "local_changes": "none"
+    },
+    "MAE-VQGAN": {
+      "repository": "https://github.com/amirbar/visual_prompting.git",
+      "commit": "6351e0d786c2d25bfdd5fe504153b1dfb345fa81",
+      "license": "no license file detected at audited commit",
+      "vendored_from": "tracked source snapshot from a clean official clone",
+      "local_changes": "none"
+    },
+    "VisualCloze": {
+      "repository": "https://github.com/lzyhha/VisualCloze.git",
+      "commit": "b3dda649cb197969fa2b23a5a6b28fc2b2566014",
+      "license": "no license file detected at audited commit",
+      "vendored_from": "tracked source snapshot from a clean official clone",
+      "local_changes": "none"
+    },
+    "PromptGIP": {
+      "repository": "https://github.com/lyh-18/PromptGIP.git",
+      "commit": "aa7e297aa6140a39b472fb22e099517c05a4a557",
+      "license": "no license file detected at audited commit",
+      "vendored_from": "tracked source snapshot from a clean official clone",
+      "local_changes": "none"
+    }
+  }
+}
