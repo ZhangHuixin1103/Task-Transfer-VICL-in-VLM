@@ -545,6 +545,22 @@ class InterfaceContractTest(unittest.TestCase):
         self.assertTrue(result.metadata["demo_target_shape_adjusted"])
         result.output.close()
 
+    def test_prompt_diffusion_only_ignores_legacy_clip_position_ids(self):
+        from comparison.adapters.external import (
+            PROMPT_DIFFUSION_LEGACY_POSITION_IDS,
+            load_prompt_diffusion_checkpoint,
+        )
+
+        model = torch.nn.Linear(2, 2)
+        state_dict = dict(model.state_dict())
+        state_dict[PROMPT_DIFFUSION_LEGACY_POSITION_IDS] = torch.arange(77)[None]
+        ignored = load_prompt_diffusion_checkpoint(model, state_dict)
+        self.assertEqual(ignored, [PROMPT_DIFFUSION_LEGACY_POSITION_IDS])
+
+        state_dict["unexpected.real_weight"] = torch.ones(1)
+        with self.assertRaisesRegex(RuntimeError, "unexpected.real_weight"):
+            load_prompt_diffusion_checkpoint(model, state_dict)
+
     def test_painter_restores_the_original_query_size(self):
         from comparison.adapters.external import PainterAdapter
 

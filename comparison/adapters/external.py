@@ -33,6 +33,24 @@ IMAGENET_MEAN = np.array([0.485, 0.456, 0.406])
 IMAGENET_STD = np.array([0.229, 0.224, 0.225])
 RESAMPLING = getattr(Image, "Resampling", Image)
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
+PROMPT_DIFFUSION_LEGACY_POSITION_IDS = (
+    "cond_stage_model.transformer.text_model.embeddings.position_ids"
+)
+
+
+def load_prompt_diffusion_checkpoint(model, state_dict: Mapping[str, Any]) -> list[str]:
+    """Strictly load 04999 while bridging one Transformers buffer change."""
+    ignored: list[str] = []
+    model_keys = set(model.state_dict())
+    if (
+        PROMPT_DIFFUSION_LEGACY_POSITION_IDS in state_dict
+        and PROMPT_DIFFUSION_LEGACY_POSITION_IDS not in model_keys
+    ):
+        state_dict = dict(state_dict)
+        state_dict.pop(PROMPT_DIFFUSION_LEGACY_POSITION_IDS)
+        ignored.append(PROMPT_DIFFUSION_LEGACY_POSITION_IDS)
+    model.load_state_dict(state_dict, strict=True)
+    return ignored
 
 
 class PainterAdapter(ComparisonAdapter):
@@ -858,6 +876,7 @@ class PromptDiffusionAdapter(ComparisonAdapter):
         self.einops = None
         self.hwc3 = None
         self.resize_image = None
+        self.checkpoint_compatibility_ignored_keys: list[str] = []
 
     @property
     def conditions(self) -> Iterable[str]:
@@ -894,7 +913,9 @@ class PromptDiffusionAdapter(ComparisonAdapter):
 
             self.model = create_model(str(self.config_path)).cpu()
             state_dict = load_state_dict(self.checkpoint, location="cpu")
-            self.model.load_state_dict(state_dict)
+            self.checkpoint_compatibility_ignored_keys = (
+                load_prompt_diffusion_checkpoint(self.model, state_dict)
+            )
         self.model = self.model.to(self.device).eval()
         self.sampler = DDIMSampler(self.model)
         self.prompt_diffusion_config = prompt_diffusion_config
@@ -1053,6 +1074,9 @@ class PromptDiffusionAdapter(ComparisonAdapter):
         return {
             "condition": condition,
             "checkpoint": self.checkpoint,
+            "checkpoint_compatibility_ignored_keys": (
+                self.checkpoint_compatibility_ignored_keys
+            ),
             "config": str(self.config_path),
             "sampler": "official cldm.ddim_hacked.DDIMSampler",
             "steps": self.steps,
