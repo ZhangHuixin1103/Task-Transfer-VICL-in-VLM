@@ -15,6 +15,7 @@ import numpy as np
 import torch
 from PIL import Image
 
+from comparison.adapters.common import require_checkpoint_file
 from comparison.base import (
     ComparisonAdapter,
     InferenceResult,
@@ -50,6 +51,25 @@ def definitions(path: Path):
 
 
 class InterfaceContractTest(unittest.TestCase):
+    def test_checkpoint_fallback_recovers_old_flattened_readme_path(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            nested = root / "weights" / "Painter" / "painter_vit_large.pth"
+            nested.parent.mkdir(parents=True)
+            nested.touch()
+            resolved = require_checkpoint_file(
+                str(root / "weights" / "painter_vit_large.pth"),
+                "Painter",
+                nested,
+            )
+        self.assertEqual(Path(resolved), nested.resolve())
+
+    def test_checkpoint_error_lists_the_requested_path(self):
+        with tempfile.TemporaryDirectory() as directory:
+            missing = Path(directory) / "missing.ckpt"
+            with self.assertRaisesRegex(FileNotFoundError, str(missing)):
+                require_checkpoint_file(str(missing), "InstructDiffusion")
+
     def test_t2t_import_path_does_not_import_external_adapters(self):
         result = subprocess.run(
             [
@@ -332,7 +352,9 @@ class InterfaceContractTest(unittest.TestCase):
             "data_root": TASK_TRANSFER / "data/tasks",
         }
         prompt_diffusion = PromptDiffusionAdapter(
-            repository=EXTERNAL_ROOT / "Prompt-Diffusion", **common
+            repository=EXTERNAL_ROOT / "Prompt-Diffusion",
+            checkpoint="network-step=04999.ckpt",
+            **common,
         )
         visualcloze = VisualClozeAdapter(
             repository=EXTERNAL_ROOT / "VisualCloze",
@@ -344,8 +366,13 @@ class InterfaceContractTest(unittest.TestCase):
             checkpoint="v1-5-pruned-emaonly-adaption-task.ckpt",
             **common,
         )
-        self.assertEqual(prompt_diffusion.steps, 50)
-        self.assertEqual(prompt_diffusion.seed, 2023)
+        self.assertEqual(prompt_diffusion.steps, 100)
+        self.assertEqual(prompt_diffusion.seed, 1)
+        self.assertEqual(prompt_diffusion.resolution, 512)
+        self.assertEqual(prompt_diffusion.guidance_scale, 9.0)
+        self.assertEqual(prompt_diffusion.strength, 1.0)
+        self.assertEqual(prompt_diffusion.eta, 0.0)
+        self.assertEqual(prompt_diffusion.dtype, torch.float32)
         self.assertEqual(visualcloze.steps, 30)
         self.assertEqual(visualcloze.seed, 0)
         self.assertEqual(instruct.steps, 100)
@@ -419,6 +446,103 @@ class InterfaceContractTest(unittest.TestCase):
         )
         torch.testing.assert_close(FakeUtils.canvas[0, :, 111, 111], expected_gap)
         torch.testing.assert_close(FakeUtils.canvas[0, :, 0, 0], expected_white)
+        result.output.close()
+
+    def test_prompt_diffusion_uses_original_cldm_conditioning_and_aligns_demo(self):
+        from comparison.adapters.external import PromptDiffusionAdapter
+
+        class FakeCV2:
+            INTER_LINEAR = 1
+
+            @staticmethod
+            def resize(array, size, interpolation):
+                return np.asarray(Image.fromarray(array).resize(size))
+
+        class FakeEinops:
+            @staticmethod
+            def rearrange(tensor, pattern):
+                if pattern == "b h w c -> b c h w":
+                    return tensor.permute(0, 3, 1, 2)
+                if pattern == "b c h w -> b h w c":
+                    return tensor.permute(0, 2, 3, 1)
+                raise AssertionError(pattern)
+
+        class FakeModel:
+            control_scales = None
+
+            @staticmethod
+            def get_learned_conditioning(prompts):
+                return tuple(prompts)
+
+            @staticmethod
+            def decode_first_stage(samples):
+                return torch.zeros(
+                    (1, 3, samples.shape[-2] * 8, samples.shape[-1] * 8)
+                )
+
+        class FakeSampler:
+            call = None
+
+            @classmethod
+            def sample(cls, *args, **kwargs):
+                cls.call = (args, kwargs)
+                shape = args[2]
+                return torch.zeros((1, *shape)), {}
+
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            paths = {
+                "demo_in.png": (19, 17),
+                "demo_out.png": (17, 17),
+                "query.png": (31, 17),
+                "target.png": (31, 17),
+            }
+            for name, size in paths.items():
+                Image.new("RGB", size, "white").save(root / name)
+            dataset = root / "eval.json"
+            dataset.write_text(
+                json.dumps(
+                    [
+                        {
+                            "taskA_input": "demo_in.png",
+                            "taskA_output": "demo_out.png",
+                            "taskB_input": "query.png",
+                            "taskB_output": "target.png",
+                        }
+                    ]
+                ),
+                encoding="utf-8",
+            )
+            adapter = PromptDiffusionAdapter(
+                repository=root,
+                dataset_json=dataset,
+                data_root=root,
+                checkpoint="network-step=04999.ckpt",
+            )
+            adapter.device = "cpu"
+            adapter.model = FakeModel()
+            adapter.sampler = FakeSampler()
+            adapter.prompt_diffusion_config = SimpleNamespace(save_memory=False)
+            adapter.cv2 = FakeCV2
+            adapter.einops = FakeEinops
+            adapter.hwc3 = lambda array: array
+
+            def resize_image(array, resolution):
+                width = 896 if array.shape[1] > array.shape[0] else 512
+                return np.zeros((512, width, 3), dtype=np.uint8)
+
+            adapter.resize_image = resize_image
+            adapter.configure_samples(dataset)
+            result = adapter.run("official")
+
+        args, kwargs = FakeSampler.call
+        self.assertEqual(args[:3], (100, 1, (4, 64, 112)))
+        self.assertEqual(kwargs["eta"], 0.0)
+        self.assertEqual(kwargs["unconditional_guidance_scale"], 9.0)
+        self.assertEqual(kwargs["unconditional_conditioning"]["example_pair"][0].shape[1], 6)
+        self.assertEqual(args[3]["query"][0].shape, (1, 3, 512, 896))
+        self.assertEqual(result.output.size, (896, 512))
+        self.assertTrue(result.metadata["demo_target_shape_adjusted"])
         result.output.close()
 
     def test_painter_restores_the_original_query_size(self):
@@ -543,14 +667,15 @@ class InterfaceContractTest(unittest.TestCase):
         self.assertIn(
             "painter_vit_large_patch16_input896x448_win_dec64_8glb_sl1", painter
         )
-        prompt_control = definitions(
-            EXTERNAL_ROOT / "Prompt-Diffusion" / "promptdiffusioncontrolnet.py"
+        prompt_model = definitions(
+            EXTERNAL_ROOT / "Prompt-Diffusion" / "cldm" / "model.py"
         )
-        prompt_pipeline = definitions(
-            EXTERNAL_ROOT / "Prompt-Diffusion" / "pipeline_prompt_diffusion.py"
+        prompt_sampler = definitions(
+            EXTERNAL_ROOT / "Prompt-Diffusion" / "cldm" / "ddim_hacked.py"
         )
-        self.assertIn("PromptDiffusionControlNetModel", prompt_control)
-        self.assertIn("PromptDiffusionPipeline", prompt_pipeline)
+        self.assertIn("create_model", prompt_model)
+        self.assertIn("load_state_dict", prompt_model)
+        self.assertIn("DDIMSampler", prompt_sampler)
         instruct = definitions(EXTERNAL_ROOT / "InstructDiffusion" / "edit_cli.py")
         self.assertIn("CFGDenoiser", instruct)
         self.assertIn("load_model_from_config", instruct)

@@ -377,6 +377,9 @@ def run_quality(args) -> dict[str, Any]:
                         "text_prompt": task.text_prompt,
                         "dtype": args.dtype,
                         "config": args.config,
+                        "prompt_diffusion_config": getattr(
+                            args, "prompt_diffusion_config", None
+                        ),
                         "cfg_text": args.cfg_text,
                         "cfg_image": args.cfg_image,
                         "shape_policy": args.shape_policy,

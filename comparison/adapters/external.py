@@ -19,9 +19,10 @@ from ..base import (
     select_dataset_records,
     vicl_sample_from_records,
 )
-from ..metrics import StageTimer
+from ..metrics import StageTimer, seed_everything
 from .common import (
     import_from_root,
+    require_checkpoint_file,
     resolve_model_reference,
     torch_dtype,
     working_directory,
@@ -31,6 +32,7 @@ from .common import (
 IMAGENET_MEAN = np.array([0.485, 0.456, 0.406])
 IMAGENET_STD = np.array([0.229, 0.224, 0.225])
 RESAMPLING = getattr(Image, "Resampling", Image)
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
 
 
 class PainterAdapter(ComparisonAdapter):
@@ -92,10 +94,14 @@ class PainterAdapter(ComparisonAdapter):
         return ("official",)
 
     def setup(self) -> None:
-        if not self.checkpoint or not Path(self.checkpoint).is_file():
-            raise FileNotFoundError(
-                "Painter requires its official released checkpoint; pass --checkpoint"
-            )
+        requested_name = (
+            Path(self.checkpoint).name if self.checkpoint else "painter_vit_large.pth"
+        )
+        self.checkpoint = require_checkpoint_file(
+            self.checkpoint,
+            "Painter",
+            PROJECT_ROOT / "weights" / "Painter" / requested_name,
+        )
         initial_index = self.sample_index
         self.configure_samples(
             self.dataset_json,
@@ -797,40 +803,78 @@ class PromptDiffusionAdapter(ComparisonAdapter):
         repository: Path,
         dataset_json: Path,
         data_root: Path,
+        checkpoint: str,
         sample_index: int = 0,
-        model_id: str = "zhendongw/prompt-diffusion-diffusers",
+        config: str = "models/cldm_v15.yaml",
         device: str = "cuda",
-        dtype: str = "fp16",
-        steps: int = 50,
-        seed: int = 2023,
+        dtype: str = "fp32",
+        steps: int = 100,
+        seed: int = 1,
         text_prompt: str = "perform the demonstrated visual task",
-        resolution: int | None = None,
+        resolution: int = 512,
+        positive_prompt: str = "best quality, extremely detailed",
+        negative_prompt: str = (
+            "longbody, lowres, bad anatomy, bad hands, missing fingers, extra digit, "
+            "fewer digits, cropped, worst quality, low quality"
+        ),
+        strength: float = 1.0,
+        guidance_scale: float = 9.0,
+        eta: float = 0.0,
+        guess_mode: bool = False,
         demo_input: str | None = None,
         demo_output: str | None = None,
     ):
+        if not device.startswith("cuda"):
+            raise ValueError("Prompt-Diffusion's released DDIM sampler requires CUDA")
+        if torch_dtype(dtype) != torch.float32:
+            raise ValueError("The official network-step=04999.ckpt inference uses FP32")
         self.repository = repository.resolve()
         self.dataset_json = dataset_json.resolve()
         self.data_root = data_root.resolve()
+        self.checkpoint = resolve_model_reference(checkpoint, self.repository)
+        self.config_path = Path(resolve_model_reference(config, self.repository))
         self.sample_index = sample_index
-        self.model_id = resolve_model_reference(model_id, self.repository)
         self.device = device
-        self.dtype = torch_dtype(dtype)
+        self.dtype = torch.float32
         self.steps = steps
         self.seed = seed
         self.text_prompt = text_prompt
         self.resolution = resolution
+        self.positive_prompt = positive_prompt
+        self.negative_prompt = negative_prompt
+        self.strength = strength
+        self.guidance_scale = guidance_scale
+        self.eta = eta
+        self.guess_mode = guess_mode
         self.demo_input = demo_input
         self.demo_output = demo_output
         self.records: list[dict[str, Any]] = []
         self._record_cache: dict[Path, list[dict[str, Any]]] = {}
         self.sample: VICLSample | None = None
-        self.pipeline = None
+        self.model = None
+        self.sampler = None
+        self.prompt_diffusion_config = None
+        self.cv2 = None
+        self.einops = None
+        self.hwc3 = None
+        self.resize_image = None
 
     @property
     def conditions(self) -> Iterable[str]:
         return ("official",)
 
     def setup(self) -> None:
+        requested_name = Path(self.checkpoint).name
+        self.checkpoint = require_checkpoint_file(
+            self.checkpoint,
+            "Prompt-Diffusion",
+            self.repository / "ckpts" / requested_name,
+            PROJECT_ROOT / "weights" / "Prompt-Diffusion" / requested_name,
+        )
+        if not self.config_path.is_file():
+            raise FileNotFoundError(
+                f"Prompt-Diffusion model config was not found: {self.config_path}"
+            )
         initial_index = self.sample_index
         self.configure_samples(
             self.dataset_json,
@@ -841,77 +885,139 @@ class PromptDiffusionAdapter(ComparisonAdapter):
         if str(self.repository) not in sys.path:
             sys.path.insert(0, str(self.repository))
         with working_directory(self.repository):
-            from diffusers import DDIMScheduler
-            from pipeline_prompt_diffusion import PromptDiffusionPipeline
-            from promptdiffusioncontrolnet import PromptDiffusionControlNetModel
+            import config as prompt_diffusion_config
+            import cv2
+            import einops
+            from annotator.util import HWC3, resize_image
+            from cldm.ddim_hacked import DDIMSampler
+            from cldm.model import create_model, load_state_dict
 
-            controlnet = PromptDiffusionControlNetModel.from_pretrained(
-                self.model_id, subfolder="controlnet", torch_dtype=self.dtype
-            )
-            self.pipeline = PromptDiffusionPipeline.from_pretrained(
-                self.model_id, controlnet=controlnet, torch_dtype=self.dtype
-            )
-        self.pipeline.scheduler = DDIMScheduler.from_config(
-            self.pipeline.scheduler.config
-        )
-        self.pipeline.to(self.device)
-        self.pipeline.set_progress_bar_config(disable=True)
+            self.model = create_model(str(self.config_path)).cpu()
+            state_dict = load_state_dict(self.checkpoint, location="cpu")
+            self.model.load_state_dict(state_dict)
+        self.model = self.model.to(self.device).eval()
+        self.sampler = DDIMSampler(self.model)
+        self.prompt_diffusion_config = prompt_diffusion_config
+        self.cv2 = cv2
+        self.einops = einops
+        self.hwc3 = HWC3
+        self.resize_image = resize_image
 
     def run(self, condition: str) -> InferenceResult:
-        if condition != "official" or self.sample is None or self.pipeline is None:
+        if (
+            condition != "official"
+            or self.sample is None
+            or self.model is None
+            or self.sampler is None
+        ):
             raise ValueError(condition)
         stages: Dict[str, Any] = {}
         with StageTimer(stages, "preprocess"):
-            demo_input = self._load_rgb(self.sample.task_a_input)
-            demo_output = self._load_rgb(self.sample.task_a_output)
-            query = self._load_rgb(self.sample.task_b_input)
-            generator = torch.Generator(device="cpu").manual_seed(self.seed)
-        with StageTimer(stages, "diffusion_generation"):
-            try:
-                with torch.inference_mode():
-                    output = self.pipeline(
-                        self.text_prompt,
-                        num_inference_steps=self.steps,
-                        generator=generator,
-                        image_pair=[demo_input, demo_output],
-                        image=query,
-                        height=self.resolution,
-                        width=self.resolution,
-                    ).images[0]
-            finally:
-                demo_input.close()
-                demo_output.close()
-                query.close()
-        output_size = getattr(output, "size", None)
-        if self.resolution is not None and output_size != (
-            self.resolution,
-            self.resolution,
-        ):
-            raise RuntimeError(
-                "Prompt-Diffusion ignored the controlled output size: "
-                f"expected {(self.resolution, self.resolution)}, got {output_size}"
+            query_image = self._load_uint8(self.sample.task_b_input)
+            demo_input = self._load_uint8(self.sample.task_a_input)
+            demo_output = self._load_uint8(self.sample.task_a_output)
+            query_shape = self.resize_image(
+                self.hwc3(query_image), self.resolution
+            ).shape
+            height, width, _ = query_shape
+            query_map = self.cv2.resize(
+                self.hwc3(query_image),
+                (width, height),
+                interpolation=self.cv2.INTER_LINEAR,
             )
+            demo_source = self.cv2.resize(
+                self.hwc3(demo_input),
+                (width, height),
+                interpolation=self.cv2.INTER_LINEAR,
+            )
+            demo_target = self.resize_image(
+                self.hwc3(demo_output), self.resolution
+            )
+            demo_target_shape_adjusted = demo_target.shape != query_shape
+            if demo_target_shape_adjusted:
+                # The official notebook assumes matching prompt/query aspect ratios.
+                # Our held-out pairs need this interface-only spatial alignment.
+                demo_target = self.cv2.resize(
+                    demo_target,
+                    (width, height),
+                    interpolation=self.cv2.INTER_LINEAR,
+                )
+            example = np.concatenate([demo_source, demo_target], axis=2)
+            query = 2 * torch.from_numpy(query_map.copy()).float().to(self.device) / 255 - 1
+            example = 2 * torch.from_numpy(example.copy()).float().to(self.device) / 255 - 1
+            query = self.einops.rearrange(query[None], "b h w c -> b c h w").clone()
+            example = self.einops.rearrange(
+                example[None], "b h w c -> b c h w"
+            ).clone()
+            seed_everything(self.seed)
+
+        with StageTimer(stages, "diffusion_generation"):
+            with torch.inference_mode():
+                if self.prompt_diffusion_config.save_memory:
+                    self.model.low_vram_shift(is_diffusing=False)
+                cond = {
+                    "c_crossattn": [
+                        self.model.get_learned_conditioning(
+                            [f"{self.text_prompt}, {self.positive_prompt}"]
+                        )
+                    ],
+                    "example_pair": [example],
+                    "query": [query],
+                }
+                uncond = {
+                    "c_crossattn": [
+                        self.model.get_learned_conditioning([self.negative_prompt])
+                    ],
+                    "example_pair": [example],
+                    "query": [query],
+                }
+                if self.prompt_diffusion_config.save_memory:
+                    self.model.low_vram_shift(is_diffusing=True)
+                self.model.control_scales = (
+                    [
+                        self.strength * (0.825 ** float(12 - index))
+                        for index in range(13)
+                    ]
+                    if self.guess_mode
+                    else [self.strength] * 13
+                )
+                samples, _ = self.sampler.sample(
+                    self.steps,
+                    1,
+                    (4, height // 8, width // 8),
+                    cond,
+                    verbose=False,
+                    eta=self.eta,
+                    unconditional_guidance_scale=self.guidance_scale,
+                    unconditional_conditioning=uncond,
+                )
+                if self.prompt_diffusion_config.save_memory:
+                    self.model.low_vram_shift(is_diffusing=False)
+                decoded = self.model.decode_first_stage(samples)
+                decoded = (
+                    self.einops.rearrange(decoded, "b c h w -> b h w c")
+                    * 127.5
+                    + 127.5
+                ).cpu().numpy().clip(0, 255).astype(np.uint8)
+                output = Image.fromarray(decoded[0])
+
         return InferenceResult(
             output=output,
             stage_seconds=stages,
             metadata={
-                "output_size": list(output_size) if output_size is not None else None,
+                "output_size": list(output.size),
+                "demo_target_shape_adjusted": demo_target_shape_adjusted,
                 "input_direction": "[demo input, demo output, query input] -> query output",
                 "sample": self.sample.as_dict(),
             },
         )
 
-    def _load_rgb(self, relative_path: str) -> Image.Image:
+    def _load_uint8(self, relative_path: str) -> np.ndarray:
         with Image.open(self.data_root / relative_path) as source:
-            image = source.convert("RGB").copy()
-        if self.resolution is not None:
-            image = image.resize(
-                (self.resolution, self.resolution), RESAMPLING.BICUBIC
-            )
-        return image
+            return np.asarray(source.convert("RGB"), dtype=np.uint8)
 
     def parameter_components(self, condition: str) -> Mapping[str, Any]:
-        return {"prompt_diffusion_pipeline": self.pipeline}
+        return {"prompt_diffusion": self.model}
 
     def configure_samples(
         self,
@@ -946,21 +1052,27 @@ class PromptDiffusionAdapter(ComparisonAdapter):
     def condition_metadata(self, condition: str) -> Dict[str, Any]:
         return {
             "condition": condition,
-            "model_id": self.model_id,
-            "scheduler": "DDIMScheduler",
+            "checkpoint": self.checkpoint,
+            "config": str(self.config_path),
+            "sampler": "official cldm.ddim_hacked.DDIMSampler",
             "steps": self.steps,
             "device": self.device,
             "dtype": str(self.dtype),
             "seed": self.seed,
-            "generator_device": "cpu",
-            "resolution": (
-                [self.resolution, self.resolution] if self.resolution else None
-            ),
+            "image_resolution_min_side": self.resolution,
+            "positive_prompt": self.positive_prompt,
+            "negative_prompt": self.negative_prompt,
+            "strength": self.strength,
+            "guidance_scale": self.guidance_scale,
+            "eta": self.eta,
+            "guess_mode": self.guess_mode,
             "sample": self.sample.as_dict() if self.sample else None,
             "protocol_note": (
-                "The official image_pair=[demo input, demo output], image=query call is used. "
-                "Prompt-Diffusion was designed primarily for same-task prompting; cross-task input "
-                "here standardizes comparison measurement, not task accuracy."
+                "The official network-step=04999.ckpt, cldm_v15 config, conditioning "
+                "dictionary, and DDIMSampler path from run_prompt_diffusion.ipynb are used. "
+                "When a held-out demonstration and query have different aspect ratios, the "
+                "demonstration target is spatially aligned to the official query canvas before "
+                "forming the six-channel example pair."
             ),
         }
 
@@ -1020,10 +1132,13 @@ class InstructDiffusionAdapter(ComparisonAdapter):
         return ("official",)
 
     def setup(self) -> None:
-        if not Path(self.checkpoint).exists():
-            raise FileNotFoundError(
-                "InstructDiffusion requires its official checkpoint; pass --checkpoint"
-            )
+        requested_name = Path(self.checkpoint).name
+        self.checkpoint = require_checkpoint_file(
+            self.checkpoint,
+            "InstructDiffusion",
+            self.repository / "checkpoints" / requested_name,
+            PROJECT_ROOT / "weights" / "InstructDiffusion" / requested_name,
+        )
         initial_index = self.sample_index
         self.configure_samples(
             self.dataset_json,

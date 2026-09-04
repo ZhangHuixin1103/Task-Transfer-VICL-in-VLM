@@ -274,18 +274,21 @@ def build_adapter(args, project_root: Path):
     if args.adapter == "prompt-diffusion":
         from .adapters.external import PromptDiffusionAdapter
 
+        if not args.checkpoint:
+            raise ValueError("--checkpoint is required for prompt-diffusion")
         return PromptDiffusionAdapter(
             repository=_external_repository("Prompt-Diffusion"),
             dataset_json=dataset_json,
             data_root=data_root,
+            checkpoint=args.checkpoint,
             sample_index=args.sample_index,
-            model_id=args.model_id or "zhendongw/prompt-diffusion-diffusers",
             device=args.device,
-            dtype=args.dtype or "fp16",
-            steps=50 if args.steps is None else args.steps,
-            seed=args.seed if args.seed is not None else 2023,
+            dtype=args.dtype or "fp32",
+            steps=100 if args.steps is None else args.steps,
+            seed=args.seed if args.seed is not None else 1,
             text_prompt=args.text_prompt,
-            resolution=args.resolution,
+            resolution=args.resolution or 512,
+            config=args.prompt_diffusion_config,
             demo_input=args.demo_input,
             demo_output=args.demo_output,
         )
@@ -443,6 +446,9 @@ def parser() -> argparse.ArgumentParser:
     result.add_argument("--model-id")
     result.add_argument("--checkpoint")
     result.add_argument("--config", default="configs/instruct_diffusion.yaml")
+    result.add_argument(
+        "--prompt-diffusion-config", default="models/cldm_v15.yaml"
+    )
     result.add_argument(
         "--prompt-checkpoint",
         default="Qwen3-VL/qwen-vl-finetune/output/checkpoint-4875",

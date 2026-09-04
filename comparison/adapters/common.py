@@ -48,3 +48,32 @@ def resolve_model_reference(reference: str, project_root: Path) -> str:
     if not candidate.is_absolute():
         candidate = project_root / candidate
     return str(candidate.resolve()) if candidate.exists() else reference
+
+
+def require_checkpoint_file(
+    reference: str | None,
+    model_name: str,
+    *fallbacks: Path,
+) -> str:
+    """Resolve one checkpoint while preserving conventional model subdirectories."""
+    candidates: list[Path] = []
+    if reference:
+        requested = Path(reference).expanduser()
+        candidates.append(requested)
+    # Model adapters supply the old README's intended nested locations here,
+    # keeping already-issued flattened commands recoverable.
+    candidates.extend(fallbacks)
+
+    checked: list[Path] = []
+    for candidate in candidates:
+        resolved = candidate.resolve()
+        if resolved in checked:
+            continue
+        checked.append(resolved)
+        if resolved.is_file():
+            return str(resolved)
+
+    locations = "\n  - ".join(str(path) for path in checked) or "(none)"
+    raise FileNotFoundError(
+        f"{model_name} checkpoint was not found. Checked:\n  - {locations}"
+    )
