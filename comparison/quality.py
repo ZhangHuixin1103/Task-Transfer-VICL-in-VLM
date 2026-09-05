@@ -123,6 +123,19 @@ def _task_seed(base: int, task_name: str) -> int:
     return base + sum((index + 1) * ord(char) for index, char in enumerate(task_name))
 
 
+def _set_task_prompt(adapter, prompt: str, task_name: str) -> None:
+    setter = getattr(adapter, "set_task_prompt", None)
+    if callable(setter):
+        setter(task_name, prompt)
+    elif hasattr(adapter, "text_prompt"):
+        adapter.text_prompt = prompt
+
+
+def _text_conditioning_metadata(adapter) -> dict[str, Any] | None:
+    getter = getattr(adapter, "text_conditioning_metadata", None)
+    return getter() if callable(getter) else None
+
+
 def _heldout_record_indices(
     records: list[dict[str, Any]], demo_input: str, demo_output: str
 ) -> tuple[list[int], list[int]]:
@@ -340,8 +353,7 @@ def run_quality(args) -> dict[str, Any]:
                         demo_output=task.demo_output,
                         record_indices=heldout_source_indices,
                     )
-                    if hasattr(adapter, "text_prompt"):
-                        adapter.text_prompt = task.text_prompt
+                    _set_task_prompt(adapter, task.text_prompt, task.name)
                     selected = _selected_indices(
                         adapter.sample_count(),
                         args.max_samples,
@@ -390,6 +402,10 @@ def run_quality(args) -> dict[str, Any]:
                         "demo_input": task.demo_input,
                         "demo_output": task.demo_output,
                     }
+                    text_conditioning = _text_conditioning_metadata(adapter)
+                    if text_conditioning is not None:
+                        # This also invalidates pre-fix Prompt-Diffusion resume rows.
+                        configuration["model_text_conditioning"] = text_conditioning
                     fingerprint = _fingerprint(configuration)
                     record_path = records_root / (
                         f"{adapter.name}__{condition}__{task.name}.jsonl"
@@ -482,7 +498,13 @@ def run_quality(args) -> dict[str, Any]:
                             ),
                             "demo_input": task.demo_input,
                             "demo_output": task.demo_output,
-                            "text_prompt": task.text_prompt,
+                            "manifest_task_instruction": task.text_prompt,
+                            "model_text_conditioning": text_conditioning,
+                            "metadata": (
+                                adapter.condition_metadata(condition)
+                                if callable(getattr(adapter, "condition_metadata", None))
+                                else {}
+                            ),
                             "records_jsonl": str(record_path),
                             **_summary(rows),
                         }

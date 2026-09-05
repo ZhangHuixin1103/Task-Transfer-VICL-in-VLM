@@ -14,6 +14,7 @@
     "derived_json": "data/dataset/eval_dataset_same_task.json",
     "query_policy": "Merge and globally deduplicate Task-B pairs from eval_dataset.json, sample with seed 2026, and fill short target tasks from eval_dataset_1.json and paired files already in data/tasks to obtain exactly 100 unique queries per task.",
     "demo_policy": "For each query, use a different input/output pair from the same Task B as the one-shot demonstration.",
+    "prompt_diffusion_text_policy": "Use an empty content prompt with the released positive/negative quality prompts; infer the task only from the same-task visual demonstration.",
     "note": "There are 11 target tasks and 1,100 competitor queries; inpainting is excluded because it is not a Task B in the source graph. Model inference uses each official default. Metrics follow the existing T2T evaluation by resizing each prediction to its native target size."
   },
   "tasks": [

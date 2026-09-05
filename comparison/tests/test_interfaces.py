@@ -382,6 +382,11 @@ class InterfaceContractTest(unittest.TestCase):
         self.assertEqual(prompt_diffusion.strength, 1.0)
         self.assertEqual(prompt_diffusion.eta, 0.0)
         self.assertEqual(prompt_diffusion.dtype, torch.float32)
+        self.assertEqual(prompt_diffusion.content_prompt, "")
+        self.assertEqual(
+            prompt_diffusion.positive_conditioning,
+            "best quality, extremely detailed",
+        )
         self.assertEqual(visualcloze.steps, 30)
         self.assertEqual(visualcloze.seed, 0)
         self.assertEqual(instruct.steps, 100)
@@ -764,16 +769,28 @@ class InterfaceContractTest(unittest.TestCase):
 
             adapter.resize_image = resize_image
             adapter.configure_samples(dataset)
+            adapter.set_task_prompt("deblurring", "remove blur and restore details")
             result = adapter.run("official")
 
         args, kwargs = FakeSampler.call
         self.assertEqual(args[:3], (100, 1, (4, 64, 112)))
+        self.assertEqual(
+            args[3]["c_crossattn"][0],
+            ("best quality, extremely detailed",),
+        )
         self.assertEqual(kwargs["eta"], 0.0)
         self.assertEqual(kwargs["unconditional_guidance_scale"], 9.0)
         self.assertEqual(kwargs["unconditional_conditioning"]["example_pair"][0].shape[1], 6)
         self.assertEqual(args[3]["query"][0].shape, (1, 3, 512, 896))
         self.assertEqual(result.output.size, (896, 512))
         self.assertTrue(result.metadata["demo_target_shape_adjusted"])
+        self.assertFalse(
+            result.metadata["text_conditioning"]["manifest_task_instruction_used"]
+        )
+        self.assertEqual(
+            result.metadata["text_conditioning"]["manifest_task_instruction"],
+            "remove blur and restore details",
+        )
         result.output.close()
 
     def test_prompt_diffusion_only_ignores_legacy_clip_position_ids(self):

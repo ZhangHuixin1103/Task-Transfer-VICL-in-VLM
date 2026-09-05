@@ -85,7 +85,7 @@ def _select_and_prime_inputs(adapter, sample_index: int) -> None:
 
 
 def _suite_signature(adapter, args, manifest_path: Path, conditions: list[str]) -> dict[str, Any]:
-    return {
+    signature = {
         "adapter": adapter.name,
         "conditions": conditions,
         "task_manifest": str(manifest_path),
@@ -105,6 +105,10 @@ def _suite_signature(adapter, args, manifest_path: Path, conditions: list[str]) 
         "cfg_image": getattr(adapter, "cfg_image", None),
         "painter_task": getattr(adapter, "task_protocol", None),
     }
+    text_conditioning = getattr(adapter, "text_conditioning_metadata", None)
+    if callable(text_conditioning):
+        signature["model_text_conditioning"] = text_conditioning()
+    return signature
 
 
 def _load_resume_document(path: Path | None, signature: dict[str, Any]) -> tuple[Path | None, dict[str, Any] | None]:
@@ -582,7 +586,7 @@ def run_suite(args) -> dict[str, Any]:
                         },
                         "demo_input": task.demo_input,
                         "demo_output": task.demo_output,
-                        "text_prompt": task.text_prompt,
+                        "manifest_task_instruction": task.text_prompt,
                         "metadata": adapter.condition_metadata(condition),
                         "latency": latency,
                         "warmup_policy": warmup_policy,

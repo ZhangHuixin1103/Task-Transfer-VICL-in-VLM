@@ -288,7 +288,7 @@ def build_adapter(args, project_root: Path):
             dtype=args.dtype or "fp32",
             steps=100 if args.steps is None else args.steps,
             seed=args.seed if args.seed is not None else 1,
-            text_prompt=args.text_prompt,
+            content_prompt="",
             resolution=args.resolution or 512,
             config=args.prompt_diffusion_config,
             demo_input=args.demo_input,
@@ -481,7 +481,14 @@ def parser() -> argparse.ArgumentParser:
         default="mae_vit_large_patch16_input256",
     )
     result.add_argument("--seed", type=int)
-    result.add_argument("--text-prompt", default="perform the demonstrated visual task")
+    result.add_argument(
+        "--text-prompt",
+        default="perform the demonstrated visual task",
+        help=(
+            "Task instruction for text-instruction adapters; Prompt-Diffusion "
+            "intentionally uses an empty content prompt"
+        ),
+    )
     result.add_argument("--cfg-text", type=float, default=5.0)
     result.add_argument("--cfg-image", type=float, default=1.25)
     result.add_argument("--optimized", action="store_true")

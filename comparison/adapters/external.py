@@ -980,7 +980,10 @@ class VisualClozeAdapter(ComparisonAdapter):
 
 class PromptDiffusionAdapter(ComparisonAdapter):
     name = "prompt-diffusion"
-    protocol = "[demo input, demo output, query] + text -> query output (diffusion)"
+    protocol = (
+        "same-task [demo input, demo output, query] + official quality prompt "
+        "-> query output (diffusion)"
+    )
 
     def __init__(
         self,
@@ -994,7 +997,7 @@ class PromptDiffusionAdapter(ComparisonAdapter):
         dtype: str = "fp32",
         steps: int = 100,
         seed: int = 1,
-        text_prompt: str = "perform the demonstrated visual task",
+        content_prompt: str = "",
         resolution: int = 512,
         positive_prompt: str = "best quality, extremely detailed",
         negative_prompt: str = (
@@ -1022,7 +1025,7 @@ class PromptDiffusionAdapter(ComparisonAdapter):
         self.dtype = torch.float32
         self.steps = steps
         self.seed = seed
-        self.text_prompt = text_prompt
+        self.content_prompt = content_prompt.strip()
         self.resolution = resolution
         self.positive_prompt = positive_prompt
         self.negative_prompt = negative_prompt
@@ -1043,6 +1046,35 @@ class PromptDiffusionAdapter(ComparisonAdapter):
         self.hwc3 = None
         self.resize_image = None
         self.checkpoint_compatibility_ignored_keys: list[str] = []
+        self.manifest_task_name: str | None = None
+        self.manifest_task_instruction: str | None = None
+
+    @property
+    def positive_conditioning(self) -> str:
+        """Build the official positive CLIP string without a leading comma."""
+        return ", ".join(
+            value
+            for value in (self.content_prompt, self.positive_prompt.strip())
+            if value
+        )
+
+    def set_task_prompt(self, task_name: str, prompt: str) -> None:
+        """Record the manifest instruction, but do not feed it to Prompt-Diffusion."""
+        self.manifest_task_name = task_name
+        self.manifest_task_instruction = prompt
+
+    def text_conditioning_metadata(self) -> Dict[str, Any]:
+        return {
+            "policy_version": "empty-content-v1",
+            "content_prompt": self.content_prompt,
+            "positive_prompt": self.positive_prompt,
+            "effective_positive_conditioning": self.positive_conditioning,
+            "negative_prompt": self.negative_prompt,
+            "manifest_task_name": self.manifest_task_name,
+            "manifest_task_instruction": self.manifest_task_instruction,
+            "manifest_task_instruction_used": False,
+            "task_source": "same-task visual demonstration only",
+        }
 
     @property
     def conditions(self) -> Iterable[str]:
@@ -1145,7 +1177,7 @@ class PromptDiffusionAdapter(ComparisonAdapter):
                 cond = {
                     "c_crossattn": [
                         self.model.get_learned_conditioning(
-                            [f"{self.text_prompt}, {self.positive_prompt}"]
+                            [self.positive_conditioning]
                         )
                     ],
                     "example_pair": [example],
@@ -1195,6 +1227,7 @@ class PromptDiffusionAdapter(ComparisonAdapter):
                 "output_size": list(output.size),
                 "demo_target_shape_adjusted": demo_target_shape_adjusted,
                 "input_direction": "[demo input, demo output, query input] -> query output",
+                "text_conditioning": self.text_conditioning_metadata(),
                 "sample": self.sample.as_dict(),
             },
         )
@@ -1250,8 +1283,11 @@ class PromptDiffusionAdapter(ComparisonAdapter):
             "dtype": str(self.dtype),
             "seed": self.seed,
             "image_resolution_min_side": self.resolution,
+            "content_prompt": self.content_prompt,
             "positive_prompt": self.positive_prompt,
+            "effective_positive_conditioning": self.positive_conditioning,
             "negative_prompt": self.negative_prompt,
+            "text_conditioning": self.text_conditioning_metadata(),
             "strength": self.strength,
             "guidance_scale": self.guidance_scale,
             "eta": self.eta,
@@ -1260,6 +1296,9 @@ class PromptDiffusionAdapter(ComparisonAdapter):
             "protocol_note": (
                 "The official network-step=04999.ckpt, cldm_v15 config, conditioning "
                 "dictionary, and DDIMSampler path from run_prompt_diffusion.ipynb are used. "
+                "Because this dataset has no target-image content captions, the content "
+                "prompt is empty; only the released positive/negative quality prompts are "
+                "used, and the task is inferred from the same-task visual example. "
                 "When a held-out demonstration and query have different aspect ratios, the "
                 "demonstration target is spatially aligned to the official query canvas before "
                 "forming the six-channel example pair."
