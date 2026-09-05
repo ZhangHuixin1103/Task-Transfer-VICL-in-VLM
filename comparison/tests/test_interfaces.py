@@ -460,7 +460,51 @@ class InterfaceContractTest(unittest.TestCase):
     def test_mae_vqgan_loads_vqgan_assets_beside_main_checkpoint(self):
         from comparison.adapters.external import MAEVQGANAdapter
 
+        missing = object()
+        original_np_float = np.__dict__.get("float", missing)
+
+        class FakeAttention(torch.nn.Module):
+            def __init__(self):
+                super().__init__()
+                self.qkv = torch.nn.Identity()
+                self.num_heads = 1
+                self.scale = 1.0
+                self.proj = torch.nn.Identity()
+                self.proj_drop = torch.nn.Identity()
+                self.q_norm = torch.nn.Identity()
+                self.k_norm = torch.nn.Identity()
+
+        class ModernTimmBlock(torch.nn.Module):
+            def __init__(self):
+                super().__init__()
+                self.norm1 = torch.nn.Identity()
+                self.attn = FakeAttention()
+                self.drop_path1 = torch.nn.Identity()
+                self.drop_path2 = torch.nn.Identity()
+                self.ls1 = torch.nn.Identity()
+                self.ls2 = torch.nn.Identity()
+                self.norm2 = torch.nn.Identity()
+                self.mlp = torch.nn.Identity()
+
         class FakeModel:
+            def __init__(self):
+                self.patch_embed = SimpleNamespace(patch_size=(16, 16))
+                self.pos_embed = object()
+                self.cls_token = object()
+                self.blocks = []
+                self.norm = object()
+                self.decoder_embed = object()
+                self.mask_token = object()
+                self.decoder_pos_embed = object()
+                self.decoder_blocks = [ModernTimmBlock()]
+                self.decoder_norm = object()
+                self.decoder_pred = object()
+                self.vae = SimpleNamespace(
+                    quantize=SimpleNamespace(get_codebook_entry=lambda *args: None),
+                    decode=lambda *args: None,
+                )
+                self.unpatchify = lambda *args: None
+
             def eval(self):
                 return self
 
@@ -480,6 +524,7 @@ class InterfaceContractTest(unittest.TestCase):
 
             @staticmethod
             def prepare_model(*args, **kwargs):
+                assert "float" in np.__dict__
                 FakeModelsMAE.get_vq_model()
                 return FakeModel()
 
@@ -520,10 +565,60 @@ class InterfaceContractTest(unittest.TestCase):
             ):
                 adapter.setup()
 
+        self.assertIs(np.__dict__.get("float", missing), original_np_float)
         self.assertEqual(
             FakeModelsMAE.call,
             (str(config.resolve()), str(vqgan_checkpoint.resolve())),
         )
+        self.assertEqual(adapter.runtime_compatibility["legacy_drop_path_aliases"], [0])
+
+    def test_mae_vqgan_runtime_rejects_unexpected_new_timm_semantics(self):
+        from comparison.adapters.external import prepare_mae_vqgan_runtime
+
+        class NonIdentityDropPath(torch.nn.Module):
+            drop_prob = 0.1
+
+            def forward(self, value):
+                return value
+
+        block = SimpleNamespace(
+            norm1=object(),
+            attn=SimpleNamespace(
+                qkv=object(),
+                num_heads=1,
+                scale=1.0,
+                proj=object(),
+                proj_drop=object(),
+                q_norm=torch.nn.Identity(),
+                k_norm=torch.nn.Identity(),
+            ),
+            drop_path1=NonIdentityDropPath(),
+            drop_path2=NonIdentityDropPath(),
+            ls1=torch.nn.Identity(),
+            ls2=torch.nn.Identity(),
+            norm2=object(),
+            mlp=object(),
+        )
+        model = SimpleNamespace(
+            patch_embed=SimpleNamespace(patch_size=(16, 16)),
+            pos_embed=object(),
+            cls_token=object(),
+            blocks=[],
+            norm=object(),
+            decoder_embed=object(),
+            mask_token=object(),
+            decoder_pos_embed=object(),
+            decoder_blocks=[block],
+            decoder_norm=object(),
+            decoder_pred=object(),
+            vae=SimpleNamespace(
+                quantize=SimpleNamespace(get_codebook_entry=lambda *args: None),
+                decode=lambda *args: None,
+            ),
+            unpatchify=lambda *args: None,
+        )
+        with self.assertRaisesRegex(RuntimeError, "non-default"):
+            prepare_mae_vqgan_runtime(model)
 
     def test_visualcloze_reports_incompatible_diffusers_environment(self):
         from comparison.adapters.external import VisualClozeAdapter
@@ -555,9 +650,34 @@ class InterfaceContractTest(unittest.TestCase):
             with mock.patch(
                 "comparison.adapters.external.import_from_root",
                 side_effect=RuntimeError("attention_dispatch infer_schema(func)"),
+            ), mock.patch(
+                "comparison.preflight.inspect_visualcloze_environment",
+                return_value={"status": "pass", "errors": []},
             ):
                 with self.assertRaisesRegex(RuntimeError, "dedicated VisualCloze"):
                     adapter.setup()
+
+    def test_visualcloze_preflight_rejects_bad_versions_before_import(self):
+        from comparison.preflight import inspect_visualcloze_environment
+
+        versions = {
+            "numpy": "2.2.6",
+            "torch": "2.1.0",
+            "torchvision": "0.16.0",
+            "diffusers": "0.32.1",
+            "transformers": "4.47.1",
+            "accelerate": "1.2.1",
+            "flash-attn": "2.7.2.post1",
+            "opencv-python": "4.12.0.88",
+        }
+        with mock.patch(
+            "comparison.preflight._version", side_effect=versions.get
+        ):
+            report = inspect_visualcloze_environment()
+
+        self.assertEqual(report["status"], "fail")
+        self.assertTrue(any("NumPy must be 1.x" in error for error in report["errors"]))
+        self.assertTrue(any("Diffusers must be 0.31.0" in error for error in report["errors"]))
 
     def test_prompt_diffusion_uses_original_cldm_conditioning_and_aligns_demo(self):
         from comparison.adapters.external import PromptDiffusionAdapter

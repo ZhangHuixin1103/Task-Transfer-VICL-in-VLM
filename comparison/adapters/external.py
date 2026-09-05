@@ -39,6 +39,105 @@ PROMPT_DIFFUSION_LEGACY_POSITION_IDS = (
 )
 
 
+def _nested_attribute(value: Any, path: str) -> Any:
+    for name in path.split("."):
+        value = getattr(value, name)
+    return value
+
+
+def prepare_mae_vqgan_runtime(model: Any) -> Dict[str, Any]:
+    """Validate the official hand-written decoder against the installed timm."""
+    required_model_attributes = (
+        "patch_embed",
+        "patch_embed.patch_size",
+        "pos_embed",
+        "cls_token",
+        "blocks",
+        "norm",
+        "decoder_embed",
+        "mask_token",
+        "decoder_pos_embed",
+        "decoder_blocks",
+        "decoder_norm",
+        "decoder_pred",
+        "vae.quantize.get_codebook_entry",
+        "vae.decode",
+        "unpatchify",
+    )
+    missing: list[str] = []
+    for path in required_model_attributes:
+        try:
+            _nested_attribute(model, path)
+        except AttributeError:
+            missing.append(f"model.{path}")
+
+    patched_blocks: list[int] = []
+    incompatible_blocks: list[str] = []
+    for index, block in enumerate(getattr(model, "decoder_blocks", ())):
+        for path in (
+            "norm1",
+            "attn.qkv",
+            "attn.num_heads",
+            "attn.scale",
+            "attn.proj",
+            "attn.proj_drop",
+            "norm2",
+            "mlp",
+        ):
+            try:
+                _nested_attribute(block, path)
+            except AttributeError:
+                missing.append(f"model.decoder_blocks[{index}].{path}")
+
+        if hasattr(block, "drop_path"):
+            continue
+        drop_path1 = getattr(block, "drop_path1", None)
+        drop_path2 = getattr(block, "drop_path2", None)
+        if drop_path1 is None or drop_path2 is None:
+            missing.append(f"model.decoder_blocks[{index}].drop_path")
+            continue
+
+        # timm split the old drop_path into one module per residual branch.
+        # MAE constructs these blocks with zero stochastic depth, so both new
+        # modules must be no-ops to preserve the released decoder exactly.
+        no_op_drop_paths = all(
+            isinstance(module, torch.nn.Identity)
+            or getattr(module, "drop_prob", None) in (0, 0.0)
+            for module in (drop_path1, drop_path2)
+        )
+        no_op_layer_scales = all(
+            isinstance(getattr(block, name, torch.nn.Identity()), torch.nn.Identity)
+            for name in ("ls1", "ls2")
+        )
+        no_op_qk_norms = all(
+            isinstance(getattr(block.attn, name, torch.nn.Identity()), torch.nn.Identity)
+            for name in ("q_norm", "k_norm")
+        )
+        if not (no_op_drop_paths and no_op_layer_scales and no_op_qk_norms):
+            incompatible_blocks.append(str(index))
+            continue
+        block.drop_path = drop_path1
+        patched_blocks.append(index)
+
+    if missing or incompatible_blocks:
+        details = []
+        if missing:
+            details.append("missing attributes: " + ", ".join(missing))
+        if incompatible_blocks:
+            details.append(
+                "non-default layer-scale/drop-path/qk-norm in decoder blocks: "
+                + ", ".join(incompatible_blocks)
+            )
+        raise RuntimeError(
+            "Installed timm is incompatible with the released MAE-VQGAN decoder; "
+            + "; ".join(details)
+        )
+    return {
+        "validated_decoder_blocks": len(getattr(model, "decoder_blocks", ())),
+        "legacy_drop_path_aliases": patched_blocks,
+    }
+
+
 def load_prompt_diffusion_checkpoint(model, state_dict: Mapping[str, Any]) -> list[str]:
     """Strictly load 04999 while bridging one Transformers buffer change."""
     ignored: list[str] = []
@@ -345,6 +444,7 @@ class MAEVQGANAdapter(ComparisonAdapter):
         self.sample: VICLSample | None = None
         self.model = None
         self.mae_utils = None
+        self.runtime_compatibility: Dict[str, Any] | None = None
 
     @property
     def conditions(self) -> Iterable[str]:
@@ -390,6 +490,12 @@ class MAEVQGANAdapter(ComparisonAdapter):
             )
 
         models_mae.get_vq_model = get_vq_model_from_weights
+        had_legacy_np_float = "float" in np.__dict__
+        legacy_np_float = np.__dict__.get("float")
+        if not had_legacy_np_float:
+            # The released 2022 MAE utility still requests np.float, which NumPy
+            # removed in 1.24. Keep the compatibility local to model creation.
+            setattr(np, "float", float)
         try:
             with working_directory(self.repository):
                 self.model = self.mae_utils.prepare_model(
@@ -397,6 +503,11 @@ class MAEVQGANAdapter(ComparisonAdapter):
                 )
         finally:
             models_mae.get_vq_model = official_get_vq_model
+            if had_legacy_np_float:
+                setattr(np, "float", legacy_np_float)
+            else:
+                delattr(np, "float")
+        self.runtime_compatibility = prepare_mae_vqgan_runtime(self.model)
         self.model.eval().to(self.device)
 
     def _image_tensor(self, relative_path: str) -> torch.Tensor:
@@ -486,6 +597,7 @@ class MAEVQGANAdapter(ComparisonAdapter):
             "checkpoint": self.checkpoint,
             "vqgan_config": self.vqgan_config,
             "vqgan_checkpoint": self.vqgan_checkpoint,
+            "runtime_compatibility": self.runtime_compatibility,
             "architecture": self.architecture,
             "device": self.device,
             "dtype": str(self.dtype),
@@ -717,6 +829,15 @@ class VisualClozeAdapter(ComparisonAdapter):
             raise FileNotFoundError(
                 f"VisualCloze requires its official LoRA checkpoint: {self.checkpoint}"
             )
+        from ..preflight import inspect_visualcloze_environment
+
+        environment = inspect_visualcloze_environment()
+        if environment["status"] != "pass":
+            raise RuntimeError(
+                "VisualCloze environment preflight failed: "
+                + "; ".join(environment["errors"])
+                + ". Reinstall comparison/requirements/visualcloze.txt."
+            )
         initial_index = self.sample_index
         self.configure_samples(
             self.dataset_json,
@@ -726,7 +847,7 @@ class VisualClozeAdapter(ComparisonAdapter):
         self.select_sample(initial_index)
         try:
             module = import_from_root("visualcloze", self.repository)
-        except (ImportError, RuntimeError) as error:
+        except (AttributeError, ImportError, RuntimeError) as error:
             message = str(error)
             if "infer_schema(func)" in message or "attention_dispatch" in message:
                 raise RuntimeError(
