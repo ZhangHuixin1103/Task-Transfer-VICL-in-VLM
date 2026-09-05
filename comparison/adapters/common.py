@@ -50,12 +50,12 @@ def resolve_model_reference(reference: str, project_root: Path) -> str:
     return str(candidate.resolve()) if candidate.exists() else reference
 
 
-def require_checkpoint_file(
+def require_model_file(
     reference: str | None,
-    model_name: str,
+    description: str,
     *fallbacks: Path,
 ) -> str:
-    """Resolve one checkpoint while preserving conventional model subdirectories."""
+    """Resolve one required model file and report every location that was checked."""
     candidates: list[Path] = []
     if reference:
         requested = Path(reference).expanduser()
@@ -75,5 +75,14 @@ def require_checkpoint_file(
 
     locations = "\n  - ".join(str(path) for path in checked) or "(none)"
     raise FileNotFoundError(
-        f"{model_name} checkpoint was not found. Checked:\n  - {locations}"
+        f"{description} was not found. Checked:\n  - {locations}"
     )
+
+
+def require_checkpoint_file(
+    reference: str | None,
+    model_name: str,
+    *fallbacks: Path,
+) -> str:
+    """Resolve one checkpoint while preserving conventional model subdirectories."""
+    return require_model_file(reference, f"{model_name} checkpoint", *fallbacks)

@@ -231,6 +231,8 @@ def build_adapter(args, project_root: Path):
             device=args.device,
             dtype=args.dtype or "fp32",
             architecture=args.mae_architecture,
+            vqgan_config=args.vqgan_config,
+            vqgan_checkpoint=args.vqgan_checkpoint,
             demo_input=args.demo_input,
             demo_output=args.demo_output,
         )
@@ -445,6 +447,8 @@ def parser() -> argparse.ArgumentParser:
     result.add_argument("--demo-output")
     result.add_argument("--model-id")
     result.add_argument("--checkpoint")
+    result.add_argument("--vqgan-config")
+    result.add_argument("--vqgan-checkpoint")
     result.add_argument("--config", default="configs/instruct_diffusion.yaml")
     result.add_argument(
         "--prompt-diffusion-config", default="models/cldm_v15.yaml"

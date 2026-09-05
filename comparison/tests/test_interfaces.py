@@ -15,7 +15,7 @@ import numpy as np
 import torch
 from PIL import Image
 
-from comparison.adapters.common import require_checkpoint_file
+from comparison.adapters.common import require_checkpoint_file, require_model_file
 from comparison.base import (
     ComparisonAdapter,
     InferenceResult,
@@ -69,6 +69,15 @@ class InterfaceContractTest(unittest.TestCase):
             missing = Path(directory) / "missing.ckpt"
             with self.assertRaisesRegex(FileNotFoundError, str(missing)):
                 require_checkpoint_file(str(missing), "InstructDiffusion")
+
+    def test_required_model_file_accepts_a_fallback(self):
+        with tempfile.TemporaryDirectory() as directory:
+            expected = Path(directory) / "model.yaml"
+            expected.touch()
+            resolved = require_model_file(
+                None, "MAE-VQGAN VQGAN config", expected
+            )
+        self.assertEqual(Path(resolved), expected.resolve())
 
     def test_t2t_import_path_does_not_import_external_adapters(self):
         result = subprocess.run(
@@ -447,6 +456,108 @@ class InterfaceContractTest(unittest.TestCase):
         torch.testing.assert_close(FakeUtils.canvas[0, :, 111, 111], expected_gap)
         torch.testing.assert_close(FakeUtils.canvas[0, :, 0, 0], expected_white)
         result.output.close()
+
+    def test_mae_vqgan_loads_vqgan_assets_beside_main_checkpoint(self):
+        from comparison.adapters.external import MAEVQGANAdapter
+
+        class FakeModel:
+            def eval(self):
+                return self
+
+            def to(self, *args, **kwargs):
+                return self
+
+        class FakeModelsMAE:
+            call = None
+
+            @classmethod
+            def get_vq_model(cls, config_path=None, ckpt_path=None):
+                cls.call = (config_path, ckpt_path)
+                return object()
+
+        class FakeUtils:
+            models_mae = FakeModelsMAE
+
+            @staticmethod
+            def prepare_model(*args, **kwargs):
+                FakeModelsMAE.get_vq_model()
+                return FakeModel()
+
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "source").mkdir()
+            weights = root / "weights/MAE-VQGAN"
+            weights.mkdir(parents=True)
+            checkpoint = weights / "checkpoint-3400.pth"
+            config = weights / "model.yaml"
+            vqgan_checkpoint = weights / "last.ckpt"
+            for path in (checkpoint, config, vqgan_checkpoint):
+                path.touch()
+            dataset = root / "eval.json"
+            dataset.write_text(
+                json.dumps(
+                    [
+                        {
+                            "taskA_input": "demo-in.png",
+                            "taskA_output": "demo-out.png",
+                            "taskB_input": "query.png",
+                            "taskB_output": "target.png",
+                        }
+                    ]
+                ),
+                encoding="utf-8",
+            )
+            adapter = MAEVQGANAdapter(
+                repository=root / "source",
+                dataset_json=dataset,
+                data_root=root,
+                checkpoint=str(checkpoint),
+                device="cpu",
+            )
+            with mock.patch(
+                "comparison.adapters.external.import_from_root",
+                return_value=FakeUtils,
+            ):
+                adapter.setup()
+
+        self.assertEqual(
+            FakeModelsMAE.call,
+            (str(config.resolve()), str(vqgan_checkpoint.resolve())),
+        )
+
+    def test_visualcloze_reports_incompatible_diffusers_environment(self):
+        from comparison.adapters.external import VisualClozeAdapter
+
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            checkpoint = root / "visualcloze-384-lora.pth"
+            checkpoint.touch()
+            dataset = root / "eval.json"
+            dataset.write_text(
+                json.dumps(
+                    [
+                        {
+                            "taskA_input": "demo-in.png",
+                            "taskA_output": "demo-out.png",
+                            "taskB_input": "query.png",
+                            "taskB_output": "target.png",
+                        }
+                    ]
+                ),
+                encoding="utf-8",
+            )
+            adapter = VisualClozeAdapter(
+                repository=root,
+                dataset_json=dataset,
+                data_root=root,
+                checkpoint=str(checkpoint),
+            )
+            with mock.patch(
+                "comparison.adapters.external.import_from_root",
+                side_effect=RuntimeError("attention_dispatch infer_schema(func)"),
+            ):
+                with self.assertRaisesRegex(RuntimeError, "dedicated VisualCloze"):
+                    adapter.setup()
 
     def test_prompt_diffusion_uses_original_cldm_conditioning_and_aligns_demo(self):
         from comparison.adapters.external import PromptDiffusionAdapter

@@ -26,13 +26,14 @@ Set the downloaded checkpoint paths, then run:
 ```bash
 export VICL_WEIGHTS="$PWD/weights"
 export PAINTER_CKPT="$VICL_WEIGHTS/Painter/painter_vit_large.pth"
+export MAE_CKPT="$VICL_WEIGHTS/MAE-VQGAN/checkpoint-3400.pth"
 export PROMPT_DIFFUSION_CKPT="$PWD/third_party/Prompt-Diffusion/ckpts/network-step=04999.ckpt"
 export INSTRUCT_CKPT="$PWD/third_party/InstructDiffusion/checkpoints/v1-5-pruned-emaonly-adaption-task.ckpt"
-test -f "$PAINTER_CKPT" && test -f "$PROMPT_DIFFUSION_CKPT" && test -f "$INSTRUCT_CKPT"
+test -f "$PAINTER_CKPT" && test -f "$MAE_CKPT" && test -f "$VICL_WEIGHTS/MAE-VQGAN/model.yaml" && test -f "$VICL_WEIGHTS/MAE-VQGAN/last.ckpt" && test -f "$PROMPT_DIFFUSION_CKPT" && test -f "$INSTRUCT_CKPT"
 
 python -m comparison.quality --adapter painter --conditions official --task-manifest comparison/competitor_tasks.json --checkpoint "$PAINTER_CKPT" --max-samples -1 --resume --output-dir comparison/outputs/quality/painter
 
-python -m comparison.quality --adapter mae-vqgan --conditions official --task-manifest comparison/competitor_tasks.json --checkpoint "$VICL_WEIGHTS/MAE-VQGAN/mae_vqgan.pth" --max-samples -1 --resume --output-dir comparison/outputs/quality/mae_vqgan
+python -m comparison.quality --adapter mae-vqgan --conditions official --task-manifest comparison/competitor_tasks.json --checkpoint "$MAE_CKPT" --max-samples -1 --resume --output-dir comparison/outputs/quality/mae_vqgan
 
 python -m comparison.quality --adapter prompt-diffusion --conditions official --task-manifest comparison/competitor_tasks.json --checkpoint "$PROMPT_DIFFUSION_CKPT" --max-samples -1 --resume --output-dir comparison/outputs/quality/prompt_diffusion
 
@@ -42,9 +43,6 @@ python -m comparison.quality --adapter visualcloze --conditions official --task-
 
 python -m comparison.quality --adapter prompt-gip --conditions official --task-manifest comparison/competitor_tasks.json --checkpoint "$VICL_WEIGHTS/PromptGIP/PromptGIP-checkpoint.pth" --max-samples -1 --resume --output-dir comparison/outputs/quality/prompt_gip
 ```
-
-MAE-VQGAN also expects `model.yaml` and `last.ckpt` in
-`third_party/MAE-VQGAN`.
 
 ## Resources
 
@@ -56,7 +54,7 @@ python -m comparison.suite --adapter t2t-qwen --conditions ours --task-manifest 
 
 python -m comparison.suite --adapter painter --conditions official --task-manifest comparison/competitor_tasks.json --checkpoint "$PAINTER_CKPT" --max-samples 100 --warmup 5 --profile-flops --output-dir comparison/outputs/resources/painter
 
-python -m comparison.suite --adapter mae-vqgan --conditions official --task-manifest comparison/competitor_tasks.json --checkpoint "$VICL_WEIGHTS/MAE-VQGAN/mae_vqgan.pth" --max-samples 100 --warmup 5 --profile-flops --output-dir comparison/outputs/resources/mae_vqgan
+python -m comparison.suite --adapter mae-vqgan --conditions official --task-manifest comparison/competitor_tasks.json --checkpoint "$MAE_CKPT" --max-samples 100 --warmup 5 --profile-flops --output-dir comparison/outputs/resources/mae_vqgan
 
 python -m comparison.suite --adapter prompt-diffusion --conditions official --task-manifest comparison/competitor_tasks.json --checkpoint "$PROMPT_DIFFUSION_CKPT" --max-samples 100 --warmup 5 --profile-flops --output-dir comparison/outputs/resources/prompt_diffusion
 

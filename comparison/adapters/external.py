@@ -23,6 +23,7 @@ from ..metrics import StageTimer, seed_everything
 from .common import (
     import_from_root,
     require_checkpoint_file,
+    require_model_file,
     resolve_model_reference,
     torch_dtype,
     working_directory,
@@ -314,6 +315,8 @@ class MAEVQGANAdapter(ComparisonAdapter):
         device: str = "cuda",
         dtype: str = "fp32",
         architecture: str = "mae_vit_large_patch16",
+        vqgan_config: str | None = None,
+        vqgan_checkpoint: str | None = None,
         demo_input: str | None = None,
         demo_output: str | None = None,
     ):
@@ -327,6 +330,10 @@ class MAEVQGANAdapter(ComparisonAdapter):
         self.device = device
         self.dtype = torch.float32
         self.architecture = architecture
+        self.vqgan_config_reference = vqgan_config
+        self.vqgan_checkpoint_reference = vqgan_checkpoint
+        self.vqgan_config: str | None = None
+        self.vqgan_checkpoint: str | None = None
         self.resolution = 224
         self.canvas_resolution = 224
         self.quadrant_resolution = 111
@@ -344,15 +351,27 @@ class MAEVQGANAdapter(ComparisonAdapter):
         return ("official",)
 
     def setup(self) -> None:
-        for required in (self.checkpoint, "model.yaml", "last.ckpt"):
-            path = Path(required)
-            if not path.is_absolute():
-                path = self.repository / path
-            if not path.is_file():
-                raise FileNotFoundError(
-                    "MAE-VQGAN requires its official MAE checkpoint plus the "
-                    f"VQGAN model.yaml and last.ckpt in the repository root; missing {path}"
-                )
+        self.checkpoint = require_checkpoint_file(
+            self.checkpoint,
+            "MAE-VQGAN MAE",
+            PROJECT_ROOT / "weights/MAE-VQGAN/checkpoint-3400.pth",
+        )
+        checkpoint_dir = Path(self.checkpoint).parent
+        asset_dirs = (
+            checkpoint_dir,
+            PROJECT_ROOT / "weights/MAE-VQGAN",
+            self.repository,
+        )
+        self.vqgan_config = require_model_file(
+            self.vqgan_config_reference,
+            "MAE-VQGAN VQGAN config (model.yaml)",
+            *(directory / "model.yaml" for directory in asset_dirs),
+        )
+        self.vqgan_checkpoint = require_model_file(
+            self.vqgan_checkpoint_reference,
+            "MAE-VQGAN VQGAN checkpoint (last.ckpt)",
+            *(directory / "last.ckpt" for directory in asset_dirs),
+        )
         initial_index = self.sample_index
         self.configure_samples(
             self.dataset_json,
@@ -361,10 +380,23 @@ class MAEVQGANAdapter(ComparisonAdapter):
         )
         self.select_sample(initial_index)
         self.mae_utils = import_from_root("evaluate.mae_utils", self.repository)
-        with working_directory(self.repository):
-            self.model = self.mae_utils.prepare_model(
-                self.checkpoint, arch=self.architecture, device="cpu"
+        models_mae = self.mae_utils.models_mae
+        official_get_vq_model = models_mae.get_vq_model
+
+        def get_vq_model_from_weights():
+            return official_get_vq_model(
+                config_path=self.vqgan_config,
+                ckpt_path=self.vqgan_checkpoint,
             )
+
+        models_mae.get_vq_model = get_vq_model_from_weights
+        try:
+            with working_directory(self.repository):
+                self.model = self.mae_utils.prepare_model(
+                    self.checkpoint, arch=self.architecture, device="cpu"
+                )
+        finally:
+            models_mae.get_vq_model = official_get_vq_model
         self.model.eval().to(self.device)
 
     def _image_tensor(self, relative_path: str) -> torch.Tensor:
@@ -452,6 +484,8 @@ class MAEVQGANAdapter(ComparisonAdapter):
         return {
             "condition": condition,
             "checkpoint": self.checkpoint,
+            "vqgan_config": self.vqgan_config,
+            "vqgan_checkpoint": self.vqgan_checkpoint,
             "architecture": self.architecture,
             "device": self.device,
             "dtype": str(self.dtype),
@@ -690,7 +724,18 @@ class VisualClozeAdapter(ComparisonAdapter):
             demo_output=self.demo_output,
         )
         self.select_sample(initial_index)
-        module = import_from_root("visualcloze", self.repository)
+        try:
+            module = import_from_root("visualcloze", self.repository)
+        except (ImportError, RuntimeError) as error:
+            message = str(error)
+            if "infer_schema(func)" in message or "attention_dispatch" in message:
+                raise RuntimeError(
+                    "VisualCloze cannot import with this Torch/Diffusers combination. "
+                    "Run it in the dedicated VisualCloze environment from "
+                    "comparison/README.md (torch==2.1.0, diffusers==0.32.1); do not "
+                    "run this adapter in the Qwen environment."
+                ) from error
+            raise
         with working_directory(self.repository):
             self.model = module.VisualClozeModel(
                 model_path=self.checkpoint,
